@@ -97,6 +97,27 @@ class DBController extends Controller
     public function render(Request $request)
     {
         $parent = $request->input('parent');
-       return $posts = Temp::where('parent', '=', $parent)->get();
+        $post_in_work= $request->input('post_in_work');
+       return $posts = Temp::where('parent', '=', $parent)->where('id_post', '=', $post_in_work)->get();
     }
+    public function render_posts(Request $request)
+    {
+       // return $names = Temp::select('id_post','name_post')->latest()->distinct()->paginate(10);
+        return $names = Temp::select('id_post', 'name_post')->distinct('id_post')->get();
+    }
+    public function post_id()
+    {
+        return $posts = Temp::max('id_post');
+    }
+    public function select_line(Request $request)
+    {
+        $id_post = $request->input('id_post');
+        return $line = Temp::where('id_post', '=', $id_post)->max('number_line');
+    }
+    public function select_name(Request $request)
+    {
+        $id_post = $request->input('id_post');
+        return $name = Temp::select('name_post')->where('id_post', '=', $id_post)->first();
+    }
+
 }

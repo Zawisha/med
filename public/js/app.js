@@ -3337,11 +3337,11 @@ __webpack_require__.r(__webpack_exports__);
     return {
       inputs: [],
       message: '',
-      current_line: 0
+      current_line: 0,
+      marker: 0
     };
   },
   mounted: function mounted() {
-    //            console.log(this.$store.state.totalTvCount);
     this.render_start_array(this.inputs);
   },
   created: function created() {},
@@ -3354,7 +3354,7 @@ __webpack_require__.r(__webpack_exports__);
         numb_line: this.$store.state.lineCounter
       });
       axios.post('/api/add_content', {
-        id_post: '1',
+        id_post: this.$store.state.post_id,
         name_post: this.$store.state.totalTvCount,
         number_line: this.$store.state.lineCounter,
         parent: this.current_line,
@@ -3364,30 +3364,49 @@ __webpack_require__.r(__webpack_exports__);
     },
     next_post: function next_post(numb) {
       this.current_line = numb;
-      this.inputs = [];
+      this.inputs = []; //навигация совпала
+
+      if (this.current_line == this.$store.state.navigation[this.marker + 1]) {
+        this.marker++;
+      } //навигация не совпала
+      else {
+          this.marker++; //если в массиве только ноль
+
+          this.$store.dispatch('spliceElem', this.marker);
+          this.$store.dispatch('change_nav', this.current_line);
+        }
+
       this.render_start_array(this.inputs); //запишем новое значение навигации в массив
 
-      this.$store.dispatch('change_nav', this.current_line);
+      console.log('current_line ->' + this.current_line);
+      console.log('marker ->' + this.marker);
       console.log(this.$store.state.navigation);
     },
     back: function back() {
       if (this.current_line != 0) {
         this.inputs = [];
-        this.message = ''; //выберем предыдущий номер массива( строки )
-
-        for (var i = 0; i < this.$store.state.navigation.length; i++) {
-          if (this.$store.state.navigation[i] == this.current_line) {
-            this.current_line = this.$store.state.navigation[i - 1];
-          }
-        }
+        this.message = '';
+        this.marker--;
+        this.current_line = this.$store.state.navigation[this.marker];
+        console.log('current_line after back ->' + this.current_line);
+        console.log('marker ->' + this.marker);
+        console.log(this.$store.state.navigation);
+        this.render_start_array(this.inputs);
       }
-
-      ;
-      this.render_start_array(this.inputs);
+    },
+    forward: function forward() {
+      if (this.marker + 1 != this.$store.state.navigation.length) {
+        this.inputs = [];
+        this.marker++;
+        console.log('current_line after forward ->' + this.current_line);
+        this.current_line = this.$store.state.navigation[this.marker];
+        this.render_start_array(this.inputs);
+      }
     },
     render_start_array: function render_start_array(inp) {
       axios.post('/api/render', {
-        parent: this.current_line
+        parent: this.current_line,
+        post_in_work: this.$store.state.post_id
       }).then(function (_ref) {
         var data = _ref.data;
         return data.forEach(function (entry) {
@@ -3435,11 +3454,113 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     push_the_button: function push_the_button() {
-      this.$store.dispatch('changeName', this.message);
+      var _this = this;
+
+      axios.post('/api/post_id').then(function (_ref) {
+        var data = _ref.data;
+        return _this.$store.dispatch('spliceElem', 1), _this.$store.dispatch('setLineCounter', 0), _this.$store.dispatch('setPostCounter', data + 1), _this.$store.dispatch('changeName', _this.message), Vue.router.push({
+          name: 'add_content'
+        });
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/medical/PostsList.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/medical/PostsList.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _app_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../app.js */ "./resources/js/app.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      posts: []
+    };
+  },
+  mounted: function mounted() {
+    this.render_table(this.posts);
+  },
+  methods: {
+    render_table: function render_table(inp) {
+      axios.post('/api/render_posts', {
+        parent: this.current_line
+      }).then(function (_ref) {
+        var data = _ref.data;
+        return data.forEach(function (entry) {
+          inp.push({
+            text: entry.name_post,
+            id_post: entry.id_post
+          });
+        });
+      });
+    },
+    select_line: function select_line(numb) {
+      var _this = this;
+
+      axios.post('/api/select_line', {
+        id_post: numb
+      }).then(function (_ref2) {
+        var data = _ref2.data;
+        return _this.$store.dispatch('setLineCounter', data);
+      });
+    },
+    select_name: function select_name(numb) {
+      var _this2 = this;
+
+      axios.post('/api/select_name', {
+        id_post: numb
+      }).then(function (_ref3) {
+        var data = _ref3.data;
+        return _this2.$store.dispatch('changeName', data.name_post);
+      });
+    },
+    edit_post: function edit_post(numb) {
+      //выбираю номер линии у поста
+      this.select_line(numb);
+      this.select_name(numb); //меняю значение поста
+
+      this.$store.dispatch('setPostCounter', numb); //имя поста
+
       Vue.router.push({
         name: 'add_content'
       });
-    }
+    },
+    delete_post: function delete_post(numb) {}
   }
 });
 
@@ -39591,7 +39712,11 @@ var render = function() {
     _vm._v(" "),
     _c(
       "button",
-      { staticClass: "btn btn-primary btn-sm", attrs: { type: "button" } },
+      {
+        staticClass: "btn btn-primary btn-sm",
+        attrs: { type: "button" },
+        on: { click: _vm.forward }
+      },
       [_vm._v("Вперёд")]
     )
   ])
@@ -39670,6 +39795,97 @@ var render = function() {
   ])
 }
 var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/medical/PostsList.vue?vue&type=template&id=cdebee90&":
+/*!********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/medical/PostsList.vue?vue&type=template&id=cdebee90& ***!
+  \********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "col" }, [
+    _c("table", { staticClass: "table" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        _vm._l(_vm.posts, function(post) {
+          return _c("tr", [
+            _c("td", { attrs: { scope: "col-8" } }, [
+              _vm._v(
+                "\n                " + _vm._s(post.text) + "\n            "
+              )
+            ]),
+            _vm._v(" "),
+            _c("td", { attrs: { scope: "col-2" } }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-secondary",
+                  attrs: { type: "button" },
+                  on: {
+                    click: function($event) {
+                      return _vm.edit_post(post.id_post)
+                    }
+                  }
+                },
+                [_vm._v("Редактировать")]
+              )
+            ]),
+            _vm._v(" "),
+            _c("td", { attrs: { scope: "col-2" } }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-danger",
+                  attrs: { type: "button" },
+                  on: {
+                    click: function($event) {
+                      return _vm.delete_post(post.id_post)
+                    }
+                  }
+                },
+                [_vm._v("Удалить")]
+              )
+            ])
+          ])
+        }),
+        0
+      )
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", { staticClass: "thead-dark" }, [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("#")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col-8" } }, [_vm._v("Название поста")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col-2" } }),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col-2" } })
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -55559,6 +55775,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_auth_RenewPassword_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/auth/RenewPassword.vue */ "./resources/js/components/auth/RenewPassword.vue");
 /* harmony import */ var _components_medical_AddNewPost__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/medical/AddNewPost */ "./resources/js/components/medical/AddNewPost.vue");
 /* harmony import */ var _components_medical_AddContent__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/medical/AddContent */ "./resources/js/components/medical/AddContent.vue");
+/* harmony import */ var _components_medical_PostsList__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/medical/PostsList */ "./resources/js/components/medical/PostsList.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
@@ -55576,6 +55793,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('example-component', __webp
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('app', __webpack_require__(/*! ./components/App.vue */ "./resources/js/components/App.vue")["default"]); // шина данных
 
 var postName = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
+
 
 
 
@@ -55627,6 +55845,10 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/admin/add_content',
     name: 'add_content',
     component: _components_medical_AddContent__WEBPACK_IMPORTED_MODULE_15__["default"]
+  }, {
+    path: '/admin/posts',
+    name: 'posts',
+    component: _components_medical_PostsList__WEBPACK_IMPORTED_MODULE_16__["default"]
   }]
 });
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.router = router; //websanova/vue-auth
@@ -56432,6 +56654,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/medical/PostsList.vue":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/medical/PostsList.vue ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _PostsList_vue_vue_type_template_id_cdebee90___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PostsList.vue?vue&type=template&id=cdebee90& */ "./resources/js/components/medical/PostsList.vue?vue&type=template&id=cdebee90&");
+/* harmony import */ var _PostsList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PostsList.vue?vue&type=script&lang=js& */ "./resources/js/components/medical/PostsList.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _PostsList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PostsList_vue_vue_type_template_id_cdebee90___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _PostsList_vue_vue_type_template_id_cdebee90___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/medical/PostsList.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/medical/PostsList.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/medical/PostsList.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PostsList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./PostsList.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/medical/PostsList.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PostsList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/medical/PostsList.vue?vue&type=template&id=cdebee90&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/medical/PostsList.vue?vue&type=template&id=cdebee90& ***!
+  \**************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostsList_vue_vue_type_template_id_cdebee90___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./PostsList.vue?vue&type=template&id=cdebee90& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/medical/PostsList.vue?vue&type=template&id=cdebee90&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostsList_vue_vue_type_template_id_cdebee90___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostsList_vue_vue_type_template_id_cdebee90___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/store/index.js":
 /*!*************************************!*\
   !*** ./resources/js/store/index.js ***!
@@ -56452,9 +56743,15 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   state: {
     totalTvCount: '',
     lineCounter: 0,
-    navigation: [0]
+    navigation: [0],
+    //какой пост находится в работе сейчас
+    post_id: 0
   },
-  getters: {},
+  getters: {
+    LAST_ELEM: function LAST_ELEM(state) {
+      return state.navigation[state.navigation.length - 1];
+    }
+  },
   mutations: {
     removeTv: function removeTv(state, amount) {
       state.totalTvCount = amount;
@@ -56462,8 +56759,17 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     upLine: function upLine(state) {
       state.lineCounter++;
     },
+    setPost: function setPost(state, numb) {
+      state.post_id = numb;
+    },
     add_to_nav: function add_to_nav(state, numb) {
       state.navigation.push(numb);
+    },
+    spl_elem: function spl_elem(state, numb) {
+      state.navigation.splice(numb);
+    },
+    line_setup: function line_setup(state, numb) {
+      state.lineCounter = numb;
     }
   },
   actions: {
@@ -56473,8 +56779,17 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     upLineCounter: function upLineCounter(context) {
       context.commit('upLine');
     },
+    setPostCounter: function setPostCounter(context, numb) {
+      context.commit('setPost', numb);
+    },
     change_nav: function change_nav(context, numb) {
       context.commit('add_to_nav', numb);
+    },
+    spliceElem: function spliceElem(context, numb) {
+      context.commit('spl_elem', numb);
+    },
+    setLineCounter: function setLineCounter(context, numb) {
+      context.commit('line_setup', numb);
     }
   }
 });

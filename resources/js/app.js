@@ -1,5 +1,6 @@
 
 
+
 require('./bootstrap');
 
 window.Vue = require('vue');
@@ -39,6 +40,7 @@ import ForgetPassword from './components/auth/ForgetPassword.vue';
 import RenewPassword from './components/auth/RenewPassword.vue';
 import AddNewPost from "./components/medical/AddNewPost";
 import AddContent from "./components/medical/AddContent";
+import PostsList from "./components/medical/PostsList";
 
 const router = new VueRouter({
     mode: 'history',
@@ -91,6 +93,11 @@ const router = new VueRouter({
             path: '/admin/add_content',
             name: 'add_content',
             component: AddContent
+        },
+        {
+            path: '/admin/posts',
+            name: 'posts',
+            component: PostsList
         }
 
 

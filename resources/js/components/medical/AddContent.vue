@@ -15,7 +15,7 @@
             </div>
         </div>
         <button type="button" class="btn btn-primary btn-sm" v-on:click="back" >Назад</button>
-        <button type="button" class="btn btn-primary btn-sm">Вперёд</button>
+        <button type="button" class="btn btn-primary btn-sm" v-on:click="forward">Вперёд</button>
     </div>
 </template>
 
@@ -27,11 +27,12 @@
                 inputs: [],
                 message: '' ,
                 current_line: 0,
+                marker:0,
 
             }
         },
         mounted() {
-//            console.log(this.$store.state.totalTvCount);
+
 
             this.render_start_array(this.inputs);
 
@@ -50,10 +51,9 @@
                     text:this.message,
                     numb_line:this.$store.state.lineCounter,
                 });
-
                 axios
                     .post('/api/add_content',{
-                            id_post:'1',
+                            id_post:this.$store.state.post_id,
                             name_post:this.$store.state.totalTvCount,
                             number_line:this.$store.state.lineCounter,
                             parent:this.current_line,
@@ -65,28 +65,58 @@
 
             next_post(numb)
             {
-                this.current_line = numb;
-                this.inputs = [];
+                    this.current_line = numb;
+                    this.inputs = [];
+                //навигация совпала
+                if(this.current_line == this.$store.state.navigation[this.marker+1])
+                {
+
+                this.marker++;
+                }
+                //навигация не совпала
+                else
+                {
+                    this.marker++;
+                    //если в массиве только ноль
+                        this.$store.dispatch('spliceElem',this.marker);
+                        this.$store.dispatch('change_nav', this.current_line);
+                }
+
+
                 this.render_start_array(this.inputs);
-//запишем новое значение навигации в массив
-                this.$store.dispatch('change_nav', this.current_line);
-                console.log(this.$store.state.navigation)
+                //запишем новое значение навигации в массив
+                console.log('current_line ->' + this.current_line);
+                console.log('marker ->' + this.marker);
+                console.log(this.$store.state.navigation);
+
+
             },
             back()
             {
                 if(this.current_line != 0) {
                     this.inputs = [];
                     this.message = '';
-                    //выберем предыдущий номер массива( строки )
-                    for (var i = 0; i < this.$store.state.navigation.length; i++) {
-                        if (this.$store.state.navigation[i] == this.current_line) {
-                            this.current_line=(this.$store.state.navigation[i - 1]);
-                        }
-                    }
+                    this.marker--;
+                    this.current_line=(this.$store.state.navigation[this.marker]);
+                    console.log('current_line after back ->' + this.current_line);
+                    console.log('marker ->' + this.marker);
+                    console.log(this.$store.state.navigation);
+                    this.render_start_array(this.inputs);
+                }
 
-                };
-                this.render_start_array(this.inputs);
 
+
+            },
+            forward()
+            {
+                if((this.marker+1)!=(this.$store.state.navigation.length))
+                {
+                    this.inputs = [];
+                    this.marker++;
+                    console.log('current_line after forward ->' + this.current_line);
+                    this.current_line=(this.$store.state.navigation[this.marker]);
+                    this.render_start_array(this.inputs);
+                }
 
             },
 
@@ -95,6 +125,7 @@
                 axios
                     .post('/api/render',{
                         parent:this.current_line,
+                        post_in_work:this.$store.state.post_id,
                     }).then(({ data }) => (
                 data.forEach(function(entry) {
                     inp.push({

@@ -20,14 +20,23 @@
 
             return {
                 message: '',
+
             }
         },
         methods: {
 
             push_the_button()
             {
-                this.$store.dispatch('changeName', this.message);
-                Vue.router.push({name:'add_content'})
+                axios
+                    .post('/api/post_id').then(({ data }) => (
+                    this.$store.dispatch('spliceElem',1),
+                    this.$store.dispatch('setLineCounter', 0),
+                    this.$store.dispatch('setPostCounter', data+1),
+                    this.$store.dispatch('changeName', this.message),
+                    Vue.router.push({name:'add_content'})
+                    )
+                );
+
 
             },
 

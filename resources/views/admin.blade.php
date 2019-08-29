@@ -186,10 +186,10 @@
                     </div>
                 </div>
                     <ul class="list-sidebar bg-defoult">
-                    <li> <a href="#" data-toggle="collapse" data-target="#dashboard" class="collapsed active" > <i class="fa fa-th-large"></i> <span class="nav-label"> Пользователи </span> <span class="fa fa-chevron-left pull-right"></span> </a>
+                    <li> <a href="#" data-toggle="collapse" data-target="#dashboard" class="collapsed active" > <i class="fa fa-th-large"></i> <span class="nav-label"> Контент </span> <span class="fa fa-chevron-left pull-right"></span> </a>
                         <ul class="sub-menu collapse" id="dashboard">
                             <li class="active"><router-link :to="{ name: 'add_new' }">Новый пост</router-link></li>
-                            <li><a href="#">General</a></li>
+                            <li ><router-link :to="{ name: 'posts' }">Список постов</router-link></li>
                             <li><a href="#">Buttons</a></li>
                             <li><a href="#">Tabs & Accordions</a></li>
                             <li><a href="#">Typography</a></li>

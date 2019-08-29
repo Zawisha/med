@@ -31,3 +31,7 @@ Route::post('ifexist', 'MyAuth\AuthController@if_exist');
 
 Route::post('add_content', 'DBController@store');
 Route::post('render', 'DBController@render');
+Route::post('render_posts', 'DBController@render_posts');
+Route::post('post_id', 'DBController@post_id');
+Route::post('select_line', 'DBController@select_line');
+Route::post('select_name', 'DBController@select_name');
