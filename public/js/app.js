@@ -3332,20 +3332,69 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      inputs: [],
+      // current_line: 0,
+      // marker:0,
+      answers: [],
       message: '',
-      current_line: 0,
-      marker: 0
+      text_block_name: '',
+      question: '',
+      parents: false
     };
   },
   mounted: function mounted() {
+    //current main_procedure
     this.render_start_array(this.inputs);
   },
   created: function created() {},
   methods: {
+    add_answer: function add_answer() {
+      this.answers.push({
+        text: ""
+      });
+    },
+    save: function save() {
+      this.answer = []; //получил ответы
+
+      var elems = document.getElementsByClassName('qwe');
+      [0].value;
+      var i;
+
+      for (i = 0; i < elems.length; i++) {
+        axios.post('/api/add_content', {
+          id_post: this.$store.state.post_id,
+          id_procedure: this.$store.state.current_main_procedure,
+          number_line: this.$store.state.lineCounter,
+          parent: this.current_line,
+          text: this.message
+        });
+        console.log(elems[i].value);
+      }
+    },
     add_new_line: function add_new_line() {
       //vuex увеличение счётчика линии
       this.$store.dispatch('upLineCounter');
@@ -3452,14 +3501,184 @@ __webpack_require__.r(__webpack_exports__);
       message: ''
     };
   },
+  mounted: function mounted() {
+    this.find_post_id();
+  },
   methods: {
-    push_the_button: function push_the_button() {
+    find_post_id: function find_post_id() {
       var _this = this;
 
       axios.post('/api/post_id').then(function (_ref) {
         var data = _ref.data;
-        return _this.$store.dispatch('spliceElem', 1), _this.$store.dispatch('setLineCounter', 0), _this.$store.dispatch('setPostCounter', data + 1), _this.$store.dispatch('changeName', _this.message), Vue.router.push({
-          name: 'add_content'
+        return (//установим номер поста
+          _this.$store.dispatch('setPostCounter', data + 1) // this.$store.dispatch('changeName', this.message),
+          //     Vue.router.push({name:'add_content'})
+
+        );
+      });
+    },
+    push_the_button: function push_the_button() {
+      //установим имя поста
+      this.$store.dispatch('changeName', this.message), Vue.router.push({
+        name: 'add_procedures'
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/medical/AddProcedures.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/medical/AddProcedures.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      inputs: [],
+      message: '',
+      current_line: 0,
+      procedure_number: 0
+    };
+  },
+  mounted: function mounted() {
+    this.render_start_array(this.inputs);
+  },
+  created: function created() {},
+  methods: {
+    test: function test() {
+      console.log('POST NUMBER ' + this.$store.state.post_id);
+    },
+    add_new_line: function add_new_line() {
+      //установим счётчик процедуры
+      this.procedure_number = this.inputs.length;
+      this.procedure_number++;
+      this.inputs.push({
+        name_main_procedure: this.message,
+        id_main_procedure: this.procedure_number
+      });
+      axios.post('/api/add_procedure', {
+        id_post: this.$store.state.post_id,
+        name_post: this.$store.state.namePost,
+        id_main_procedure: this.procedure_number,
+        name_main_procedure: this.message
+      });
+      this.message = '';
+    },
+    go_to_post: function go_to_post(numb) {
+      this.$store.dispatch('setCurrentMainProcedure', numb), Vue.router.push({
+        name: 'block_list'
+      });
+    },
+    render_start_array: function render_start_array(inp) {
+      axios.post('/api/render_procedures', {
+        id_post: this.$store.state.post_id
+      }).then(function (_ref) {
+        var data = _ref.data;
+        return data.forEach(function (entry) {
+          inp.push({
+            name_main_procedure: entry.name_main_procedure,
+            id_main_procedure: entry.id_main_procedure
+          });
+        });
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/medical/BlockList.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/medical/BlockList.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      inputs: [],
+      message: '',
+      current_line: 0,
+      procedure_number: 0
+    };
+  },
+  mounted: function mounted() {// this.render_start_array(this.inputs);
+  },
+  created: function created() {},
+  methods: {
+    test: function test() {
+      console.log('POST NUMBER ' + this.$store.state.post_id);
+      console.log('procedure NUMBER ' + this.$store.state.current_main_procedure);
+    },
+    new_block: function new_block() {
+      Vue.router.push({
+        name: 'add_content'
+      });
+    },
+    go_to_post: function go_to_post(numb) {
+      this.$store.dispatch('setCurrentMainProcedure', numb), Vue.router.push({
+        name: 'add_content'
+      });
+    },
+    render_start_array: function render_start_array(inp) {
+      axios.post('/api/render_blocks', {
+        id_post: this.$store.state.post_id,
+        id_procedure: this.$store.state.current_main_procedure
+      }).then(function (_ref) {
+        var data = _ref.data;
+        return data.forEach(function (entry) {
+          inp.push({
+            id_block: entry.id_block,
+            block_name: entry.block_name
+          });
         });
       });
     }
@@ -3505,62 +3724,120 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      posts: []
+      //главный массив постов
+      posts: [],
+      //массив в который положится промежуточное значение постов
+      removed: [],
+      //текущий номер страницы пагинации
+      pagination_numb: 0,
+      //количество постов всего ( для пагинации )
+      posts_length: 0,
+      //массив пагинации
+      pagination: [],
+      //активная страница
+      active_page: 0
     };
   },
   mounted: function mounted() {
-    this.render_table(this.posts);
+    //  console.log('qweQQQ ');
+    this.render_table(this.posts, this.removed, this.pagination_numb, this.posts_length);
   },
   methods: {
-    render_table: function render_table(inp) {
+    render_table: function render_table(inp, removed, pagination_numb) {
+      var _this = this;
+
+      this.pagination = []; //множитель количества постов на странице ( он же номер )
+
+      pagination_numb = pagination_numb * 10;
       axios.post('/api/render_posts', {
         parent: this.current_line
       }).then(function (_ref) {
         var data = _ref.data;
-        return data.forEach(function (entry) {
-          inp.push({
-            text: entry.name_post,
-            id_post: entry.id_post
-          });
-        });
-      });
+        return (//запишем количество постов
+          _this.posts_length = data.length, _this.count_pages(_this.posts_length), //пагинация с какой позиции и сколько взять
+          removed = data.splice(pagination_numb, 10), removed.forEach(function (entry) {
+            inp.push({
+              text: entry.name_post,
+              id_post: entry.id_post
+            });
+          })
+        );
+      }); //проверка на начало и конец списка
     },
+    //не использую
     select_line: function select_line(numb) {
-      var _this = this;
+      var _this2 = this;
 
       axios.post('/api/select_line', {
         id_post: numb
       }).then(function (_ref2) {
         var data = _ref2.data;
-        return _this.$store.dispatch('setLineCounter', data);
+        return _this2.$store.dispatch('setLineCounter', data);
       });
     },
     select_name: function select_name(numb) {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.post('/api/select_name', {
         id_post: numb
       }).then(function (_ref3) {
         var data = _ref3.data;
-        return _this2.$store.dispatch('changeName', data.name_post);
+        return _this3.$store.dispatch('changeName', data.name_post);
       });
     },
     edit_post: function edit_post(numb) {
       //выбираю номер линии у поста
-      this.select_line(numb);
+      // this.select_line(numb);
       this.select_name(numb); //меняю значение поста
 
       this.$store.dispatch('setPostCounter', numb); //имя поста
 
       Vue.router.push({
-        name: 'add_content'
+        name: 'add_procedures'
       });
     },
-    delete_post: function delete_post(numb) {}
+    delete_post: function delete_post(numb) {
+      console.log(this.posts_length);
+    },
+    next: function next() {
+      if ((this.pagination_numb + 1) * 10 < this.posts_length) {
+        this.posts = [];
+        this.pagination_numb++;
+        this.render_table(this.posts, this.removed, this.pagination_numb);
+      }
+    },
+    prev: function prev() {
+      if (this.pagination_numb != 0) {
+        this.posts = [];
+        this.pagination_numb--;
+        this.render_table(this.posts, this.removed, this.pagination_numb);
+      }
+    },
+    numb_pagination: function numb_pagination(page) {
+      this.posts = [];
+      this.pagination_numb = page;
+      this.render_table(this.posts, this.removed, this.pagination_numb);
+    },
+    count_pages: function count_pages(numb) {
+      for (var i = 1; i <= Math.ceil(numb / 10); i++) {
+        this.pagination.push(i);
+      }
+    }
   }
 });
 
@@ -39629,62 +39906,193 @@ var render = function() {
         "div",
         { staticClass: "col-md-8" },
         [
-          _vm._l(_vm.inputs, function(item) {
-            return _c("div", [
-              _c(
-                "p",
-                {
-                  staticClass: " bg-success text-white rounded mybtn",
-                  staticStyle: { "white-space": "pre-line" },
-                  on: {
-                    click: function($event) {
-                      return _vm.next_post(item.numb_line)
-                    }
-                  }
-                },
-                [
-                  _vm._v(
-                    "\n      " +
-                      _vm._s(item.text) +
-                      " => " +
-                      _vm._s(item.numb_line) +
-                      "\n    "
-                  )
-                ]
-              )
-            ])
-          }),
-          _vm._v(" "),
+          _vm._v("\nНазвание:\n                "),
           _c("textarea", {
             directives: [
               {
                 name: "model",
                 rawName: "v-model",
-                value: _vm.message,
-                expression: "message"
+                value: _vm.text_block_name,
+                expression: "text_block_name"
               }
             ],
             staticClass: "form-control",
-            attrs: { rows: "2", id: "messages", name: "text" },
-            domProps: { value: _vm.message },
+            attrs: { rows: "1", id: "block_name", name: "text_block_name" },
+            domProps: { value: _vm.text_block_name },
             on: {
               input: function($event) {
                 if ($event.target.composing) {
                   return
                 }
-                _vm.message = $event.target.value
+                _vm.text_block_name = $event.target.value
               }
             }
+          }),
+          _vm._v("\nВопрос:\n                "),
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.question,
+                expression: "question"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { rows: "2", id: "messages", name: "text" },
+            domProps: { value: _vm.question },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.question = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("hr", {
+            attrs: {
+              align: "center",
+              width: "90%",
+              size: "10",
+              color: "#dddddd"
+            }
+          }),
+          _vm._v(" "),
+          _c("div", [_vm._v("Ответы:")]),
+          _vm._v(" "),
+          _vm._l(_vm.answers, function(item) {
+            return _c("div", [
+              _c("p", [
+                _vm._v("\n    1 вариант\n    "),
+                _c(
+                  "textarea",
+                  {
+                    staticClass: "qwe",
+                    attrs: { rows: "2", id: "myTextarea", name: "text" }
+                  },
+                  [_vm._v(_vm._s(item.text) + " ")]
+                ),
+                _vm._v("\n    Направляет на блок: XXXXXXXXX\n    ")
+              ])
+            ])
           }),
           _vm._v(" "),
           _c(
             "button",
             {
-              staticClass: "btn btn-primary btn-block",
+              staticClass: "btn btn-secondary active",
               attrs: { type: "button" },
-              on: { click: _vm.add_new_line }
+              on: { click: _vm.add_answer }
             },
-            [_vm._v("Сохранить строку и добавить новую")]
+            [_vm._v("Добавить ответ")]
+          ),
+          _vm._v(" "),
+          _c("hr", {
+            attrs: {
+              align: "center",
+              width: "90%",
+              size: "10",
+              color: "#dddddd"
+            }
+          }),
+          _vm._v(" "),
+          _vm.parents
+            ? _c("div", [
+                _c("hr", {
+                  attrs: {
+                    align: "center",
+                    width: "90%",
+                    size: "5",
+                    color: "#dddddd"
+                  }
+                }),
+                _vm._v(" "),
+                _c("div", [_vm._v("Родители:")]),
+                _vm._v(
+                  "\n                Имя родителя\n                Описание вопроса. Изменить\n                "
+                ),
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.message,
+                      expression: "message"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { rows: "2", id: "3", name: "text" },
+                  domProps: { value: _vm.message },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.message = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(
+                  "\n                Ответы родителя:\n                1 вариант\n                "
+                ),
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.message,
+                      expression: "message"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { rows: "2", id: "4", name: "text" },
+                  domProps: { value: _vm.message },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.message = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(
+                  "\n                Направляет на блок: XXXXXXXXX\n                2 вариант\n                "
+                ),
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.message,
+                      expression: "message"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { rows: "2", id: "5", name: "text" },
+                  domProps: { value: _vm.message },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.message = $event.target.value
+                    }
+                  }
+                })
+              ])
+            : _c("div", [_vm._v("Родителей нет.")]),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-secondary active",
+              attrs: { type: "button" },
+              on: { click: _vm.save }
+            },
+            [_vm._v("Сохранить")]
           ),
           _vm._v(" "),
           _c(
@@ -39693,32 +40101,12 @@ var render = function() {
               staticClass: "btn btn-danger btn-block",
               attrs: { type: "button" }
             },
-            [_vm._v("Полностью сохранить блок")]
+            [_vm._v("На главную")]
           )
         ],
         2
       )
-    ]),
-    _vm._v(" "),
-    _c(
-      "button",
-      {
-        staticClass: "btn btn-primary btn-sm",
-        attrs: { type: "button" },
-        on: { click: _vm.back }
-      },
-      [_vm._v("Назад")]
-    ),
-    _vm._v(" "),
-    _c(
-      "button",
-      {
-        staticClass: "btn btn-primary btn-sm",
-        attrs: { type: "button" },
-        on: { click: _vm.forward }
-      },
-      [_vm._v("Вперёд")]
-    )
+    ])
   ])
 }
 var staticRenderFns = []
@@ -39745,10 +40133,12 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "col" }, [
     _c("h1", { staticStyle: { color: "green" } }, [
-      _vm._v("Введите назание поста")
+      _vm._v(
+        "Введите заголовок поста (например: Какую из форм экономической концентрации вы планируете совершить? ) "
+      )
     ]),
     _vm._v(" "),
-    _c("p", [_vm._v("Название: " + _vm._s(_vm.message))]),
+    _c("p", [_vm._v("Заголовок поста: " + _vm._s(_vm.message))]),
     _vm._v(" "),
     _c(
       "form",
@@ -39788,10 +40178,204 @@ var render = function() {
         _c(
           "button",
           { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-          [_vm._v("Submit")]
+          [_vm._v("Сохранить")]
         )
       ]
     )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/medical/AddProcedures.vue?vue&type=template&id=21a9ecb0&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/medical/AddProcedures.vue?vue&type=template&id=21a9ecb0& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    _vm._v("\n        Список процедур:\n        "),
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c(
+        "div",
+        { staticClass: "col-md-8" },
+        [
+          _vm._l(_vm.inputs, function(item) {
+            return _c("div", [
+              _c(
+                "p",
+                {
+                  staticClass: " bg-success text-white rounded mybtn",
+                  staticStyle: { "white-space": "pre-line" },
+                  on: {
+                    click: function($event) {
+                      return _vm.go_to_post(item.id_main_procedure)
+                    }
+                  }
+                },
+                [
+                  _vm._v(
+                    "\n      " +
+                      _vm._s(item.name_main_procedure) +
+                      " => " +
+                      _vm._s(item.id_main_procedure) +
+                      "\n    "
+                  )
+                ]
+              )
+            ])
+          }),
+          _vm._v(" "),
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.message,
+                expression: "message"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { rows: "2", id: "messages", name: "text" },
+            domProps: { value: _vm.message },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.message = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary btn-block",
+              attrs: { type: "button" },
+              on: { click: _vm.add_new_line }
+            },
+            [_vm._v("Сохранить процедуру")]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary btn-block",
+              attrs: { type: "button" },
+              on: { click: _vm.test }
+            },
+            [_vm._v("test")]
+          )
+        ],
+        2
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/medical/BlockList.vue?vue&type=template&id=4833f772&":
+/*!********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/medical/BlockList.vue?vue&type=template&id=4833f772& ***!
+  \********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    _vm._v("\n        Список блоков:\n        "),
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c(
+        "div",
+        { staticClass: "col-md-8" },
+        [
+          _vm._l(_vm.inputs, function(item) {
+            return _c("div", [
+              _c(
+                "p",
+                {
+                  staticClass: " bg-success text-white rounded mybtn",
+                  staticStyle: { "white-space": "pre-line" },
+                  on: {
+                    click: function($event) {
+                      return _vm.go_to_post(item.procedure_number)
+                    }
+                  }
+                },
+                [
+                  _vm._v(
+                    "\n      " +
+                      _vm._s(item.block_name) +
+                      " => " +
+                      _vm._s(item.id_block) +
+                      "\n    "
+                  )
+                ]
+              )
+            ])
+          }),
+          _vm._v(" "),
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.message,
+                expression: "message"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { rows: "2", id: "messages", name: "text" },
+            domProps: { value: _vm.message },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.message = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary btn-block",
+              attrs: { type: "button" },
+              on: { click: _vm.new_block }
+            },
+            [_vm._v("Новый блок")]
+          )
+        ],
+        2
+      )
+    ])
   ])
 }
 var staticRenderFns = []
@@ -39865,7 +40449,54 @@ var render = function() {
         }),
         0
       )
-    ])
+    ]),
+    _vm._v(" "),
+    _c("nav", { attrs: { "aria-label": "..." } }, [
+      _c(
+        "ul",
+        { staticClass: "pagination" },
+        [
+          _c(
+            "li",
+            {
+              staticClass: "page-item page-link disabled ",
+              on: { click: _vm.prev }
+            },
+            [_vm._v("Previous")]
+          ),
+          _vm._v(" "),
+          _vm._l(_vm.pagination, function(page) {
+            return _vm.active_page == page
+              ? _c(
+                  "li",
+                  {
+                    staticClass: "page-item page-link ",
+                    on: {
+                      click: function($event) {
+                        return _vm.numb_pagination(page - 1)
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                " + _vm._s(page) + "\n            "
+                    )
+                  ]
+                )
+              : _vm._e()
+          }),
+          _vm._v(" "),
+          _c(
+            "li",
+            { staticClass: "page-item page-link ", on: { click: _vm.next } },
+            [_vm._v("Next")]
+          )
+        ],
+        2
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "active_li" }, [_vm._v("qweqweqweqwe")])
   ])
 }
 var staticRenderFns = [
@@ -55776,6 +56407,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_medical_AddNewPost__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/medical/AddNewPost */ "./resources/js/components/medical/AddNewPost.vue");
 /* harmony import */ var _components_medical_AddContent__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/medical/AddContent */ "./resources/js/components/medical/AddContent.vue");
 /* harmony import */ var _components_medical_PostsList__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/medical/PostsList */ "./resources/js/components/medical/PostsList.vue");
+/* harmony import */ var _components_medical_AddProcedures__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/medical/AddProcedures */ "./resources/js/components/medical/AddProcedures.vue");
+/* harmony import */ var _components_medical_BlockList__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/medical/BlockList */ "./resources/js/components/medical/BlockList.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
@@ -55793,6 +56426,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('example-component', __webp
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('app', __webpack_require__(/*! ./components/App.vue */ "./resources/js/components/App.vue")["default"]); // шина данных
 
 var postName = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
+
+
 
 
 
@@ -55849,6 +56484,14 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/admin/posts',
     name: 'posts',
     component: _components_medical_PostsList__WEBPACK_IMPORTED_MODULE_16__["default"]
+  }, {
+    path: '/admin/add_procedures',
+    name: 'add_procedures',
+    component: _components_medical_AddProcedures__WEBPACK_IMPORTED_MODULE_17__["default"]
+  }, {
+    path: '/admin/block_list',
+    name: 'block_list',
+    component: _components_medical_BlockList__WEBPACK_IMPORTED_MODULE_18__["default"]
   }]
 });
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.router = router; //websanova/vue-auth
@@ -56654,6 +57297,144 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/medical/AddProcedures.vue":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/medical/AddProcedures.vue ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _AddProcedures_vue_vue_type_template_id_21a9ecb0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AddProcedures.vue?vue&type=template&id=21a9ecb0& */ "./resources/js/components/medical/AddProcedures.vue?vue&type=template&id=21a9ecb0&");
+/* harmony import */ var _AddProcedures_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AddProcedures.vue?vue&type=script&lang=js& */ "./resources/js/components/medical/AddProcedures.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _AddProcedures_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AddProcedures_vue_vue_type_template_id_21a9ecb0___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AddProcedures_vue_vue_type_template_id_21a9ecb0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/medical/AddProcedures.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/medical/AddProcedures.vue?vue&type=script&lang=js&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/medical/AddProcedures.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AddProcedures_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./AddProcedures.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/medical/AddProcedures.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AddProcedures_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/medical/AddProcedures.vue?vue&type=template&id=21a9ecb0&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/medical/AddProcedures.vue?vue&type=template&id=21a9ecb0& ***!
+  \******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddProcedures_vue_vue_type_template_id_21a9ecb0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./AddProcedures.vue?vue&type=template&id=21a9ecb0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/medical/AddProcedures.vue?vue&type=template&id=21a9ecb0&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddProcedures_vue_vue_type_template_id_21a9ecb0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddProcedures_vue_vue_type_template_id_21a9ecb0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/medical/BlockList.vue":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/medical/BlockList.vue ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _BlockList_vue_vue_type_template_id_4833f772___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BlockList.vue?vue&type=template&id=4833f772& */ "./resources/js/components/medical/BlockList.vue?vue&type=template&id=4833f772&");
+/* harmony import */ var _BlockList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BlockList.vue?vue&type=script&lang=js& */ "./resources/js/components/medical/BlockList.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _BlockList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _BlockList_vue_vue_type_template_id_4833f772___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _BlockList_vue_vue_type_template_id_4833f772___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/medical/BlockList.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/medical/BlockList.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/medical/BlockList.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BlockList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./BlockList.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/medical/BlockList.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BlockList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/medical/BlockList.vue?vue&type=template&id=4833f772&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/medical/BlockList.vue?vue&type=template&id=4833f772& ***!
+  \**************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_BlockList_vue_vue_type_template_id_4833f772___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./BlockList.vue?vue&type=template&id=4833f772& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/medical/BlockList.vue?vue&type=template&id=4833f772&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_BlockList_vue_vue_type_template_id_4833f772___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_BlockList_vue_vue_type_template_id_4833f772___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/medical/PostsList.vue":
 /*!*******************************************************!*\
   !*** ./resources/js/components/medical/PostsList.vue ***!
@@ -56741,11 +57522,12 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   state: {
-    totalTvCount: '',
+    namePost: '',
     lineCounter: 0,
     navigation: [0],
     //какой пост находится в работе сейчас
-    post_id: 0
+    post_id: 0,
+    current_main_procedure: 0
   },
   getters: {
     LAST_ELEM: function LAST_ELEM(state) {
@@ -56754,7 +57536,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   },
   mutations: {
     removeTv: function removeTv(state, amount) {
-      state.totalTvCount = amount;
+      state.namePost = amount;
     },
     upLine: function upLine(state) {
       state.lineCounter++;
@@ -56770,6 +57552,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     },
     line_setup: function line_setup(state, numb) {
       state.lineCounter = numb;
+    },
+    CurrentMainProcedure_setup: function CurrentMainProcedure_setup(state, numb) {
+      state.current_main_procedure = numb;
     }
   },
   actions: {
@@ -56790,6 +57575,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     },
     setLineCounter: function setLineCounter(context, numb) {
       context.commit('line_setup', numb);
+    },
+    setCurrentMainProcedure: function setCurrentMainProcedure(context, numb) {
+      context.commit('CurrentMainProcedure_setup', numb);
     }
   }
 });

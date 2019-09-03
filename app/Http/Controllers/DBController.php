@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Temp;
+use App\Procedure;
+use App\Post;
 
 class DBController extends Controller
 {
@@ -100,14 +102,19 @@ class DBController extends Controller
         $post_in_work= $request->input('post_in_work');
        return $posts = Temp::where('parent', '=', $parent)->where('id_post', '=', $post_in_work)->get();
     }
+    public function render_procedures(Request $request)
+    {
+        $id_post = $request->input('id_post');
+        return $posts = Procedure::where('id_post', '=', $id_post)->get();
+    }
+
     public function render_posts(Request $request)
     {
-       // return $names = Temp::select('id_post','name_post')->latest()->distinct()->paginate(10);
-        return $names = Temp::select('id_post', 'name_post')->distinct('id_post')->get();
+        return $names = Procedure::select('id_post', 'name_post')->distinct('id_post')->get();
     }
     public function post_id()
     {
-        return $posts = Temp::max('id_post');
+        return $posts = Procedure::max('id_post');
     }
     public function select_line(Request $request)
     {
@@ -117,7 +124,27 @@ class DBController extends Controller
     public function select_name(Request $request)
     {
         $id_post = $request->input('id_post');
-        return $name = Temp::select('name_post')->where('id_post', '=', $id_post)->first();
+        return $name = Procedure::select('name_post')->where('id_post', '=', $id_post)->first();
+    }
+    public function add_procedure(Request $request)
+    {
+        $id_post = $request->input('id_post');
+        $name_post = $request->input('name_post');
+        $id_main_procedure = $request->input('id_main_procedure');
+        $name_main_procedure = $request->input('name_main_procedure');
+        return Procedure::create([
+            'id_post' => $id_post,
+            'name_post' => $name_post,
+            'id_main_procedure' => $id_main_procedure,
+            'name_main_procedure' => $name_main_procedure,
+        ]);
+    }
+
+    public function render_blocks(Request $request)
+    {
+        $id_post = $request->input('id_post');
+        $id_procedure = $request->input('id_procedure');
+        return $posts = Post::where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->get();
     }
 
 }

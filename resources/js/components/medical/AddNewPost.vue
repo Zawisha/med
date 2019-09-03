@@ -1,13 +1,13 @@
 <template>
     <div class="col">
-                <h1 style="color:green">Введите назание поста</h1>
-                <p>Название: {{ message }}</p>
+                <h1 style="color:green">Введите заголовок поста (например: Какую из форм экономической концентрации вы планируете совершить? ) </h1>
+                <p>Заголовок поста: {{ message }}</p>
                 <form @submit.prevent="push_the_button">
                     <div class="form-group">
                         <textarea class="form-control" rows="6" id="messages" name="text" v-model="message">
               </textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
                 </form>
     </div>
 </template>
@@ -23,25 +23,39 @@
 
             }
         },
+        mounted() {
+
+            this.find_post_id();
+
+        },
         methods: {
 
-            push_the_button()
+
+            find_post_id()
             {
                 axios
                     .post('/api/post_id').then(({ data }) => (
-                    this.$store.dispatch('spliceElem',1),
-                    this.$store.dispatch('setLineCounter', 0),
-                    this.$store.dispatch('setPostCounter', data+1),
-                    this.$store.dispatch('changeName', this.message),
-                    Vue.router.push({name:'add_content'})
+
+                        //установим номер поста
+
+                        this.$store.dispatch('setPostCounter', data+1)
+                        // this.$store.dispatch('changeName', this.message),
+                        //     Vue.router.push({name:'add_content'})
+
                     )
-                );
-
-
+                )
             },
 
 
-        },
+            push_the_button()
+            {
+                //установим имя поста
+                this.$store.dispatch('changeName', this.message),
+                Vue.router.push({name:'add_procedures'})
+            },
+
+
+        }
 
     }
 </script>

@@ -41,6 +41,9 @@ import RenewPassword from './components/auth/RenewPassword.vue';
 import AddNewPost from "./components/medical/AddNewPost";
 import AddContent from "./components/medical/AddContent";
 import PostsList from "./components/medical/PostsList";
+import AddProcedures from "./components/medical/AddProcedures";
+import BlockList from "./components/medical/BlockList";
+
 
 const router = new VueRouter({
     mode: 'history',
@@ -98,7 +101,17 @@ const router = new VueRouter({
             path: '/admin/posts',
             name: 'posts',
             component: PostsList
-        }
+        },
+        {
+            path: '/admin/add_procedures',
+            name: 'add_procedures',
+            component: AddProcedures
+        },
+        {
+            path: '/admin/block_list',
+            name: 'block_list',
+            component: BlockList
+        },
 
 
     ],

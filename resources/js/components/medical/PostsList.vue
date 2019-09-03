@@ -22,6 +22,17 @@
             </tbody>
         </table>
 
+        <nav aria-label="...">
+            <ul class="pagination">
+                <li class="page-item page-link disabled " v-on:click="prev">Previous</li>
+                <li class="page-item page-link " v-for="page in pagination" v-on:click="numb_pagination(page - 1)" v-if="active_page == page ">
+                    {{ page }}
+                </li>
+                <li class="page-item page-link " v-on:click="next">Next</li>
+            </ul>
+        </nav>
+
+        <div class="active_li">qweqweqweqwe</div>
 
     </div>
 </template>
@@ -33,34 +44,62 @@
         data(){
 
             return {
+                //главный массив постов
                 posts: [],
+                //массив в который положится промежуточное значение постов
+                removed:[],
+                //текущий номер страницы пагинации
+                pagination_numb:0,
+                //количество постов всего ( для пагинации )
+                posts_length:0,
+                //массив пагинации
+                pagination:[],
+                //активная страница
+                active_page:0
+
             }
         },
         mounted() {
 
-
-            this.render_table(this.posts);
+          //  console.log('qweQQQ ');
+            this.render_table(this.posts, this.removed, this.pagination_numb, this.posts_length);
 
 
         },
         methods: {
 
-            render_table(inp)
+            render_table(inp, removed, pagination_numb)
             {
+                this.pagination=[];
+                //множитель количества постов на странице ( он же номер )
+                pagination_numb=pagination_numb*10;
                 axios
                     .post('/api/render_posts',{
                         parent:this.current_line,
                     }).then(({ data }) => (
-                        data.forEach(function(entry) {
-                            inp.push({
-                                text:entry.name_post,
-                                id_post:entry.id_post,
-                            });
+                    //запишем количество постов
+                    this.posts_length=data.length,
+                        this.count_pages(this.posts_length),
+                        //пагинация с какой позиции и сколько взять
+                            removed= data.splice(pagination_numb, 10),
+
+
+                                removed.forEach(function(entry) {
+                                inp.push({
+                                    text:entry.name_post,
+                                    id_post:entry.id_post,
+                                });
+
                         })
+
                     )
+
                 );
+                //проверка на начало и конец списка
+
             },
 
+            //не использую
             select_line(numb)
             {
                 axios
@@ -88,16 +127,48 @@
             edit_post(numb)
             {
                 //выбираю номер линии у поста
-                this.select_line(numb);
+               // this.select_line(numb);
                this.select_name(numb);
                 //меняю значение поста
                 this.$store.dispatch('setPostCounter', numb);
                 //имя поста
-                Vue.router.push({name:'add_content'});
+                Vue.router.push({name:'add_procedures'});
             },
             delete_post(numb)
             {
+                console.log(this.posts_length);
+            },
+            next()
+            {
+                if(((this.pagination_numb+1) * 10)<(this.posts_length))
+                {
+                    this.posts=[];
+                    this.pagination_numb++;
+                    this.render_table(this.posts, this.removed, this.pagination_numb);
+                }
 
+            },
+            prev()
+            {
+                if(this.pagination_numb != 0)
+                {
+                    this.posts=[];
+                    this.pagination_numb--;
+                    this.render_table(this.posts, this.removed, this.pagination_numb);
+                }
+
+            },
+            numb_pagination(page)
+            {
+                this.posts=[];
+                this.pagination_numb=page;
+                this.render_table(this.posts, this.removed, this.pagination_numb);
+            },
+            count_pages(numb)
+            {
+                for (let i = 1; i <= Math.ceil(numb/10); i++) {
+                   this.pagination.push(i);
+                }
             }
 
 

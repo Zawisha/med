@@ -5,11 +5,12 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
     state: {
-        totalTvCount: '',
+        namePost: '',
         lineCounter:0,
         navigation:[0],
         //какой пост находится в работе сейчас
         post_id:0,
+        current_main_procedure:0,
     },
     getters: {
         LAST_ELEM: state => {
@@ -19,7 +20,7 @@ export const store = new Vuex.Store({
     mutations: {
         removeTv(state, amount)
         {
-            state.totalTvCount = amount;
+            state.namePost = amount;
         },
         upLine(state)
         {
@@ -40,6 +41,10 @@ export const store = new Vuex.Store({
         line_setup(state,numb)
         {
             state.lineCounter=numb;
+        },
+        CurrentMainProcedure_setup(state,numb)
+        {
+            state.current_main_procedure=numb;
         }
     },
     actions: {
@@ -66,6 +71,10 @@ export const store = new Vuex.Store({
         setLineCounter(context,numb)
         {
             context.commit('line_setup',numb);
+        },
+        setCurrentMainProcedure(context,numb)
+        {
+            context.commit('CurrentMainProcedure_setup',numb);
         }
 
 

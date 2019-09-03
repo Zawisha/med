@@ -9,6 +9,11 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/my_nav.css') }}" rel="stylesheet">
     <link href="{{ asset('css/content.css') }}" rel="stylesheet">
+    <style>
+        .active_li {
+        border:3px solid blue;
+        }
+    </style>
 </head>
 
 
@@ -266,3 +271,4 @@
     });
 </script>
 </html>
+
