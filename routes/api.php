@@ -30,7 +30,7 @@ Route::post('forget', 'MyAuth\AuthController@forgetPassword');
 Route::post('ifexist', 'MyAuth\AuthController@if_exist');
 
 Route::post('add_content', 'DBController@store');
-//not use
+Route::post('delete', 'DBController@destroy');
 Route::post('render', 'DBController@render');
 Route::post('render_posts', 'DBController@render_posts');
 Route::post('post_id', 'DBController@post_id');

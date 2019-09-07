@@ -11,6 +11,7 @@ export const store = new Vuex.Store({
         //какой пост находится в работе сейчас
         post_id:0,
         current_main_procedure:0,
+        block_id:0
     },
     getters: {
         LAST_ELEM: state => {
@@ -29,6 +30,10 @@ export const store = new Vuex.Store({
         setPost(state, numb)
         {
             state.post_id=numb;
+        },
+        setBlock(state, numb)
+        {
+            state.block_id=numb;
         },
         add_to_nav(state,numb)
         {
@@ -59,6 +64,10 @@ export const store = new Vuex.Store({
         setPostCounter(context, numb)
         {
             context.commit('setPost', numb);
+        },
+        setBlockCounter(context, numb)
+        {
+            context.commit('setBlock', numb);
         },
         change_nav(context, numb)
         {

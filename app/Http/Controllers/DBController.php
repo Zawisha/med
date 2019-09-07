@@ -39,16 +39,23 @@ class DBController extends Controller
     public function store(Request $request)
     {
         $id_post = $request->input('id_post');
-        $name_post = $request->input('name_post');
-        $parent = $request->input('parent');
-        $text = $request->input('text');
-        $number_line = $request->input('number_line');
-        return Temp::create([
+        $id_procedure = $request->input('id_procedure');
+        $id_block = $request->input('id_block');
+        $block_name = $request->input('block_name');
+        $question_text = $request->input('question_text');
+        $answer_text = $request->input('answer_text');
+        $answer_link_id = $request->input('answer_link_id');
+
+
+
+        return Post::create([
             'id_post' => $id_post,
-            'name_post' => $name_post,
-            'parent' => $parent,
-            'text' => $text,
-            'number_line' => $number_line,
+            'id_procedure' => $id_procedure,
+            'id_block' => $id_block,
+            'block_name' => $block_name,
+            'question_text' => $question_text,
+            'answer_text' => $answer_text,
+            'answer_link_id' => $answer_link_id,
         ]);
     }
 
@@ -71,7 +78,7 @@ class DBController extends Controller
      */
     public function edit($id)
     {
-        //
+
     }
 
     /**
@@ -92,15 +99,19 @@ class DBController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $id_post = $request->input('id_post');
+        $id_procedure = $request->input('id_procedure');
+        $id_block = $request->input('id_block');
+        $delete = Post::where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->where('id_block', '=', $id_block)->delete();
     }
     public function render(Request $request)
     {
-        $parent = $request->input('parent');
-        $post_in_work= $request->input('post_in_work');
-       return $posts = Temp::where('parent', '=', $parent)->where('id_post', '=', $post_in_work)->get();
+        $id_post = $request->input('id_post');
+        $id_procedure= $request->input('id_procedure');
+        $id_block=$request->input('id_block');
+       return $posts = Post::where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->where('id_block', '=', $id_block)->get();
     }
     public function render_procedures(Request $request)
     {
@@ -144,7 +155,7 @@ class DBController extends Controller
     {
         $id_post = $request->input('id_post');
         $id_procedure = $request->input('id_procedure');
-        return $posts = Post::where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->get();
+        return $posts = Post::select('id_block', 'block_name')->where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->distinct('id_block')->get();
     }
 
 }

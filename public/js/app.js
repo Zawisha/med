@@ -3357,8 +3357,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      // current_line: 0,
-      // marker:0,
       answers: [],
       message: '',
       text_block_name: '',
@@ -3368,7 +3366,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     //current main_procedure
-    this.render_start_array(this.inputs);
+    this.render_start_array(this.answers);
   },
   created: function created() {},
   methods: {
@@ -3378,92 +3376,53 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     save: function save() {
-      this.answer = []; //получил ответы
+      var _this = this;
 
-      var elems = document.getElementsByClassName('qwe');
-      [0].value;
+      this.answer = [];
+      axios.post('/api/delete', {
+        id_post: this.$store.state.post_id,
+        id_procedure: this.$store.state.current_main_procedure,
+        id_block: this.$store.state.block_id
+      }).then(function (_ref) {
+        var data = _ref.data;
+
+        _this.save_data();
+      });
+    },
+    save_data: function save_data() {
+      //получил ответы
+      var elems = document.getElementsByClassName('answer');
       var i;
 
       for (i = 0; i < elems.length; i++) {
         axios.post('/api/add_content', {
           id_post: this.$store.state.post_id,
           id_procedure: this.$store.state.current_main_procedure,
-          number_line: this.$store.state.lineCounter,
-          parent: this.current_line,
-          text: this.message
+          id_block: this.$store.state.block_id,
+          block_name: this.text_block_name,
+          question_text: this.question,
+          answer_text: elems[i].value,
+          answer_link_id: '555'
         });
-        console.log(elems[i].value);
-      }
-    },
-    add_new_line: function add_new_line() {
-      //vuex увеличение счётчика линии
-      this.$store.dispatch('upLineCounter');
-      this.inputs.push({
-        text: this.message,
-        numb_line: this.$store.state.lineCounter
-      });
-      axios.post('/api/add_content', {
-        id_post: this.$store.state.post_id,
-        name_post: this.$store.state.totalTvCount,
-        number_line: this.$store.state.lineCounter,
-        parent: this.current_line,
-        text: this.message
-      });
-      this.message = '';
-    },
-    next_post: function next_post(numb) {
-      this.current_line = numb;
-      this.inputs = []; //навигация совпала
-
-      if (this.current_line == this.$store.state.navigation[this.marker + 1]) {
-        this.marker++;
-      } //навигация не совпала
-      else {
-          this.marker++; //если в массиве только ноль
-
-          this.$store.dispatch('spliceElem', this.marker);
-          this.$store.dispatch('change_nav', this.current_line);
-        }
-
-      this.render_start_array(this.inputs); //запишем новое значение навигации в массив
-
-      console.log('current_line ->' + this.current_line);
-      console.log('marker ->' + this.marker);
-      console.log(this.$store.state.navigation);
-    },
-    back: function back() {
-      if (this.current_line != 0) {
-        this.inputs = [];
-        this.message = '';
-        this.marker--;
-        this.current_line = this.$store.state.navigation[this.marker];
-        console.log('current_line after back ->' + this.current_line);
-        console.log('marker ->' + this.marker);
-        console.log(this.$store.state.navigation);
-        this.render_start_array(this.inputs);
-      }
-    },
-    forward: function forward() {
-      if (this.marker + 1 != this.$store.state.navigation.length) {
-        this.inputs = [];
-        this.marker++;
-        console.log('current_line after forward ->' + this.current_line);
-        this.current_line = this.$store.state.navigation[this.marker];
-        this.render_start_array(this.inputs);
       }
     },
     render_start_array: function render_start_array(inp) {
+      var _this2 = this;
+
       axios.post('/api/render', {
-        parent: this.current_line,
-        post_in_work: this.$store.state.post_id
-      }).then(function (_ref) {
-        var data = _ref.data;
-        return data.forEach(function (entry) {
-          inp.push({
-            text: entry.text,
-            numb_line: entry.number_line
+        id_post: this.$store.state.post_id,
+        id_procedure: this.$store.state.current_main_procedure,
+        id_block: this.$store.state.block_id
+      }).then(function (_ref2) {
+        var data = _ref2.data;
+
+        if (data.length != 0) {
+          _this2.text_block_name = data[0].block_name, _this2.question = data[0].question_text, data.forEach(function (entry) {
+            inp.push({
+              text: entry.answer_text
+            });
           });
-        });
+        }
       });
     }
   }
@@ -3639,8 +3598,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3650,21 +3607,18 @@ __webpack_require__.r(__webpack_exports__);
       procedure_number: 0
     };
   },
-  mounted: function mounted() {// this.render_start_array(this.inputs);
+  mounted: function mounted() {
+    this.render_start_array(this.inputs);
   },
   created: function created() {},
   methods: {
-    test: function test() {
-      console.log('POST NUMBER ' + this.$store.state.post_id);
-      console.log('procedure NUMBER ' + this.$store.state.current_main_procedure);
-    },
     new_block: function new_block() {
-      Vue.router.push({
+      this.$store.dispatch('setBlockCounter', this.inputs.length + 1), Vue.router.push({
         name: 'add_content'
       });
     },
     go_to_post: function go_to_post(numb) {
-      this.$store.dispatch('setCurrentMainProcedure', numb), Vue.router.push({
+      this.$store.dispatch('setBlockCounter', numb), Vue.router.push({
         name: 'add_content'
       });
     },
@@ -39962,14 +39916,14 @@ var render = function() {
           _vm._v(" "),
           _c("div", [_vm._v("Ответы:")]),
           _vm._v(" "),
-          _vm._l(_vm.answers, function(item) {
+          _vm._l(_vm.answers, function(item, i) {
             return _c("div", [
               _c("p", [
-                _vm._v("\n    1 вариант\n    "),
+                _vm._v("\n    " + _vm._s(i + 1) + " вариант\n    "),
                 _c(
                   "textarea",
                   {
-                    staticClass: "qwe",
+                    staticClass: "answer",
                     attrs: { rows: "2", id: "myTextarea", name: "text" }
                   },
                   [_vm._v(_vm._s(item.text) + " ")]
@@ -40324,7 +40278,7 @@ var render = function() {
                   staticStyle: { "white-space": "pre-line" },
                   on: {
                     click: function($event) {
-                      return _vm.go_to_post(item.procedure_number)
+                      return _vm.go_to_post(item.id_block)
                     }
                   }
                 },
@@ -40339,28 +40293,6 @@ var render = function() {
                 ]
               )
             ])
-          }),
-          _vm._v(" "),
-          _c("textarea", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.message,
-                expression: "message"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { rows: "2", id: "messages", name: "text" },
-            domProps: { value: _vm.message },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.message = $event.target.value
-              }
-            }
           }),
           _vm._v(" "),
           _c(
@@ -57527,7 +57459,8 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     navigation: [0],
     //какой пост находится в работе сейчас
     post_id: 0,
-    current_main_procedure: 0
+    current_main_procedure: 0,
+    block_id: 0
   },
   getters: {
     LAST_ELEM: function LAST_ELEM(state) {
@@ -57543,6 +57476,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     },
     setPost: function setPost(state, numb) {
       state.post_id = numb;
+    },
+    setBlock: function setBlock(state, numb) {
+      state.block_id = numb;
     },
     add_to_nav: function add_to_nav(state, numb) {
       state.navigation.push(numb);
@@ -57566,6 +57502,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     },
     setPostCounter: function setPostCounter(context, numb) {
       context.commit('setPost', numb);
+    },
+    setBlockCounter: function setBlockCounter(context, numb) {
+      context.commit('setBlock', numb);
     },
     change_nav: function change_nav(context, numb) {
       context.commit('add_to_nav', numb);

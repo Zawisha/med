@@ -9,10 +9,10 @@
                 <hr align="center" width="90%" size="10" color="#dddddd" />
                 <div>Ответы:</div>
 
-    <div v-for="item in answers">
+    <div v-for="(item,i) in answers">
     <p>
-    1 вариант
-    <textarea class="qwe" rows="2" id="myTextarea" name="text" >{{ item.text }} </textarea>
+    {{ i+1 }} вариант
+    <textarea class="answer" rows="2" id="myTextarea" name="text" >{{ item.text }} </textarea>
     Направляет на блок: XXXXXXXXX
     </p>
     </div>
@@ -46,8 +46,6 @@
     export default {
         data(){
             return {
-                // current_line: 0,
-                // marker:0,
                 answers: [],
                 message: '' ,
                 text_block_name:'',
@@ -58,7 +56,7 @@
         mounted() {
 
             //current main_procedure
-            this.render_start_array(this.inputs);
+            this.render_start_array(this.answers);
 
 
         },
@@ -78,8 +76,22 @@
             {
             this.answer=[];
 
-            //получил ответы
-               var elems = document.getElementsByClassName('qwe');[0].value;
+                axios
+                    .post('/api/delete',{
+                        id_post:this.$store.state.post_id,
+                        id_procedure:this.$store.state.current_main_procedure,
+                        id_block:this.$store.state.block_id,
+                    }).then(({ data }) =>{
+                        this.save_data()
+
+                }
+                )
+            },
+
+            save_data()
+            {
+                //получил ответы
+                var elems = document.getElementsByClassName('answer');
                 var i;
                 for (i = 0; i < elems.length; i++) {
 
@@ -87,109 +99,41 @@
                         .post('/api/add_content',{
                             id_post:this.$store.state.post_id,
                             id_procedure:this.$store.state.current_main_procedure,
-
-                            number_line:this.$store.state.lineCounter,
-                            parent:this.current_line,
-                            text:this.message
+                            id_block:this.$store.state.block_id,
+                            block_name:this.text_block_name,
+                            question_text:this.question,
+                            answer_text:elems[i].value,
+                            answer_link_id:'555'
                         });
-
-                  console.log(elems[i].value);
-                }
-
-            },
-
-            add_new_line()
-            {
-                //vuex увеличение счётчика линии
-                this.$store.dispatch('upLineCounter');
-
-                this.inputs.push({
-                    text:this.message,
-                    numb_line:this.$store.state.lineCounter,
-                });
-                axios
-                    .post('/api/add_content',{
-                            id_post:this.$store.state.post_id,
-                            name_post:this.$store.state.totalTvCount,
-                            number_line:this.$store.state.lineCounter,
-                            parent:this.current_line,
-                            text:this.message
-                    });
-                this.message ='';
-
-            },
-
-            next_post(numb)
-            {
-                    this.current_line = numb;
-                    this.inputs = [];
-                //навигация совпала
-                if(this.current_line == this.$store.state.navigation[this.marker+1])
-                {
-
-                this.marker++;
-                }
-                //навигация не совпала
-                else
-                {
-                    this.marker++;
-                    //если в массиве только ноль
-                        this.$store.dispatch('spliceElem',this.marker);
-                        this.$store.dispatch('change_nav', this.current_line);
                 }
 
 
-                this.render_start_array(this.inputs);
-                //запишем новое значение навигации в массив
-                console.log('current_line ->' + this.current_line);
-                console.log('marker ->' + this.marker);
-                console.log(this.$store.state.navigation);
-
-
             },
-            back()
-            {
-                if(this.current_line != 0) {
-                    this.inputs = [];
-                    this.message = '';
-                    this.marker--;
-                    this.current_line=(this.$store.state.navigation[this.marker]);
-                    console.log('current_line after back ->' + this.current_line);
-                    console.log('marker ->' + this.marker);
-                    console.log(this.$store.state.navigation);
-                    this.render_start_array(this.inputs);
-                }
 
 
-
-            },
-            forward()
-            {
-                if((this.marker+1)!=(this.$store.state.navigation.length))
-                {
-                    this.inputs = [];
-                    this.marker++;
-                    console.log('current_line after forward ->' + this.current_line);
-                    this.current_line=(this.$store.state.navigation[this.marker]);
-                    this.render_start_array(this.inputs);
-                }
-
-            },
 
             render_start_array(inp)
             {
                 axios
                     .post('/api/render',{
-                        parent:this.current_line,
-                        post_in_work:this.$store.state.post_id,
-                    }).then(({ data }) => (
-                data.forEach(function(entry) {
-                    inp.push({
-                        text:entry.text,
-                        numb_line:entry.number_line,
-                    });
-                })
-                    )
+                        id_post:this.$store.state.post_id,
+                        id_procedure:this.$store.state.current_main_procedure,
+                        id_block:this.$store.state.block_id,
+                    }).then(({ data }) =>
+                {
+                    if(data.length != 0)
+                    {
+                               this.text_block_name = data[0].block_name,
+                               this.question = data[0].question_text,
+
+                        data.forEach(function(entry) {
+                            inp.push({
+                                text:entry.answer_text,
+                            });
+                        })
+                    }
+                }
+
                 );
             },
 

@@ -20,7 +20,6 @@ class CreatePostTable extends Migration
             $table->integer('id_block');
             $table->string('block_name');
             $table->string('question_text');
-            $table->integer('answer_id');
             $table->string('answer_text');
             $table->integer('answer_link_id');
             $table->timestamps();
