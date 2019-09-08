@@ -111,8 +111,28 @@ class DBController extends Controller
         $id_post = $request->input('id_post');
         $id_procedure= $request->input('id_procedure');
         $id_block=$request->input('id_block');
-       return $posts = Post::where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->where('id_block', '=', $id_block)->get();
+        $posts = Post::where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->where('id_block', '=', $id_block)->get();
+        foreach( $posts as $key => $value){
+            if($posts[$key]['answer_link_id']!=0)
+            {
+                $name = Post::select('block_name')->where('id_block', '=', $posts[$key]['answer_link_id'])->first();
+                if($name){
+                    $posts[$key]['answer_link_name']=$name['block_name'];
+                }
+                else
+                {
+                    $posts[$key]['answer_link_name']='';
+                }
+            }
+            else
+            {
+                $posts[$key]['answer_link_name']='';
+            }
+
+        }
+        return $posts;
     }
+
     public function render_procedures(Request $request)
     {
         $id_post = $request->input('id_post');

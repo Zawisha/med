@@ -25,7 +25,7 @@ Vue.use(Vuex);
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('app', require('./components/App.vue').default);
-
+Vue.component('modal', require('./components/medical/ModalBlockList').default);
 // шина данных
 export var postName = new Vue();
 
@@ -43,7 +43,7 @@ import AddContent from "./components/medical/AddContent";
 import PostsList from "./components/medical/PostsList";
 import AddProcedures from "./components/medical/AddProcedures";
 import BlockList from "./components/medical/BlockList";
-
+import modal from "./components/medical/ModalBlockList";
 
 const router = new VueRouter({
     mode: 'history',
@@ -127,7 +127,8 @@ Vue.use(require('@websanova/vue-auth'), {
 
 const app = new Vue({
     el: '#app',
-    components: { App },
+    components: { App , modal},
      router,
      store,
+
 });

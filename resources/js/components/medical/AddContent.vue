@@ -13,10 +13,24 @@
     <p>
     {{ i+1 }} вариант
     <textarea class="answer" rows="2" id="myTextarea" name="text" >{{ item.text }} </textarea>
-    Направляет на блок: XXXXXXXXX
+    Направляет на блок:
+        <a href="#" v-if="item.link_id ==0" v-on:click.prevent="modal_answer(i)" >Выбрать блок</a>
+
+
+
+<!--        <a href="#" v-if="item.link_id !=0" >{{ item.link_name }}</a>-->
+        <a href="#" v-if="item.link_id !=0" v-on:click.prevent="modal_answer(i)"> {{ item.link_name }} Изменить</a>
+<!--        {{ item.link_id }}-->
     </p>
     </div>
                 <button type="button" class="btn btn-secondary active" v-on:click="add_answer">Добавить ответ</button>
+
+<!--                <button id="show-modal" @click="showModal = true" >Show Modal</button>-->
+                <modal v-if="showModal" @close="close_modal">
+                    <h3 slot="link">custom</h3>
+                </modal>
+
+
 
                 <hr align="center" width="90%" size="10" color="#dddddd" />
                 <div v-if="parents">
@@ -35,7 +49,7 @@
                 <div v-else>Родителей нет.</div>
 
                 <button type="button" class="btn btn-secondary active" v-on:click="save">Сохранить</button>
-                <button type="button" class="btn btn-danger btn-block">На главную</button>
+                <button type="button" class="btn btn-danger btn-block" v-on:click="test">Test</button>
             </div>
         </div>
     </div>
@@ -50,7 +64,11 @@
                 message: '' ,
                 text_block_name:'',
                 question:'',
-                parents:false
+                parents:false,
+                showModal:false,
+                //номер в массиве выбранного ответа
+                answer_link_to_modal:'',
+
             }
         },
         mounted() {
@@ -64,10 +82,30 @@
         },
         methods: {
 
+            test()
+            {
+                console.log(this.answers);
+            } ,
+
+            close_modal(data)
+            {
+
+                this.showModal = false,
+                this.answers[this.answer_link_to_modal]['link_id'] = data['id_block_modal'],
+                this.answers[this.answer_link_to_modal]['link_name'] = data['block_name_modal']
+            },
+
+            modal_answer(numb)
+            {
+                this.showModal = true,
+                this.answer_link_to_modal=numb
+            },
+
             add_answer()
             {
                 this.answers.push({
                     text: "",
+                    link_id:0,
             });
 
             },
@@ -103,7 +141,7 @@
                             block_name:this.text_block_name,
                             question_text:this.question,
                             answer_text:elems[i].value,
-                            answer_link_id:'555'
+                            answer_link_id:this.answers[i]['link_id'],
                         });
                 }
 
@@ -129,9 +167,13 @@
                         data.forEach(function(entry) {
                             inp.push({
                                 text:entry.answer_text,
+                                link_id:entry.answer_link_id,
+                                link_name:entry.answer_link_name,
+
                             });
                         })
                     }
+
                 }
 
                 );
@@ -143,3 +185,4 @@
 
     }
 </script>
+
