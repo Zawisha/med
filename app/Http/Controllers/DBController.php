@@ -46,17 +46,20 @@ class DBController extends Controller
         $answer_text = $request->input('answer_text');
         $answer_link_id = $request->input('answer_link_id');
 
+      // return dd($request->input('answer_text'));
+        for ($i = 0; $i < count($answer_text); $i++) {
+            Post::create([
+                'id_post' => $id_post,
+                'id_procedure' => $id_procedure,
+                'id_block' => $id_block,
+                'block_name' => $block_name,
+                'question_text' => $question_text,
+                'answer_text' => $answer_text[$i],
+                'answer_link_id' => $answer_link_id[$i],
+            ]);
 
+        }
 
-        return Post::create([
-            'id_post' => $id_post,
-            'id_procedure' => $id_procedure,
-            'id_block' => $id_block,
-            'block_name' => $block_name,
-            'question_text' => $question_text,
-            'answer_text' => $answer_text,
-            'answer_link_id' => $answer_link_id,
-        ]);
     }
 
     /**

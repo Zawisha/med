@@ -29,9 +29,6 @@
                 <modal v-if="showModal" @close="close_modal">
                     <h3 slot="link">custom</h3>
                 </modal>
-
-
-
                 <hr align="center" width="90%" size="10" color="#dddddd" />
                 <div v-if="parents">
                 <hr align="center" width="90%" size="5" color="#dddddd" />
@@ -90,9 +87,12 @@
             close_modal(data)
             {
 
-                this.showModal = false,
-                this.answers[this.answer_link_to_modal]['link_id'] = data['id_block_modal'],
-                this.answers[this.answer_link_to_modal]['link_name'] = data['block_name_modal']
+                this.showModal = false;
+                    if(data){
+                            this.answers[this.answer_link_to_modal]['link_id'] = data['id_block_modal'],
+                            this.answers[this.answer_link_to_modal]['link_name'] = data['block_name_modal']
+                    }
+
             },
 
             modal_answer(numb)
@@ -130,22 +130,25 @@
             {
                 //получил ответы
                 var elems = document.getElementsByClassName('answer');
+                //формирую массив значений для отправки
+                let  answer_arr=[];
+                let  answer_link_arr=[];
                 var i;
                 for (i = 0; i < elems.length; i++) {
-
-                    axios
+                    answer_arr.push(elems[i].value);
+                    answer_link_arr.push(this.answers[i]['link_id']);
+                }
+                     axios
                         .post('/api/add_content',{
                             id_post:this.$store.state.post_id,
                             id_procedure:this.$store.state.current_main_procedure,
                             id_block:this.$store.state.block_id,
                             block_name:this.text_block_name,
                             question_text:this.question,
-                            answer_text:elems[i].value,
-                            answer_link_id:this.answers[i]['link_id'],
+                            answer_text:answer_arr,
+                            answer_link_id:answer_link_arr,
+
                         });
-                }
-
-
             },
 
 

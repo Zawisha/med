@@ -3365,9 +3365,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3391,7 +3388,11 @@ __webpack_require__.r(__webpack_exports__);
       console.log(this.answers);
     },
     close_modal: function close_modal(data) {
-      this.showModal = false, this.answers[this.answer_link_to_modal]['link_id'] = data['id_block_modal'], this.answers[this.answer_link_to_modal]['link_name'] = data['block_name_modal'];
+      this.showModal = false;
+
+      if (data) {
+        this.answers[this.answer_link_to_modal]['link_id'] = data['id_block_modal'], this.answers[this.answer_link_to_modal]['link_name'] = data['block_name_modal'];
+      }
     },
     modal_answer: function modal_answer(numb) {
       this.showModal = true, this.answer_link_to_modal = numb;
@@ -3418,20 +3419,26 @@ __webpack_require__.r(__webpack_exports__);
     },
     save_data: function save_data() {
       //получил ответы
-      var elems = document.getElementsByClassName('answer');
+      var elems = document.getElementsByClassName('answer'); //формирую массив значений для отправки
+
+      var answer_arr = [];
+      var answer_link_arr = [];
       var i;
 
       for (i = 0; i < elems.length; i++) {
-        axios.post('/api/add_content', {
-          id_post: this.$store.state.post_id,
-          id_procedure: this.$store.state.current_main_procedure,
-          id_block: this.$store.state.block_id,
-          block_name: this.text_block_name,
-          question_text: this.question,
-          answer_text: elems[i].value,
-          answer_link_id: this.answers[i]['link_id']
-        });
+        answer_arr.push(elems[i].value);
+        answer_link_arr.push(this.answers[i]['link_id']);
       }
+
+      axios.post('/api/add_content', {
+        id_post: this.$store.state.post_id,
+        id_procedure: this.$store.state.current_main_procedure,
+        id_block: this.$store.state.block_id,
+        block_name: this.text_block_name,
+        question_text: this.question,
+        answer_text: answer_arr,
+        answer_link_id: answer_link_arr
+      });
     },
     render_start_array: function render_start_array(inp) {
       var _this2 = this;
