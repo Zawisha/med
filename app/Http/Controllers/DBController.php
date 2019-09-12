@@ -46,6 +46,8 @@ class DBController extends Controller
         $answer_text = $request->input('answer_text');
         $answer_link_id = $request->input('answer_link_id');
 
+        $parents = $request->input('parents');
+
       // return dd($request->input('answer_text'));
         for ($i = 0; $i < count($answer_text); $i++) {
             Post::create([
@@ -57,6 +59,22 @@ class DBController extends Controller
                 'answer_text' => $answer_text[$i],
                 'answer_link_id' => $answer_link_id[$i],
             ]);
+
+        }
+
+        //блок родителей
+        foreach ($parents as $parent)
+        {
+                Post::create([
+                    'id_post' => $id_post,
+                    'id_procedure' => $id_procedure,
+                    'id_block' => $parent['parent_id_block'],
+                    'block_name' => $parent['parent_name_block'],
+                    'question_text' => $parent['parent_question_text'],
+                    'answer_text' => $parent['answer'],
+                    'answer_link_id' => $parent['answer_link_id'],
+                ]);
+
 
         }
 
@@ -106,8 +124,12 @@ class DBController extends Controller
     {
         $id_post = $request->input('id_post');
         $id_procedure = $request->input('id_procedure');
-        $id_block = $request->input('id_block');
-        $delete = Post::where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->where('id_block', '=', $id_block)->delete();
+        $id_blocks = $request->input('id_block');
+
+        foreach( $id_blocks as  $id_block) {
+            $delete = Post::where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->where('id_block', '=', $id_block)->delete();
+        }
+
     }
     public function render(Request $request)
     {
@@ -136,6 +158,46 @@ class DBController extends Controller
         return $posts;
     }
 
+    public function render_parents(Request $request)
+    {
+        $id_post = $request->input('id_post');
+        $id_procedure= $request->input('id_procedure');
+        $id_block=$request->input('id_block');
+       $posts =  Post::select('id_block')->where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->where('answer_link_id', '=', $id_block)->distinct('id_block')->get();
+        $parents=[];
+        foreach( $posts as $key => $value) {
+            $parent = Post::where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->where('id_block', '=', $posts[$key]['id_block'])->get();
+            $parents[$key]=$parent;
+        }
+
+
+        foreach($parents as $key => $value)
+        {
+
+            foreach( $value as $key1 => $value1){
+                if($value[$key1]['answer_link_id']!=0)
+                {
+                    $name = Post::select('block_name')->where('id_block', '=', $parents[$key][$key1]['answer_link_id'])->first();
+                    if($name){
+                        $parents[$key][$key1]['answer_link_name']=$name['block_name'];
+                    }
+                    else
+                    {
+                        $parents[$key][$key1]['answer_link_name']='';
+                    }
+                }
+                    else
+                    {
+                    $parents[$key][$key1]['answer_link_name']='';
+                    }
+            }
+        }
+
+        return $parents;
+    }
+
+
+
     public function render_procedures(Request $request)
     {
         $id_post = $request->input('id_post');
@@ -149,6 +211,10 @@ class DBController extends Controller
     public function post_id()
     {
         return $posts = Procedure::max('id_post');
+    }
+    public function max_block_id()
+    {
+        return $posts = Post::max('id_block');
     }
     public function select_line(Request $request)
     {

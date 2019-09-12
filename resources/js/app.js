@@ -26,6 +26,7 @@ Vue.use(Vuex);
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('app', require('./components/App.vue').default);
 Vue.component('modal', require('./components/medical/ModalBlockList').default);
+Vue.component('parents_modal', require('./components/medical/ParentsModalBlockList').default);
 // шина данных
 export var postName = new Vue();
 

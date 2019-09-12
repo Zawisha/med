@@ -39,9 +39,12 @@
 
             new_block()
             {
-
-                this.$store.dispatch('setBlockCounter', this.inputs.length+1),
-                Vue.router.push({name:'add_content'});
+                axios
+                    .post('/api/max_block_id',{
+                    }).then(({ data }) =>{
+                    this.$store.dispatch('setBlockCounter', data+1),
+                        Vue.router.push({name:'add_content'});
+                });
             },
 
 

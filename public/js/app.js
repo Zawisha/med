@@ -3365,6 +3365,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3372,20 +3386,37 @@ __webpack_require__.r(__webpack_exports__);
       message: '',
       text_block_name: '',
       question: '',
-      parents: false,
       showModal: false,
       //номер в массиве выбранного ответа
-      answer_link_to_modal: ''
+      answer_link_to_modal: '',
+      parents_array: [],
+      parents_showModal: false,
+      parents_current_block_string: [],
+      parents_modal_column: ''
     };
   },
   mounted: function mounted() {
     //current main_procedure
     this.render_start_array(this.answers);
+    this.render_start_parents_array(this.parents_array);
   },
   created: function created() {},
   methods: {
     test: function test() {
-      console.log(this.answers);
+      console.log(this.parents_array);
+    },
+    delete_answer: function delete_answer(numb) {
+      this.answers.splice(numb, 1);
+    },
+    parents_close_modal: function parents_close_modal(data) {
+      this.parents_showModal = false;
+
+      if (data) {
+        this.parents_array[this.parents_modal_column][this.parents_current_block_string[1]]['parent_answer_link_id'] = data['id_block_modal'], this.parents_array[this.parents_modal_column][this.parents_current_block_string[1]]['parent_answer_link_name'] = data['block_name_modal'];
+      }
+
+      this.parents_current_block_string = [];
+      this.parents_modal_column = '';
     },
     close_modal: function close_modal(data) {
       this.showModal = false;
@@ -3397,6 +3428,9 @@ __webpack_require__.r(__webpack_exports__);
     modal_answer: function modal_answer(numb) {
       this.showModal = true, this.answer_link_to_modal = numb;
     },
+    parents_modal_answer: function parents_modal_answer(id_parent_block, numb_of_string, numb_of_first_column) {
+      this.parents_current_block_string[0] = id_parent_block, this.parents_current_block_string[1] = numb_of_string, this.parents_modal_column = numb_of_first_column, this.parents_showModal = true;
+    },
     add_answer: function add_answer() {
       this.answers.push({
         text: "",
@@ -3407,15 +3441,23 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.answer = [];
+      var blocks_array_to_delete = [];
+      blocks_array_to_delete.push(this.$store.state.block_id);
+
+      for (var i = 0; i < this.parents_array.length; i++) {
+        blocks_array_to_delete.push(this.parents_array[i][0]['parent_id_block']);
+      } // console.log('block to delete' + blocks_array_to_delete);
+
+
       axios.post('/api/delete', {
         id_post: this.$store.state.post_id,
         id_procedure: this.$store.state.current_main_procedure,
-        id_block: this.$store.state.block_id
+        id_block: blocks_array_to_delete
       }).then(function (_ref) {
         var data = _ref.data;
 
         _this.save_data();
-      });
+      }); //this.save_data();
     },
     save_data: function save_data() {
       //получил ответы
@@ -3423,12 +3465,34 @@ __webpack_require__.r(__webpack_exports__);
 
       var answer_arr = [];
       var answer_link_arr = [];
-      var i;
 
-      for (i = 0; i < elems.length; i++) {
+      for (var i = 0; i < elems.length; i++) {
         answer_arr.push(elems[i].value);
         answer_link_arr.push(this.answers[i]['link_id']);
-      }
+      } // работа с родителями
+
+
+      var parent_answer_arr = [];
+      var parents_ans = document.getElementsByClassName('answers_parent');
+      var parent_question = document.getElementsByClassName('parent_question');
+      var m = 0;
+
+      for (var _i = 0; _i < this.parents_array.length; _i++) {
+        for (var j = 0; j < this.parents_array[_i].length; j++) {
+          parent_answer_arr.push({
+            parent_id_block: this.parents_array[_i][0]['parent_id_block'],
+            parent_name_block: this.parents_array[_i][0]['parent_block_name'],
+            parent_question_text: parent_question[_i].value,
+            answer_link_id: this.parents_array[_i][j]['parent_answer_link_id'],
+            answer: parents_ans[m].value
+          });
+          m++;
+        }
+
+        console.log(parent_answer_arr);
+        console.log('dlina' + this.parents_array[_i].length);
+      } //конец блока родителей
+
 
       axios.post('/api/add_content', {
         id_post: this.$store.state.post_id,
@@ -3437,7 +3501,8 @@ __webpack_require__.r(__webpack_exports__);
         block_name: this.text_block_name,
         question_text: this.question,
         answer_text: answer_arr,
-        answer_link_id: answer_link_arr
+        answer_link_id: answer_link_arr,
+        parents: parent_answer_arr
       });
     },
     render_start_array: function render_start_array(inp) {
@@ -3459,6 +3524,43 @@ __webpack_require__.r(__webpack_exports__);
             });
           });
         }
+      });
+    },
+    //parents block
+    render_start_parents_array: function render_start_parents_array(inp) {
+      axios.post('/api/render_parents', {
+        id_post: this.$store.state.post_id,
+        id_procedure: this.$store.state.current_main_procedure,
+        id_block: this.$store.state.block_id
+      }).then(function (_ref3) {
+        var data = _ref3.data;
+
+        if (data.length != 0) {
+          var _loop = function _loop(i) {
+            var temp_inp = [];
+            data[i].forEach(function (entry) {
+              temp_inp.push({
+                parent_id_block: entry.id_block,
+                parent_block_name: entry.block_name,
+                parent_question: entry.question_text,
+                parent_answer_text: entry.answer_text,
+                parent_answer_link_id: entry.answer_link_id,
+                parent_answer_link_name: entry.answer_link_name
+              });
+            });
+            inp.push(temp_inp);
+          };
+
+          for (var i = 0; i < data.length; i++) {
+            _loop(i);
+          }
+        }
+      });
+    },
+    parent_add_answer: function parent_add_answer(numb) {
+      this.parents_array[numb].push({
+        parent_answer_text: "",
+        parent_answer_link_id: 0
       });
     }
   }
@@ -3649,8 +3751,13 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {},
   methods: {
     new_block: function new_block() {
-      this.$store.dispatch('setBlockCounter', this.inputs.length + 1), Vue.router.push({
-        name: 'add_content'
+      var _this = this;
+
+      axios.post('/api/max_block_id', {}).then(function (_ref) {
+        var data = _ref.data;
+        _this.$store.dispatch('setBlockCounter', data + 1), Vue.router.push({
+          name: 'add_content'
+        });
       });
     },
     go_to_post: function go_to_post(numb) {
@@ -3662,8 +3769,8 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/api/render_blocks', {
         id_post: this.$store.state.post_id,
         id_procedure: this.$store.state.current_main_procedure
-      }).then(function (_ref) {
-        var data = _ref.data;
+      }).then(function (_ref2) {
+        var data = _ref2.data;
         return data.forEach(function (entry) {
           inp.push({
             id_block: entry.id_block,
@@ -3737,6 +3844,88 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     modal_show_block_list: function modal_show_block_list(inp) {
       var block = this.$store.state.block_id;
+      axios.post('/api/render_blocks', {
+        id_post: this.$store.state.post_id,
+        id_procedure: this.$store.state.current_main_procedure
+      }).then(function (_ref) {
+        var data = _ref.data;
+        return data.forEach(function (entry) {
+          if (entry.id_block != block) {
+            inp.push({
+              id_block: entry.id_block,
+              block_name: entry.block_name
+            });
+          }
+        });
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      modal_blocks: []
+    };
+  },
+  //номер в массиве выбранного вопроса
+  props: ['block', 'string_par'],
+  mounted: function mounted() {
+    console.log('qwe'); //current main_procedure
+
+    this.modal_show_block_list(this.modal_blocks, this.block);
+  },
+  created: function created() {},
+  methods: {
+    modal_show_block_list: function modal_show_block_list(inp, block) {
       axios.post('/api/render_blocks', {
         id_post: this.$store.state.post_id,
         id_procedure: this.$store.state.current_main_procedure
@@ -8362,6 +8551,25 @@ __webpack_require__.r(__webpack_exports__);
 /*!****************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/medical/ModalBlockList.vue?vue&type=style&index=0&lang=css& ***!
   \****************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.modal-mask {\n    position: fixed;\n    z-index: 9998;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(0, 0, 0, .5);\n    display: table;\n    transition: opacity .3s ease;\n}\n.modal-wrapper {\n    display: table-cell;\n    vertical-align: middle;\n}\n.modal-container {\n    width: 300px;\n    margin: 0px auto;\n    padding: 20px 30px;\n    background-color: #fff;\n    border-radius: 2px;\n    box-shadow: 0 2px 8px rgba(0, 0, 0, .33);\n    transition: all .3s ease;\n    font-family: Helvetica, Arial, sans-serif;\n}\n.modal-header h3 {\n    margin-top: 0;\n    color: #42b983;\n}\n.modal-body {\n    margin: 20px 0;\n}\n.modal-default-button {\n    float: right;\n}\n\n/*\n * The following styles are auto-applied to elements with\n * transition=\"modal\" when their visibility is toggled\n * by Vue.js.\n *\n * You can easily play with the modal transition by editing\n * these styles.\n */\n.modal-enter {\n    opacity: 0;\n}\n.modal-leave-active {\n    opacity: 0;\n}\n.modal-enter .modal-container,\n.modal-leave-active .modal-container {\n    transform: scale(1.1);\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=style&index=0&lang=css&":
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=style&index=0&lang=css& ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -39231,6 +39439,36 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=style&index=0&lang=css&":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=style&index=0&lang=css& ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./ParentsModalBlockList.vue?vue&type=style&index=0&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=style&index=0&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/lib/addStyles.js":
 /*!****************************************************!*\
   !*** ./node_modules/style-loader/lib/addStyles.js ***!
@@ -40680,7 +40918,21 @@ var render = function() {
           _vm._l(_vm.answers, function(item, i) {
             return _c("div", [
               _c("p", [
-                _vm._v("\n    " + _vm._s(i + 1) + " вариант\n    "),
+                _vm._v("\n    " + _vm._s(i + 1) + " вариант  "),
+                _c(
+                  "a",
+                  {
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.delete_answer(i)
+                      }
+                    }
+                  },
+                  [_vm._v(" Удалить")]
+                ),
+                _vm._v(" "),
                 _c(
                   "textarea",
                   {
@@ -40752,92 +41004,149 @@ var render = function() {
             }
           }),
           _vm._v(" "),
-          _vm.parents
-            ? _c("div", [
-                _c("hr", {
-                  attrs: {
-                    align: "center",
-                    width: "90%",
-                    size: "5",
-                    color: "#dddddd"
-                  }
+          _c("div", [_vm._v("Родители:")]),
+          _vm._v(" "),
+          _vm._l(_vm.parents_array, function(item_parent, numb) {
+            return _c(
+              "div",
+              [
+                _vm._v(
+                  "\n                        Имя родителя\n                        " +
+                    _vm._s(item_parent[0].parent_block_name) +
+                    "\n                        Описание вопроса:\n                        "
+                ),
+                _c(
+                  "textarea",
+                  {
+                    staticClass: "form-control parent_question",
+                    attrs: { rows: "2", name: "text_block_parent_name" }
+                  },
+                  [_vm._v(" " + _vm._s(item_parent[0].parent_question))]
+                ),
+                _vm._v(" "),
+                _vm._l(item_parent, function(item, number) {
+                  return _c("div", [
+                    _c("div", [_vm._v("Ответы родителя:")]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v(
+                        "\n                                " +
+                          _vm._s(number + 1) +
+                          " вариант  "
+                      ),
+                      _c(
+                        "a",
+                        {
+                          attrs: { href: "#" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.delete_answer(number)
+                            }
+                          }
+                        },
+                        [_vm._v(" Удалить")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "textarea",
+                        {
+                          staticClass: "form-control answers_parent",
+                          attrs: { rows: "2", name: "text_block_name" }
+                        },
+                        [_vm._v(" " + _vm._s(item.parent_answer_text) + " ")]
+                      ),
+                      _vm._v(
+                        "\n                                Направляет на блок:\n                                "
+                      ),
+                      item.parent_answer_link_id == 0
+                        ? _c(
+                            "a",
+                            {
+                              attrs: { href: "#" },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.parents_modal_answer(
+                                    item.parent_id_block,
+                                    number,
+                                    numb
+                                  )
+                                }
+                              }
+                            },
+                            [_vm._v("Выбрать блок")]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      item.parent_answer_link_id != 0
+                        ? _c(
+                            "a",
+                            {
+                              attrs: { href: "#" },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.parents_modal_answer(
+                                    item.parent_id_block,
+                                    number,
+                                    numb
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                " " +
+                                  _vm._s(item.parent_answer_link_name) +
+                                  " Изменить"
+                              )
+                            ]
+                          )
+                        : _vm._e()
+                    ])
+                  ])
                 }),
                 _vm._v(" "),
-                _c("div", [_vm._v("Родители:")]),
-                _vm._v(
-                  "\n                Имя родителя\n                Описание вопроса. Изменить\n                "
-                ),
-                _c("textarea", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.message,
-                      expression: "message"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { rows: "2", id: "3", name: "text" },
-                  domProps: { value: _vm.message },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary active",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.parent_add_answer(numb)
                       }
-                      _vm.message = $event.target.value
                     }
-                  }
-                }),
-                _vm._v(
-                  "\n                Ответы родителя:\n                1 вариант\n                "
-                ),
-                _c("textarea", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.message,
-                      expression: "message"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { rows: "2", id: "4", name: "text" },
-                  domProps: { value: _vm.message },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.message = $event.target.value
-                    }
-                  }
-                }),
-                _vm._v(
-                  "\n                Направляет на блок: XXXXXXXXX\n                2 вариант\n                "
-                ),
-                _c("textarea", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.message,
-                      expression: "message"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { rows: "2", id: "5", name: "text" },
-                  domProps: { value: _vm.message },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.message = $event.target.value
-                    }
-                  }
-                })
-              ])
-            : _c("div", [_vm._v("Родителей нет.")]),
+                  },
+                  [_vm._v("Добавить ответ")]
+                )
+              ],
+              2
+            )
+          }),
+          _vm._v(" "),
+          _c("hr", {
+            attrs: { align: "center", width: "90%", size: "5", color: "#fff" }
+          }),
+          _vm._v(" "),
+          _vm.parents_showModal
+            ? _c(
+                "parents_modal",
+                {
+                  attrs: {
+                    block: _vm.parents_current_block_string[0],
+                    string_par: _vm.parents_current_block_string[1]
+                  },
+                  on: { parents_close: _vm.parents_close_modal }
+                },
+                [
+                  _c("h3", { attrs: { slot: "link" }, slot: "link" }, [
+                    _vm._v("custom")
+                  ])
+                ]
+              )
+            : _vm._e(),
           _vm._v(" "),
           _c(
             "button",
@@ -41208,6 +41517,121 @@ var render = function() {
                   [
                     _vm._v(
                       "\n                            OK\n                        "
+                    )
+                  ]
+                )
+              ])
+            ],
+            2
+          )
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=template&id=6272c82e&":
+/*!********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=template&id=6272c82e& ***!
+  \********************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("transition", { attrs: { name: "parents_modal" } }, [
+    _c("div", { staticClass: "modal-mask" }, [
+      _c("div", { staticClass: "modal-wrapper" }, [
+        _c("div", { staticClass: "modal-container" }, [
+          _c(
+            "div",
+            { staticClass: "modal-header" },
+            [
+              _vm._t("link", [
+                _vm._v(
+                  "\n                            qweeee\n                        "
+                )
+              ])
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _c("div", [_vm._v(" " + _vm._s(_vm.block) + " ")]),
+          _vm._v(" "),
+          _c("div", [_vm._v(" " + _vm._s(_vm.string_par) + " ")]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "modal-body" },
+            [
+              _vm._t(
+                "body",
+                _vm._l(_vm.modal_blocks, function(item) {
+                  return _c("div", [
+                    _c(
+                      "p",
+                      {
+                        staticClass: " bg-success text-white rounded mybtn",
+                        staticStyle: { "white-space": "pre-line" },
+                        on: {
+                          click: function($event) {
+                            return _vm.$emit("parents_close", {
+                              id_block_modal: item.id_block,
+                              block_name_modal: item.block_name
+                            })
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                                    " +
+                            _vm._s(item.block_name) +
+                            " => " +
+                            _vm._s(item.id_block) +
+                            "\n                                "
+                        )
+                      ]
+                    )
+                  ])
+                })
+              )
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "modal-footer" },
+            [
+              _vm._t("footer", [
+                _vm._v(
+                  "\n                            default footer\n                            "
+                ),
+                _c(
+                  "button",
+                  {
+                    staticClass: "modal-default-button",
+                    on: {
+                      click: function($event) {
+                        return _vm.$emit("parents_close")
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                                OK\n                            "
                     )
                   ]
                 )
@@ -57267,7 +57691,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_axios__WEBPACK_IMPORTED_MODUL
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_4__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('app', __webpack_require__(/*! ./components/App.vue */ "./resources/js/components/App.vue")["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('modal', __webpack_require__(/*! ./components/medical/ModalBlockList */ "./resources/js/components/medical/ModalBlockList.vue")["default"]); // шина данных
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('modal', __webpack_require__(/*! ./components/medical/ModalBlockList */ "./resources/js/components/medical/ModalBlockList.vue")["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('parents_modal', __webpack_require__(/*! ./components/medical/ParentsModalBlockList */ "./resources/js/components/medical/ParentsModalBlockList.vue")["default"]); // шина данных
 
 var postName = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
 
@@ -58363,6 +58788,93 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalBlockList_vue_vue_type_template_id_26ce8007___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalBlockList_vue_vue_type_template_id_26ce8007___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/medical/ParentsModalBlockList.vue":
+/*!*******************************************************************!*\
+  !*** ./resources/js/components/medical/ParentsModalBlockList.vue ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ParentsModalBlockList_vue_vue_type_template_id_6272c82e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ParentsModalBlockList.vue?vue&type=template&id=6272c82e& */ "./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=template&id=6272c82e&");
+/* harmony import */ var _ParentsModalBlockList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ParentsModalBlockList.vue?vue&type=script&lang=js& */ "./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _ParentsModalBlockList_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ParentsModalBlockList.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _ParentsModalBlockList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ParentsModalBlockList_vue_vue_type_template_id_6272c82e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ParentsModalBlockList_vue_vue_type_template_id_6272c82e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/medical/ParentsModalBlockList.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ParentsModalBlockList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./ParentsModalBlockList.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ParentsModalBlockList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=style&index=0&lang=css&":
+/*!****************************************************************************************************!*\
+  !*** ./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=style&index=0&lang=css& ***!
+  \****************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ParentsModalBlockList_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./ParentsModalBlockList.vue?vue&type=style&index=0&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ParentsModalBlockList_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ParentsModalBlockList_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ParentsModalBlockList_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ParentsModalBlockList_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ParentsModalBlockList_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=template&id=6272c82e&":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=template&id=6272c82e& ***!
+  \**************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ParentsModalBlockList_vue_vue_type_template_id_6272c82e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./ParentsModalBlockList.vue?vue&type=template&id=6272c82e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/medical/ParentsModalBlockList.vue?vue&type=template&id=6272c82e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ParentsModalBlockList_vue_vue_type_template_id_6272c82e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ParentsModalBlockList_vue_vue_type_template_id_6272c82e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
