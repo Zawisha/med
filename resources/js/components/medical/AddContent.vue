@@ -1,35 +1,55 @@
 <template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-Название:
-                <textarea class="form-control" rows="1" id="block_name" name="text_block_name" v-model="text_block_name"> </textarea>
-Вопрос:
-                <textarea class="form-control" rows="2" id="messages" name="text"  v-model="question"></textarea>
+    <div class="container justify-content-center back_content">
+        <div class="row" >
+            <div class="col-12">
+                <div class="col-12">Родительский блок>Процедура 1> Стоимость активов> Те же лица ... последний вопрос Стоимость активов> Те же лица ... последний вопросСтоимость активов> Те же лица ... последний вопросСтоимость активов> Те же лица ... последний вопрос</div>
+
+                <div class="header_content_text col-10 ml-auto">Название блока для системы</div>
+                <div class="col-12 d-flex">
+                   <div class="col-2 name_text"><b>Название:</b></div>
+                    <textarea-autosize class="form-control col-10" rows="1" id="block_name" name="text_block_name" v-model="text_block_name"> </textarea-autosize>
+                </div>
+                <div class="header_content_text col-10 ml-auto">Описание вопроса</div>
+                <div class="col-12 d-flex">
+                <div class="col-2 name_text"><b>Вопрос:</b></div>
+                <textarea-autosize class="form-control" rows="3" id="messages" name="text"  v-model="question"></textarea-autosize>
+                </div>
+
+
                 <hr align="center" width="90%" size="10" color="#dddddd" />
-                <div>Ответы:</div>
 
-    <div v-for="(item,i) in answers">
-    <p>
-    {{ i+1 }} вариант  <a href="#"  v-on:click.prevent="delete_answer(i)"> Удалить</a>
-    <textarea class="answer" rows="2" id="myTextarea" name="text" >{{ item.text }} </textarea>
-    Направляет на блок:
-        <a href="#" v-if="item.link_id ==0" v-on:click.prevent="modal_answer(i)" >Выбрать блок</a>
+                <div class="container">
+                    <div class="col-2 ">Ответы:</div>
+                    <div class="row col-12">
 
 
 
-<!--        <a href="#" v-if="item.link_id !=0" >{{ item.link_name }}</a>-->
-        <a href="#" v-if="item.link_id !=0" v-on:click.prevent="modal_answer(i)"> {{ item.link_name }} Изменить</a>
-<!--        {{ item.link_id }}-->
-    </p>
-    </div>
-                <button type="button" class="btn btn-secondary active" v-on:click="add_answer">Добавить ответ</button>
+                        <div v-for="(item,i) in answers"  class="border_content col-4" >
+                                <div>{{ i+1 }} вариант  <a href="#"  v-on:click.prevent="delete_answer(i)"> Удалить</a></div>
+                                <textarea class="answer" rows="2" id="myTextarea" name="text" >{{ item.text }} </textarea>
+                                    <div>
+                                Направляет на блок:
+                                    <a href="#" v-if="item.link_id ==0" v-on:click.prevent="modal_answer(i)" >Выбрать блок</a>
+                                    <a href="#" v-if="item.link_id !=0" v-on:click.prevent="modal_answer(i)"> {{ item.link_name }} Изменить</a>
+                                    </div>
 
-<!--                <button id="show-modal" @click="showModal = true" >Show Modal</button>-->
+                        </div>
+                        <div class="w-100"></div>
+
+                        <div class="col-2">
+                            <button type="button" class="btn btn-secondary active" v-on:click="add_answer">Добавить ответ</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr align="center" width="90%" size="10" color="#dddddd" />
+
+
                 <modal v-if="showModal" @close="close_modal">
                     <h3 slot="link">custom</h3>
                 </modal>
-                <hr align="center" width="90%" size="10" color="#dddddd" />
+
 
 
                     <div>Родители:</div>
@@ -42,15 +62,19 @@
                         <div v-for="(item, number) in item_parent">
                             <div>Ответы родителя:</div>
                             <p>
-                                {{ number+1 }} вариант  <a href="#"  v-on:click.prevent="delete_answer(number)"> Удалить</a>
+                                {{ number+1 }} вариант  <a href="#"  v-on:click.prevent="parents_delete_answer(numb,number)"> Удалить</a>
                                 <textarea class="form-control answers_parent" rows="2" name="text_block_name" > {{ item.parent_answer_text }} </textarea>
                                 Направляет на блок:
                                 <a href="#" v-if="item.parent_answer_link_id ==0" v-on:click.prevent="parents_modal_answer(item.parent_id_block, number, numb)" >Выбрать блок</a>
                                 <a href="#" v-if="item.parent_answer_link_id !=0" v-on:click.prevent="parents_modal_answer(item.parent_id_block, number, numb)"> {{ item.parent_answer_link_name }} Изменить</a>
                             </p>
-
                         </div>
-                        <button type="button" class="btn btn-secondary active" v-on:click="parent_add_answer(numb)">Добавить ответ</button>
+                        <button type="button" class="btn btn-secondary active" v-on:click="parent_add_answer(
+                        numb,
+                        item_parent[0].parent_block_name,
+                        item_parent[0].parent_id_block,
+                        item_parent[0].parent_question,
+                        )">Добавить ответ</button>
                     </div>
                 <hr align="center" width="90%" size="5" color="#fff" />
 
@@ -61,9 +85,10 @@
 
                 <button type="button" class="btn btn-secondary active" v-on:click="save">Сохранить</button>
                 <button type="button" class="btn btn-danger btn-block" v-on:click="test">Test</button>
-            </div>
-        </div>
-    </div>
+              </div>
+       </div>
+</div>
+
 </template>
 
 <script>
@@ -81,7 +106,8 @@
                 parents_array:[],
                 parents_showModal:false,
                 parents_current_block_string:[],
-                parents_modal_column:''
+                parents_modal_column:'',
+                d_flex_counter:0
             }
         },
         mounted() {
@@ -98,7 +124,24 @@
             test()
             {
                 console.log(this.parents_array);
+                alert(this.d_flex_counter);
             } ,
+
+
+            render_path()
+            {
+                axios
+                    .post('/api/render_path',{
+                        id_post:this.$store.state.post_id,
+                        id_procedure:this.$store.state.current_main_procedure,
+                        id_block:this.$store.state.block_id,
+                    });
+            },
+
+            parents_delete_answer(first_number_of_array, second_number_of_array)
+            {
+                this.parents_array[first_number_of_array].splice(second_number_of_array,1);
+            },
 
             delete_answer(numb)
             {
@@ -294,11 +337,15 @@
 
             },
 
-            parent_add_answer(numb)
+            parent_add_answer(numb, name, id,question)
             {
                 this.parents_array[numb].push({
-                    parent_answer_text: "",
                     parent_answer_link_id:0,
+                    parent_answer_link_name:"",
+                    parent_answer_text: "",
+                    parent_block_name:name,
+                    parent_id_block:id,
+                    parent_question:question
                 });
             }
 

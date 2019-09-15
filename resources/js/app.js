@@ -16,11 +16,12 @@ import VueRouter from 'vue-router';
 import Vuex from 'vuex';
 import {store} from './store';
 
+import TextareaAutosize from 'vue-textarea-autosize'
 
 Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
 Vue.use(Vuex);
-
+Vue.use(TextareaAutosize);
 
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);

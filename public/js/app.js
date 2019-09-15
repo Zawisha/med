@@ -3379,6 +3379,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3392,7 +3417,8 @@ __webpack_require__.r(__webpack_exports__);
       parents_array: [],
       parents_showModal: false,
       parents_current_block_string: [],
-      parents_modal_column: ''
+      parents_modal_column: '',
+      d_flex_counter: 0
     };
   },
   mounted: function mounted() {
@@ -3404,6 +3430,17 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     test: function test() {
       console.log(this.parents_array);
+      alert(this.d_flex_counter);
+    },
+    render_path: function render_path() {
+      axios.post('/api/render_path', {
+        id_post: this.$store.state.post_id,
+        id_procedure: this.$store.state.current_main_procedure,
+        id_block: this.$store.state.block_id
+      });
+    },
+    parents_delete_answer: function parents_delete_answer(first_number_of_array, second_number_of_array) {
+      this.parents_array[first_number_of_array].splice(second_number_of_array, 1);
     },
     delete_answer: function delete_answer(numb) {
       this.answers.splice(numb, 1);
@@ -3557,10 +3594,14 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    parent_add_answer: function parent_add_answer(numb) {
+    parent_add_answer: function parent_add_answer(numb, name, id, question) {
       this.parents_array[numb].push({
+        parent_answer_link_id: 0,
+        parent_answer_link_name: "",
         parent_answer_text: "",
-        parent_answer_link_id: 0
+        parent_block_name: name,
+        parent_id_block: id,
+        parent_question: question
       });
     }
   }
@@ -40853,327 +40894,390 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _c("div", { staticClass: "row justify-content-center" }, [
-      _c(
-        "div",
-        { staticClass: "col-md-8" },
-        [
-          _vm._v("\nНазвание:\n                "),
-          _c("textarea", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.text_block_name,
-                expression: "text_block_name"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { rows: "1", id: "block_name", name: "text_block_name" },
-            domProps: { value: _vm.text_block_name },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.text_block_name = $event.target.value
-              }
-            }
-          }),
-          _vm._v("\nВопрос:\n                "),
-          _c("textarea", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.question,
-                expression: "question"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { rows: "2", id: "messages", name: "text" },
-            domProps: { value: _vm.question },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.question = $event.target.value
-              }
-            }
-          }),
-          _vm._v(" "),
-          _c("hr", {
-            attrs: {
-              align: "center",
-              width: "90%",
-              size: "10",
-              color: "#dddddd"
-            }
-          }),
-          _vm._v(" "),
-          _c("div", [_vm._v("Ответы:")]),
-          _vm._v(" "),
-          _vm._l(_vm.answers, function(item, i) {
-            return _c("div", [
-              _c("p", [
-                _vm._v("\n    " + _vm._s(i + 1) + " вариант  "),
-                _c(
-                  "a",
-                  {
-                    attrs: { href: "#" },
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.delete_answer(i)
-                      }
-                    }
-                  },
-                  [_vm._v(" Удалить")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "textarea",
-                  {
-                    staticClass: "answer",
-                    attrs: { rows: "2", id: "myTextarea", name: "text" }
-                  },
-                  [_vm._v(_vm._s(item.text) + " ")]
-                ),
-                _vm._v("\n    Направляет на блок:\n        "),
-                item.link_id == 0
-                  ? _c(
-                      "a",
-                      {
-                        attrs: { href: "#" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.modal_answer(i)
-                          }
-                        }
-                      },
-                      [_vm._v("Выбрать блок")]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                item.link_id != 0
-                  ? _c(
-                      "a",
-                      {
-                        attrs: { href: "#" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.modal_answer(i)
-                          }
-                        }
-                      },
-                      [_vm._v(" " + _vm._s(item.link_name) + " Изменить")]
-                    )
-                  : _vm._e()
-              ])
-            ])
-          }),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-secondary active",
-              attrs: { type: "button" },
-              on: { click: _vm.add_answer }
-            },
-            [_vm._v("Добавить ответ")]
-          ),
-          _vm._v(" "),
-          _vm.showModal
-            ? _c("modal", { on: { close: _vm.close_modal } }, [
-                _c("h3", { attrs: { slot: "link" }, slot: "link" }, [
-                  _vm._v("custom")
-                ])
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _c("hr", {
-            attrs: {
-              align: "center",
-              width: "90%",
-              size: "10",
-              color: "#dddddd"
-            }
-          }),
-          _vm._v(" "),
-          _c("div", [_vm._v("Родители:")]),
-          _vm._v(" "),
-          _vm._l(_vm.parents_array, function(item_parent, numb) {
-            return _c(
+  return _c(
+    "div",
+    { staticClass: "container justify-content-center back_content" },
+    [
+      _c("div", { staticClass: "row" }, [
+        _c(
+          "div",
+          { staticClass: "col-12" },
+          [
+            _c("div", { staticClass: "col-12" }, [
+              _vm._v(
+                "Родительский блок>Процедура 1> Стоимость активов> Те же лица ... последний вопрос Стоимость активов> Те же лица ... последний вопросСтоимость активов> Те же лица ... последний вопросСтоимость активов> Те же лица ... последний вопрос"
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "header_content_text col-10 ml-auto" }, [
+              _vm._v("Название блока для системы")
+            ]),
+            _vm._v(" "),
+            _c(
               "div",
+              { staticClass: "col-12 d-flex" },
               [
-                _vm._v(
-                  "\n                        Имя родителя\n                        " +
-                    _vm._s(item_parent[0].parent_block_name) +
-                    "\n                        Описание вопроса:\n                        "
-                ),
-                _c(
-                  "textarea",
-                  {
-                    staticClass: "form-control parent_question",
-                    attrs: { rows: "2", name: "text_block_parent_name" }
-                  },
-                  [_vm._v(" " + _vm._s(item_parent[0].parent_question))]
-                ),
+                _vm._m(0),
                 _vm._v(" "),
-                _vm._l(item_parent, function(item, number) {
-                  return _c("div", [
-                    _c("div", [_vm._v("Ответы родителя:")]),
-                    _vm._v(" "),
-                    _c("p", [
-                      _vm._v(
-                        "\n                                " +
-                          _vm._s(number + 1) +
-                          " вариант  "
-                      ),
-                      _c(
-                        "a",
-                        {
-                          attrs: { href: "#" },
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              return _vm.delete_answer(number)
+                _c("textarea-autosize", {
+                  staticClass: "form-control col-10",
+                  attrs: {
+                    rows: "1",
+                    id: "block_name",
+                    name: "text_block_name"
+                  },
+                  model: {
+                    value: _vm.text_block_name,
+                    callback: function($$v) {
+                      _vm.text_block_name = $$v
+                    },
+                    expression: "text_block_name"
+                  }
+                })
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "header_content_text col-10 ml-auto" }, [
+              _vm._v("Описание вопроса")
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "col-12 d-flex" },
+              [
+                _vm._m(1),
+                _vm._v(" "),
+                _c("textarea-autosize", {
+                  staticClass: "form-control",
+                  attrs: { rows: "3", id: "messages", name: "text" },
+                  model: {
+                    value: _vm.question,
+                    callback: function($$v) {
+                      _vm.question = $$v
+                    },
+                    expression: "question"
+                  }
+                })
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("hr", {
+              attrs: {
+                align: "center",
+                width: "90%",
+                size: "10",
+                color: "#dddddd"
+              }
+            }),
+            _vm._v(" "),
+            _c("div", { staticClass: "container" }, [
+              _c("div", { staticClass: "col-2 " }, [_vm._v("Ответы:")]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "row col-12" },
+                [
+                  _vm._l(_vm.answers, function(item, i) {
+                    return _c("div", { staticClass: "border_content col-4" }, [
+                      _c("div", [
+                        _vm._v(_vm._s(i + 1) + " вариант  "),
+                        _c(
+                          "a",
+                          {
+                            attrs: { href: "#" },
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.delete_answer(i)
+                              }
                             }
-                          }
-                        },
-                        [_vm._v(" Удалить")]
-                      ),
+                          },
+                          [_vm._v(" Удалить")]
+                        )
+                      ]),
                       _vm._v(" "),
                       _c(
                         "textarea",
                         {
-                          staticClass: "form-control answers_parent",
-                          attrs: { rows: "2", name: "text_block_name" }
+                          staticClass: "answer",
+                          attrs: { rows: "2", id: "myTextarea", name: "text" }
                         },
-                        [_vm._v(" " + _vm._s(item.parent_answer_text) + " ")]
+                        [_vm._v(_vm._s(item.text) + " ")]
                       ),
-                      _vm._v(
-                        "\n                                Направляет на блок:\n                                "
-                      ),
-                      item.parent_answer_link_id == 0
-                        ? _c(
-                            "a",
-                            {
-                              attrs: { href: "#" },
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  return _vm.parents_modal_answer(
-                                    item.parent_id_block,
-                                    number,
-                                    numb
-                                  )
-                                }
-                              }
-                            },
-                            [_vm._v("Выбрать блок")]
-                          )
-                        : _vm._e(),
                       _vm._v(" "),
-                      item.parent_answer_link_id != 0
-                        ? _c(
-                            "a",
-                            {
-                              attrs: { href: "#" },
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  return _vm.parents_modal_answer(
-                                    item.parent_id_block,
-                                    number,
-                                    numb
-                                  )
+                      _c("div", [
+                        _vm._v(
+                          "\n                                Направляет на блок:\n                                    "
+                        ),
+                        item.link_id == 0
+                          ? _c(
+                              "a",
+                              {
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.modal_answer(i)
+                                  }
                                 }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                " " +
-                                  _vm._s(item.parent_answer_link_name) +
-                                  " Изменить"
-                              )
-                            ]
-                          )
-                        : _vm._e()
+                              },
+                              [_vm._v("Выбрать блок")]
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        item.link_id != 0
+                          ? _c(
+                              "a",
+                              {
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.modal_answer(i)
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  " " + _vm._s(item.link_name) + " Изменить"
+                                )
+                              ]
+                            )
+                          : _vm._e()
+                      ])
                     ])
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w-100" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-2" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary active",
+                        attrs: { type: "button" },
+                        on: { click: _vm.add_answer }
+                      },
+                      [_vm._v("Добавить ответ")]
+                    )
                   ])
-                }),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-secondary active",
-                    attrs: { type: "button" },
-                    on: {
-                      click: function($event) {
-                        return _vm.parent_add_answer(numb)
-                      }
-                    }
-                  },
-                  [_vm._v("Добавить ответ")]
-                )
-              ],
-              2
-            )
-          }),
-          _vm._v(" "),
-          _c("hr", {
-            attrs: { align: "center", width: "90%", size: "5", color: "#fff" }
-          }),
-          _vm._v(" "),
-          _vm.parents_showModal
-            ? _c(
-                "parents_modal",
-                {
-                  attrs: {
-                    block: _vm.parents_current_block_string[0],
-                    string_par: _vm.parents_current_block_string[1]
-                  },
-                  on: { parents_close: _vm.parents_close_modal }
-                },
-                [
+                ],
+                2
+              )
+            ]),
+            _vm._v(" "),
+            _c("hr", {
+              attrs: {
+                align: "center",
+                width: "90%",
+                size: "10",
+                color: "#dddddd"
+              }
+            }),
+            _vm._v(" "),
+            _vm.showModal
+              ? _c("modal", { on: { close: _vm.close_modal } }, [
                   _c("h3", { attrs: { slot: "link" }, slot: "link" }, [
                     _vm._v("custom")
                   ])
-                ]
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("div", [_vm._v("Родители:")]),
+            _vm._v(" "),
+            _vm._l(_vm.parents_array, function(item_parent, numb) {
+              return _c(
+                "div",
+                [
+                  _vm._v(
+                    "\n                        Имя родителя\n                        " +
+                      _vm._s(item_parent[0].parent_block_name) +
+                      "\n                        Описание вопроса:\n                        "
+                  ),
+                  _c(
+                    "textarea",
+                    {
+                      staticClass: "form-control parent_question",
+                      attrs: { rows: "2", name: "text_block_parent_name" }
+                    },
+                    [_vm._v(" " + _vm._s(item_parent[0].parent_question))]
+                  ),
+                  _vm._v(" "),
+                  _vm._l(item_parent, function(item, number) {
+                    return _c("div", [
+                      _c("div", [_vm._v("Ответы родителя:")]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "\n                                " +
+                            _vm._s(number + 1) +
+                            " вариант  "
+                        ),
+                        _c(
+                          "a",
+                          {
+                            attrs: { href: "#" },
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.parents_delete_answer(numb, number)
+                              }
+                            }
+                          },
+                          [_vm._v(" Удалить")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "textarea",
+                          {
+                            staticClass: "form-control answers_parent",
+                            attrs: { rows: "2", name: "text_block_name" }
+                          },
+                          [_vm._v(" " + _vm._s(item.parent_answer_text) + " ")]
+                        ),
+                        _vm._v(
+                          "\n                                Направляет на блок:\n                                "
+                        ),
+                        item.parent_answer_link_id == 0
+                          ? _c(
+                              "a",
+                              {
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.parents_modal_answer(
+                                      item.parent_id_block,
+                                      number,
+                                      numb
+                                    )
+                                  }
+                                }
+                              },
+                              [_vm._v("Выбрать блок")]
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        item.parent_answer_link_id != 0
+                          ? _c(
+                              "a",
+                              {
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.parents_modal_answer(
+                                      item.parent_id_block,
+                                      number,
+                                      numb
+                                    )
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  " " +
+                                    _vm._s(item.parent_answer_link_name) +
+                                    " Изменить"
+                                )
+                              ]
+                            )
+                          : _vm._e()
+                      ])
+                    ])
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-secondary active",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.parent_add_answer(
+                            numb,
+                            item_parent[0].parent_block_name,
+                            item_parent[0].parent_id_block,
+                            item_parent[0].parent_question
+                          )
+                        }
+                      }
+                    },
+                    [_vm._v("Добавить ответ")]
+                  )
+                ],
+                2
               )
-            : _vm._e(),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-secondary active",
-              attrs: { type: "button" },
-              on: { click: _vm.save }
-            },
-            [_vm._v("Сохранить")]
-          ),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-danger btn-block",
-              attrs: { type: "button" },
-              on: { click: _vm.test }
-            },
-            [_vm._v("Test")]
-          )
-        ],
-        2
-      )
-    ])
-  ])
+            }),
+            _vm._v(" "),
+            _c("hr", {
+              attrs: { align: "center", width: "90%", size: "5", color: "#fff" }
+            }),
+            _vm._v(" "),
+            _vm.parents_showModal
+              ? _c(
+                  "parents_modal",
+                  {
+                    attrs: {
+                      block: _vm.parents_current_block_string[0],
+                      string_par: _vm.parents_current_block_string[1]
+                    },
+                    on: { parents_close: _vm.parents_close_modal }
+                  },
+                  [
+                    _c("h3", { attrs: { slot: "link" }, slot: "link" }, [
+                      _vm._v("custom")
+                    ])
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-secondary active",
+                attrs: { type: "button" },
+                on: { click: _vm.save }
+              },
+              [_vm._v("Сохранить")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-danger btn-block",
+                attrs: { type: "button" },
+                on: { click: _vm.test }
+              },
+              [_vm._v("Test")]
+            )
+          ],
+          2
+        )
+      ])
+    ]
+  )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-2 name_text" }, [
+      _c("b", [_vm._v("Название:")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-2 name_text" }, [
+      _c("b", [_vm._v("Вопрос:")])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -44579,6 +44683,277 @@ if (inBrowser && window.Vue) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (VueRouter);
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-textarea-autosize/dist/vue-textarea-autosize.esm.js":
+/*!******************************************************************************!*\
+  !*** ./node_modules/vue-textarea-autosize/dist/vue-textarea-autosize.esm.js ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/*!
+ * vue-textarea-autosize v1.1.1 
+ * (c) 2019 Saymon
+ * Released under the MIT License.
+ */
+//
+//
+//
+//
+//
+//
+//
+var script = {
+  name: 'TextareaAutosize',
+  props: {
+    value: {
+      type: [String, Number],
+      default: ''
+    },
+    autosize: {
+      type: Boolean,
+      default: true
+    },
+    minHeight: {
+      type: [Number],
+      'default': null
+    },
+    maxHeight: {
+      type: [Number],
+      'default': null
+    },
+
+    /*
+     * Force !important for style properties
+     */
+    important: {
+      type: [Boolean, Array],
+      default: false
+    }
+  },
+  data: function data() {
+    return {
+      // data property for v-model binding with real textarea tag
+      val: null,
+      // works when content height becomes more then value of the maxHeight property
+      maxHeightScroll: false,
+      height: 'auto'
+    };
+  },
+  computed: {
+    computedStyles: function computedStyles() {
+      if (!this.autosize) return {};
+      return {
+        resize: !this.isResizeImportant ? 'none' : 'none !important',
+        height: this.height,
+        overflow: this.maxHeightScroll ? 'auto' : !this.isOverflowImportant ? 'hidden' : 'hidden !important'
+      };
+    },
+    isResizeImportant: function isResizeImportant() {
+      var imp = this.important;
+      return imp === true || Array.isArray(imp) && imp.includes('resize');
+    },
+    isOverflowImportant: function isOverflowImportant() {
+      var imp = this.important;
+      return imp === true || Array.isArray(imp) && imp.includes('overflow');
+    },
+    isHeightImportant: function isHeightImportant() {
+      var imp = this.important;
+      return imp === true || Array.isArray(imp) && imp.includes('height');
+    }
+  },
+  watch: {
+    value: function value(val) {
+      this.val = val;
+    },
+    val: function val(_val) {
+      this.$nextTick(this.resize);
+      this.$emit('input', _val);
+    },
+    minHeight: function minHeight() {
+      this.$nextTick(this.resize);
+    },
+    maxHeight: function maxHeight() {
+      this.$nextTick(this.resize);
+    },
+    autosize: function autosize(val) {
+      if (val) this.resize();
+    }
+  },
+  methods: {
+    resize: function resize() {
+      var _this = this;
+
+      var important = this.isHeightImportant ? 'important' : '';
+      this.height = "auto".concat(important ? ' !important' : '');
+      this.$nextTick(function () {
+        var contentHeight = _this.$el.scrollHeight + 1;
+
+        if (_this.minHeight) {
+          contentHeight = contentHeight < _this.minHeight ? _this.minHeight : contentHeight;
+        }
+
+        if (_this.maxHeight) {
+          if (contentHeight > _this.maxHeight) {
+            contentHeight = _this.maxHeight;
+            _this.maxHeightScroll = true;
+          } else {
+            _this.maxHeightScroll = false;
+          }
+        }
+
+        var heightVal = contentHeight + 'px';
+        _this.height = "".concat(heightVal).concat(important ? ' !important' : '');
+      });
+      return this;
+    }
+  },
+  created: function created() {
+    this.val = this.value;
+  },
+  mounted: function mounted() {
+    this.resize();
+  }
+};
+
+function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier
+/* server only */
+, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+  if (typeof shadowMode !== 'boolean') {
+    createInjectorSSR = createInjector;
+    createInjector = shadowMode;
+    shadowMode = false;
+  } // Vue.extend constructor export interop.
+
+
+  var options = typeof script === 'function' ? script.options : script; // render functions
+
+  if (template && template.render) {
+    options.render = template.render;
+    options.staticRenderFns = template.staticRenderFns;
+    options._compiled = true; // functional template
+
+    if (isFunctionalTemplate) {
+      options.functional = true;
+    }
+  } // scopedId
+
+
+  if (scopeId) {
+    options._scopeId = scopeId;
+  }
+
+  var hook;
+
+  if (moduleIdentifier) {
+    // server build
+    hook = function hook(context) {
+      // 2.3 injection
+      context = context || // cached call
+      this.$vnode && this.$vnode.ssrContext || // stateful
+      this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext; // functional
+      // 2.2 with runInNewContext: true
+
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__;
+      } // inject component styles
+
+
+      if (style) {
+        style.call(this, createInjectorSSR(context));
+      } // register component module identifier for async chunk inference
+
+
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier);
+      }
+    }; // used by ssr in case component is cached and beforeCreate
+    // never gets called
+
+
+    options._ssrRegister = hook;
+  } else if (style) {
+    hook = shadowMode ? function () {
+      style.call(this, createInjectorShadow(this.$root.$options.shadowRoot));
+    } : function (context) {
+      style.call(this, createInjector(context));
+    };
+  }
+
+  if (hook) {
+    if (options.functional) {
+      // register for functional component in vue file
+      var originalRender = options.render;
+
+      options.render = function renderWithStyleInjection(h, context) {
+        hook.call(context);
+        return originalRender(h, context);
+      };
+    } else {
+      // inject component registration as beforeCreate hook
+      var existing = options.beforeCreate;
+      options.beforeCreate = existing ? [].concat(existing, hook) : [hook];
+    }
+  }
+
+  return script;
+}
+
+var normalizeComponent_1 = normalizeComponent;
+
+/* script */
+const __vue_script__ = script;
+
+/* template */
+var __vue_render__ = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.val),expression:"val"}],style:(_vm.computedStyles),domProps:{"value":(_vm.val)},on:{"focus":_vm.resize,"input":function($event){if($event.target.composing){ return; }_vm.val=$event.target.value;}}})};
+var __vue_staticRenderFns__ = [];
+
+  /* style */
+  const __vue_inject_styles__ = undefined;
+  /* scoped */
+  const __vue_scope_id__ = undefined;
+  /* module identifier */
+  const __vue_module_identifier__ = undefined;
+  /* functional template */
+  const __vue_is_functional_template__ = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+
+  
+  var TextareaAutosize = normalizeComponent_1(
+    { render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ },
+    __vue_inject_styles__,
+    __vue_script__,
+    __vue_scope_id__,
+    __vue_is_functional_template__,
+    __vue_module_identifier__,
+    undefined,
+    undefined
+  );
+
+var version = '1.1.1';
+
+var install = function install(Vue) {
+  Vue.component('TextareaAutosize', TextareaAutosize);
+};
+
+var plugin = {
+  install: install,
+  version: version
+};
+
+if (typeof window !== 'undefined' && window.Vue) {
+  window.Vue.use(plugin);
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (plugin);
 
 
 /***/ }),
@@ -57662,20 +58037,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
-/* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/App */ "./resources/js/components/App.vue");
-/* harmony import */ var _components_Home__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/Home */ "./resources/js/components/Home.vue");
-/* harmony import */ var _components_auth_Register_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/auth/Register.vue */ "./resources/js/components/auth/Register.vue");
-/* harmony import */ var _components_auth_Login_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/auth/Login.vue */ "./resources/js/components/auth/Login.vue");
-/* harmony import */ var _components_Dashboard_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/Dashboard.vue */ "./resources/js/components/Dashboard.vue");
-/* harmony import */ var _components_AcceptToken_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/AcceptToken.vue */ "./resources/js/components/AcceptToken.vue");
-/* harmony import */ var _components_auth_ForgetPassword_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/auth/ForgetPassword.vue */ "./resources/js/components/auth/ForgetPassword.vue");
-/* harmony import */ var _components_auth_RenewPassword_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/auth/RenewPassword.vue */ "./resources/js/components/auth/RenewPassword.vue");
-/* harmony import */ var _components_medical_AddNewPost__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/medical/AddNewPost */ "./resources/js/components/medical/AddNewPost.vue");
-/* harmony import */ var _components_medical_AddContent__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/medical/AddContent */ "./resources/js/components/medical/AddContent.vue");
-/* harmony import */ var _components_medical_PostsList__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/medical/PostsList */ "./resources/js/components/medical/PostsList.vue");
-/* harmony import */ var _components_medical_AddProcedures__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/medical/AddProcedures */ "./resources/js/components/medical/AddProcedures.vue");
-/* harmony import */ var _components_medical_BlockList__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/medical/BlockList */ "./resources/js/components/medical/BlockList.vue");
-/* harmony import */ var _components_medical_ModalBlockList__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/medical/ModalBlockList */ "./resources/js/components/medical/ModalBlockList.vue");
+/* harmony import */ var vue_textarea_autosize__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-textarea-autosize */ "./node_modules/vue-textarea-autosize/dist/vue-textarea-autosize.esm.js");
+/* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/App */ "./resources/js/components/App.vue");
+/* harmony import */ var _components_Home__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/Home */ "./resources/js/components/Home.vue");
+/* harmony import */ var _components_auth_Register_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/auth/Register.vue */ "./resources/js/components/auth/Register.vue");
+/* harmony import */ var _components_auth_Login_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/auth/Login.vue */ "./resources/js/components/auth/Login.vue");
+/* harmony import */ var _components_Dashboard_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/Dashboard.vue */ "./resources/js/components/Dashboard.vue");
+/* harmony import */ var _components_AcceptToken_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/AcceptToken.vue */ "./resources/js/components/AcceptToken.vue");
+/* harmony import */ var _components_auth_ForgetPassword_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/auth/ForgetPassword.vue */ "./resources/js/components/auth/ForgetPassword.vue");
+/* harmony import */ var _components_auth_RenewPassword_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/auth/RenewPassword.vue */ "./resources/js/components/auth/RenewPassword.vue");
+/* harmony import */ var _components_medical_AddNewPost__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/medical/AddNewPost */ "./resources/js/components/medical/AddNewPost.vue");
+/* harmony import */ var _components_medical_AddContent__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/medical/AddContent */ "./resources/js/components/medical/AddContent.vue");
+/* harmony import */ var _components_medical_PostsList__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/medical/PostsList */ "./resources/js/components/medical/PostsList.vue");
+/* harmony import */ var _components_medical_AddProcedures__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/medical/AddProcedures */ "./resources/js/components/medical/AddProcedures.vue");
+/* harmony import */ var _components_medical_BlockList__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/medical/BlockList */ "./resources/js/components/medical/BlockList.vue");
+/* harmony import */ var _components_medical_ModalBlockList__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/medical/ModalBlockList */ "./resources/js/components/medical/ModalBlockList.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
@@ -57686,9 +58062,11 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 
 
 
+
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_axios__WEBPACK_IMPORTED_MODULE_2___default.a, axios__WEBPACK_IMPORTED_MODULE_1___default.a);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_4__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_textarea_autosize__WEBPACK_IMPORTED_MODULE_6__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('app', __webpack_require__(/*! ./components/App.vue */ "./resources/js/components/App.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('modal', __webpack_require__(/*! ./components/medical/ModalBlockList */ "./resources/js/components/medical/ModalBlockList.vue")["default"]);
@@ -57714,54 +58092,54 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
   routes: [{
     path: '/',
     name: 'home',
-    component: _components_Home__WEBPACK_IMPORTED_MODULE_7__["default"]
+    component: _components_Home__WEBPACK_IMPORTED_MODULE_8__["default"]
   }, {
     path: '/register',
     name: 'register',
-    component: _components_auth_Register_vue__WEBPACK_IMPORTED_MODULE_8__["default"]
+    component: _components_auth_Register_vue__WEBPACK_IMPORTED_MODULE_9__["default"]
   }, {
     path: '/login',
     name: 'login',
-    component: _components_auth_Login_vue__WEBPACK_IMPORTED_MODULE_9__["default"]
+    component: _components_auth_Login_vue__WEBPACK_IMPORTED_MODULE_10__["default"]
   }, {
     path: '/dashboard',
     name: 'dashboard',
-    component: _components_Dashboard_vue__WEBPACK_IMPORTED_MODULE_10__["default"] // meta: {
+    component: _components_Dashboard_vue__WEBPACK_IMPORTED_MODULE_11__["default"] // meta: {
     // auth: true
     //   }
 
   }, {
     path: '/accept/:token',
     name: 'accept',
-    component: _components_AcceptToken_vue__WEBPACK_IMPORTED_MODULE_11__["default"]
+    component: _components_AcceptToken_vue__WEBPACK_IMPORTED_MODULE_12__["default"]
   }, {
     path: '/forget',
     name: 'forget',
-    component: _components_auth_ForgetPassword_vue__WEBPACK_IMPORTED_MODULE_12__["default"]
+    component: _components_auth_ForgetPassword_vue__WEBPACK_IMPORTED_MODULE_13__["default"]
   }, {
     path: '/renew_password/:id/:token',
     name: 'renew_pass',
-    component: _components_auth_RenewPassword_vue__WEBPACK_IMPORTED_MODULE_13__["default"]
+    component: _components_auth_RenewPassword_vue__WEBPACK_IMPORTED_MODULE_14__["default"]
   }, {
     path: '/admin/add_new',
     name: 'add_new',
-    component: _components_medical_AddNewPost__WEBPACK_IMPORTED_MODULE_14__["default"]
+    component: _components_medical_AddNewPost__WEBPACK_IMPORTED_MODULE_15__["default"]
   }, {
     path: '/admin/add_content',
     name: 'add_content',
-    component: _components_medical_AddContent__WEBPACK_IMPORTED_MODULE_15__["default"]
+    component: _components_medical_AddContent__WEBPACK_IMPORTED_MODULE_16__["default"]
   }, {
     path: '/admin/posts',
     name: 'posts',
-    component: _components_medical_PostsList__WEBPACK_IMPORTED_MODULE_16__["default"]
+    component: _components_medical_PostsList__WEBPACK_IMPORTED_MODULE_17__["default"]
   }, {
     path: '/admin/add_procedures',
     name: 'add_procedures',
-    component: _components_medical_AddProcedures__WEBPACK_IMPORTED_MODULE_17__["default"]
+    component: _components_medical_AddProcedures__WEBPACK_IMPORTED_MODULE_18__["default"]
   }, {
     path: '/admin/block_list',
     name: 'block_list',
-    component: _components_medical_BlockList__WEBPACK_IMPORTED_MODULE_18__["default"]
+    component: _components_medical_BlockList__WEBPACK_IMPORTED_MODULE_19__["default"]
   }]
 });
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.router = router; //websanova/vue-auth
@@ -57774,8 +58152,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(__webpack_require__(/*! @websanov
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app',
   components: {
-    App: _components_App__WEBPACK_IMPORTED_MODULE_6__["default"],
-    modal: _components_medical_ModalBlockList__WEBPACK_IMPORTED_MODULE_19__["default"]
+    App: _components_App__WEBPACK_IMPORTED_MODULE_7__["default"],
+    modal: _components_medical_ModalBlockList__WEBPACK_IMPORTED_MODULE_20__["default"]
   },
   router: router,
   store: _store__WEBPACK_IMPORTED_MODULE_5__["store"]

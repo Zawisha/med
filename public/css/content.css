@@ -1,7 +1,8 @@
 /***    admin content ****/
 .admin_content {
-    padding-top: 50px;
-    margin-top: 50px;
+    padding-top: 12px;
+    margin-top: 12px;
+
 }
 .text_content {
     border:8px solid black;
@@ -9,6 +10,26 @@
 
 .active_li {
     border:3px solid blue;
+}
+.back_content {
+    background-color: #c0c0c0;
+    padding-top: 30px;
+}
+.name_text {
+    padding-top: 5px;
+    font-size: 20px;
+}
+
+.header_content_text {
+    margin-top: 20px;
+    font-size: 12px;
+    color: #808080;
+}
+
+.border_content{
+    border-right: thick solid #ff0000;
+    padding-right: 20px;
+    padding-left: 20px;
 }
 
 /*modal window*/
