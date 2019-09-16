@@ -20,6 +20,10 @@
     font-size: 20px;
 }
 
+.name_parent_text {
+    font-size: 20px;
+}
+
 .header_content_text {
     margin-top: 20px;
     font-size: 12px;
@@ -27,10 +31,19 @@
 }
 
 .border_content{
-    border-right: thick solid #ff0000;
-    padding-right: 20px;
-    padding-left: 20px;
+    /*border-right: thick solid #dddddd;*/
+    padding-right: 12px;
+    padding-left: 12px;
 }
 
-/*modal window*/
+.prokrutka {
+    height: 200px; /* высота нашего блока */
+    width: 100%; /* ширина нашего блока */
+    background: #fff; /* цвет фона, белый */
+    border: 2px solid #C1C1C1; /* размер и цвет границы блока */
+    overflow: auto
+}
 
+.parents_up_block {
+    padding-bottom: 20px;
+}

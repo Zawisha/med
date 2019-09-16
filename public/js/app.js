@@ -3404,6 +3404,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -40973,14 +40978,14 @@ var render = function() {
             }),
             _vm._v(" "),
             _c("div", { staticClass: "container" }, [
-              _c("div", { staticClass: "col-2 " }, [_vm._v("Ответы:")]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "row col-12" },
-                [
+              _c("div", { staticClass: "row col-12" }, [
+                _vm._m(2),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "prokrutka col-8 d-flex" },
                   _vm._l(_vm.answers, function(item, i) {
-                    return _c("div", { staticClass: "border_content col-4" }, [
+                    return _c("div", { staticClass: "border_content " }, [
                       _c("div", [
                         _vm._v(_vm._s(i + 1) + " вариант  "),
                         _c(
@@ -41049,23 +41054,21 @@ var render = function() {
                       ])
                     ])
                   }),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "w-100" }),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-2" }, [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-secondary active",
-                        attrs: { type: "button" },
-                        on: { click: _vm.add_answer }
-                      },
-                      [_vm._v("Добавить ответ")]
-                    )
-                  ])
-                ],
-                2
-              )
+                  0
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-2" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-secondary active",
+                      attrs: { type: "button" },
+                      on: { click: _vm.add_answer }
+                    },
+                    [_vm._v("Добавить ответ")]
+                  )
+                ])
+              ])
             ]),
             _vm._v(" "),
             _c("hr", {
@@ -41085,154 +41088,165 @@ var render = function() {
                 ])
               : _vm._e(),
             _vm._v(" "),
-            _c("div", [_vm._v("Родители:")]),
-            _vm._v(" "),
             _vm._l(_vm.parents_array, function(item_parent, numb) {
-              return _c(
-                "div",
-                [
-                  _vm._v(
-                    "\n                        Имя родителя\n                        " +
-                      _vm._s(item_parent[0].parent_block_name) +
-                      "\n                        Описание вопроса:\n                        "
-                  ),
-                  _c(
-                    "textarea",
-                    {
-                      staticClass: "form-control parent_question",
-                      attrs: { rows: "2", name: "text_block_parent_name" }
-                    },
-                    [_vm._v(" " + _vm._s(item_parent[0].parent_question))]
-                  ),
+              return _c("div", [
+                _c("div", { staticClass: "col-12 d-flex parents_up_block" }, [
+                  _vm._m(3, true),
                   _vm._v(" "),
-                  _vm._l(item_parent, function(item, number) {
-                    return _c("div", [
-                      _c("div", [_vm._v("Ответы родителя:")]),
-                      _vm._v(" "),
-                      _c("p", [
-                        _vm._v(
-                          "\n                                " +
-                            _vm._s(number + 1) +
-                            " вариант  "
-                        ),
-                        _c(
-                          "a",
-                          {
-                            attrs: { href: "#" },
-                            on: {
-                              click: function($event) {
-                                $event.preventDefault()
-                                return _vm.parents_delete_answer(numb, number)
+                  _c("div", { staticClass: "col-4" }, [
+                    _c(
+                      "a",
+                      {
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.modal_answer(_vm.i)
+                          }
+                        }
+                      },
+                      [_vm._v(_vm._s(item_parent[0].parent_block_name))]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-6" }, [
+                    _vm._v(
+                      "\n                        Описание вопроса родителя:\n                        "
+                    ),
+                    _c(
+                      "textarea",
+                      {
+                        staticClass: "form-control parent_question",
+                        attrs: { rows: "2", name: "text_block_parent_name" }
+                      },
+                      [_vm._v(" " + _vm._s(item_parent[0].parent_question))]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: " col-12 d-flex" }, [
+                  _vm._m(4, true),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "prokrutka col-8 d-flex" },
+                    _vm._l(item_parent, function(item, number) {
+                      return _c("div", { staticClass: "border_content " }, [
+                        _c("div", [
+                          _vm._v(_vm._s(number + 1) + " вариант  "),
+                          _c(
+                            "a",
+                            {
+                              attrs: { href: "#" },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.delete_answer(_vm.i)
+                                }
                               }
-                            }
-                          },
-                          [_vm._v(" Удалить")]
-                        ),
+                            },
+                            [_vm._v(" Удалить")]
+                          )
+                        ]),
                         _vm._v(" "),
                         _c(
                           "textarea",
                           {
-                            staticClass: "form-control answers_parent",
+                            staticClass: "answers_parent",
                             attrs: { rows: "2", name: "text_block_name" }
                           },
-                          [_vm._v(" " + _vm._s(item.parent_answer_text) + " ")]
+                          [_vm._v(_vm._s(item.parent_answer_text) + " ")]
                         ),
-                        _vm._v(
-                          "\n                                Направляет на блок:\n                                "
-                        ),
-                        item.parent_answer_link_id == 0
-                          ? _c(
-                              "a",
-                              {
-                                attrs: { href: "#" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.parents_modal_answer(
-                                      item.parent_id_block,
-                                      number,
-                                      numb
-                                    )
-                                  }
-                                }
-                              },
-                              [_vm._v("Выбрать блок")]
-                            )
-                          : _vm._e(),
                         _vm._v(" "),
-                        item.parent_answer_link_id != 0
-                          ? _c(
-                              "a",
-                              {
-                                attrs: { href: "#" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.parents_modal_answer(
-                                      item.parent_id_block,
-                                      number,
-                                      numb
-                                    )
+                        _c("div", [
+                          _vm._v(
+                            "\n                                        Направляет на блок:\n                                        "
+                          ),
+                          item.parent_answer_link_id == 0
+                            ? _c(
+                                "a",
+                                {
+                                  attrs: { href: "#" },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      return _vm.parents_modal_answer(
+                                        item.parent_id_block,
+                                        number,
+                                        numb
+                                      )
+                                    }
                                   }
-                                }
-                              },
-                              [
-                                _vm._v(
-                                  " " +
-                                    _vm._s(item.parent_answer_link_name) +
-                                    " Изменить"
-                                )
-                              ]
-                            )
-                          : _vm._e()
+                                },
+                                [_vm._v("Выбрать блок")]
+                              )
+                            : _vm._e(),
+                          _vm._v(
+                            "-->\n                                        "
+                          ),
+                          item.parent_answer_link_id != 0
+                            ? _c(
+                                "a",
+                                {
+                                  attrs: { href: "#" },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      return _vm.parents_modal_answer(
+                                        item.parent_id_block,
+                                        number,
+                                        numb
+                                      )
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    " " +
+                                      _vm._s(item.parent_answer_link_name) +
+                                      " Изменить"
+                                  )
+                                ]
+                              )
+                            : _vm._e()
+                        ])
                       ])
-                    ])
-                  }),
+                    }),
+                    0
+                  ),
                   _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-secondary active",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.parent_add_answer(
-                            numb,
-                            item_parent[0].parent_block_name,
-                            item_parent[0].parent_id_block,
-                            item_parent[0].parent_question
-                          )
+                  _c("div", { staticClass: "col-2" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary active",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.parent_add_answer(
+                              numb,
+                              item_parent[0].parent_block_name,
+                              item_parent[0].parent_id_block,
+                              item_parent[0].parent_question
+                            )
+                          }
                         }
-                      }
-                    },
-                    [_vm._v("Добавить ответ")]
-                  )
-                ],
-                2
-              )
+                      },
+                      [_vm._v("Добавить ответ")]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("hr", {
+                  attrs: {
+                    align: "center",
+                    width: "90%",
+                    size: "5",
+                    color: "#fff"
+                  }
+                })
+              ])
             }),
-            _vm._v(" "),
-            _c("hr", {
-              attrs: { align: "center", width: "90%", size: "5", color: "#fff" }
-            }),
-            _vm._v(" "),
-            _vm.parents_showModal
-              ? _c(
-                  "parents_modal",
-                  {
-                    attrs: {
-                      block: _vm.parents_current_block_string[0],
-                      string_par: _vm.parents_current_block_string[1]
-                    },
-                    on: { parents_close: _vm.parents_close_modal }
-                  },
-                  [
-                    _c("h3", { attrs: { slot: "link" }, slot: "link" }, [
-                      _vm._v("custom")
-                    ])
-                  ]
-                )
-              : _vm._e(),
             _vm._v(" "),
             _c(
               "button",
@@ -41252,7 +41266,25 @@ var render = function() {
                 on: { click: _vm.test }
               },
               [_vm._v("Test")]
-            )
+            ),
+            _vm._v(" "),
+            _vm.parents_showModal
+              ? _c(
+                  "parents_modal",
+                  {
+                    attrs: {
+                      block: _vm.parents_current_block_string[0],
+                      string_par: _vm.parents_current_block_string[1]
+                    },
+                    on: { parents_close: _vm.parents_close_modal }
+                  },
+                  [
+                    _c("h3", { attrs: { slot: "link" }, slot: "link" }, [
+                      _vm._v("custom")
+                    ])
+                  ]
+                )
+              : _vm._e()
           ],
           2
         )
@@ -41275,6 +41307,30 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-2 name_text" }, [
       _c("b", [_vm._v("Вопрос:")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-2 name_text" }, [
+      _c("b", [_vm._v("Ответы:")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "name_parent_text col-2" }, [
+      _c("b", [_vm._v("Родитель:")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "name_text col-2" }, [
+      _c("b", [_vm._v("Ответы родителя:")])
     ])
   }
 ]

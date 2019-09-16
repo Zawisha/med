@@ -15,16 +15,13 @@
                 <textarea-autosize class="form-control" rows="3" id="messages" name="text"  v-model="question"></textarea-autosize>
                 </div>
 
-
                 <hr align="center" width="90%" size="10" color="#dddddd" />
-
                 <div class="container">
-                    <div class="col-2 ">Ответы:</div>
                     <div class="row col-12">
+                        <div class="col-2 name_text"><b>Ответы:</b></div>
 
-
-
-                        <div v-for="(item,i) in answers"  class="border_content col-4" >
+                     <div class="prokrutka col-8 d-flex" >
+                        <div v-for="(item,i) in answers"  class="border_content " >
                                 <div>{{ i+1 }} вариант  <a href="#"  v-on:click.prevent="delete_answer(i)"> Удалить</a></div>
                                 <textarea class="answer" rows="2" id="myTextarea" name="text" >{{ item.text }} </textarea>
                                     <div>
@@ -32,59 +29,67 @@
                                     <a href="#" v-if="item.link_id ==0" v-on:click.prevent="modal_answer(i)" >Выбрать блок</a>
                                     <a href="#" v-if="item.link_id !=0" v-on:click.prevent="modal_answer(i)"> {{ item.link_name }} Изменить</a>
                                     </div>
-
                         </div>
-                        <div class="w-100"></div>
-
+                     </div>
                         <div class="col-2">
                             <button type="button" class="btn btn-secondary active" v-on:click="add_answer">Добавить ответ</button>
                         </div>
                     </div>
-
                 </div>
-
                 <hr align="center" width="90%" size="10" color="#dddddd" />
-
-
                 <modal v-if="showModal" @close="close_modal">
                     <h3 slot="link">custom</h3>
                 </modal>
 
 
+<!--                <div class="container">-->
+<!--                    <div class="row col-12">-->
 
-                    <div>Родители:</div>
                     <div v-for="(item_parent, numb) in parents_array">
-                        Имя родителя
-                        {{ item_parent[0].parent_block_name }}
-                        Описание вопроса:
+                        <div class="col-12 d-flex parents_up_block">
+                            <div class="name_parent_text col-2"><b>Родитель:</b></div>
+                      <div class="col-4" >
+                          <a href="#" v-on:click.prevent="modal_answer(i)">{{ item_parent[0].parent_block_name }}</a>
+                      </div>
+                            <div class="col-6">
+                        Описание вопроса родителя:
                         <textarea class="form-control parent_question" rows="2" name="text_block_parent_name" > {{ item_parent[0].parent_question }}</textarea>
+                            </div>
+                         </div>
 
-                        <div v-for="(item, number) in item_parent">
-                            <div>Ответы родителя:</div>
-                            <p>
-                                {{ number+1 }} вариант  <a href="#"  v-on:click.prevent="parents_delete_answer(numb,number)"> Удалить</a>
-                                <textarea class="form-control answers_parent" rows="2" name="text_block_name" > {{ item.parent_answer_text }} </textarea>
-                                Направляет на блок:
-                                <a href="#" v-if="item.parent_answer_link_id ==0" v-on:click.prevent="parents_modal_answer(item.parent_id_block, number, numb)" >Выбрать блок</a>
-                                <a href="#" v-if="item.parent_answer_link_id !=0" v-on:click.prevent="parents_modal_answer(item.parent_id_block, number, numb)"> {{ item.parent_answer_link_name }} Изменить</a>
-                            </p>
-                        </div>
+                        <div class=" col-12 d-flex">
+                        <div class="name_text col-2"><b>Ответы родителя:</b></div>
+                            <div class="prokrutka col-8 d-flex" >
+                                <div v-for="(item, number) in item_parent" class="border_content " >
+                                    <div>{{ number+1 }} вариант  <a href="#"  v-on:click.prevent="delete_answer(i)"> Удалить</a></div>
+                                    <textarea class="answers_parent" rows="2"  name="text_block_name" >{{ item.parent_answer_text }} </textarea>
+                                    <div>
+                                        Направляет на блок:
+                                        <a href="#" v-if="item.parent_answer_link_id ==0" v-on:click.prevent="parents_modal_answer(item.parent_id_block, number, numb)" >Выбрать блок</a>-->
+                                        <a href="#" v-if="item.parent_answer_link_id !=0" v-on:click.prevent="parents_modal_answer(item.parent_id_block, number, numb)"> {{ item.parent_answer_link_name }} Изменить</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-2">
                         <button type="button" class="btn btn-secondary active" v-on:click="parent_add_answer(
                         numb,
                         item_parent[0].parent_block_name,
                         item_parent[0].parent_id_block,
                         item_parent[0].parent_question,
                         )">Добавить ответ</button>
+                            </div>
+                        </div>
+                        <hr align="center" width="90%" size="5" color="#fff" />
                     </div>
-                <hr align="center" width="90%" size="5" color="#fff" />
-
-                <parents_modal v-if="parents_showModal" @parents_close="parents_close_modal" :block=parents_current_block_string[0] :string_par=parents_current_block_string[1]>
-                    <h3 slot="link">custom</h3>
-                </parents_modal>
 
 
                 <button type="button" class="btn btn-secondary active" v-on:click="save">Сохранить</button>
                 <button type="button" class="btn btn-danger btn-block" v-on:click="test">Test</button>
+
+                <parents_modal v-if="parents_showModal" @parents_close="parents_close_modal" :block=parents_current_block_string[0] :string_par=parents_current_block_string[1]>
+                    <h3 slot="link">custom</h3>
+                </parents_modal>
               </div>
        </div>
 </div>

@@ -37,7 +37,6 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <a class="navbar-brand p-0 mr-5" href="#"><img src="http://via.placeholder.com/61x14"></a>
-            <div class="float-left"> <a href="#" class="button-left"><span class="fa fa-fw fa-bars "></span></a> </div>
             <div class="collapse navbar-collapse flex-row-reverse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown messages-menu">
@@ -180,7 +179,7 @@
     <div class="main">
         <div class="container">
             <div class="row ">
-                <div class="sidebar" >
+                <div class="sidebar col-2" >
                     <div class="user-panel">
                     <div class="pull-left image">
                         <img src="http://via.placeholder.com/160x160" class="rounded-circle" alt="User Image">
@@ -248,7 +247,7 @@
                 </ul>
                 </div>
 
-                <div class="col admin_content">
+                <div class="col-10 admin_content">
                     <router-view></router-view>
                 </div>
 
