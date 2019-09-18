@@ -7,12 +7,12 @@
                 <div class="header_content_text col-10 ml-auto">Название блока для системы</div>
                 <div class="col-12 d-flex">
                    <div class="col-2 name_text"><b>Название:</b></div>
-                    <textarea-autosize class="form-control col-10" rows="1" id="block_name" name="text_block_name" v-model="text_block_name"> </textarea-autosize>
+                    <textarea-autosize class="form-control col-10  " v-bind:class="{border_alert: hasItem('Название блока не может быть пустым')}" rows="1" id="block_name" name="text_block_name" v-model="text_block_name"> </textarea-autosize>
                 </div>
                 <div class="header_content_text col-10 ml-auto">Описание вопроса</div>
                 <div class="col-12 d-flex">
                 <div class="col-2 name_text"><b>Вопрос:</b></div>
-                <textarea-autosize class="form-control" rows="3" id="messages" name="text"  v-model="question"></textarea-autosize>
+                <textarea-autosize class="form-control" rows="3" id="messages" name="text"  v-model="question" v-bind:class="{border_alert: hasItem('Поле вопроса не может быть пустым')}" ></textarea-autosize>
                 </div>
 
                 <hr align="center" width="90%" size="10" color="#dddddd" />
@@ -20,10 +20,10 @@
                     <div class="row col-12">
                         <div class="col-2 name_text"><b>Ответы:</b></div>
 
-                     <div class="prokrutka col-8 d-flex" >
+                     <div class="prokrutka col-8 d-flex" v-bind:class="{border_alert: danger_ans}" >
                         <div v-for="(item,i) in answers"  class="border_content " >
                                 <div>{{ i+1 }} вариант  <a href="#"  v-on:click.prevent="delete_answer(i)"> Удалить</a></div>
-                                <textarea class="answer" rows="2" id="myTextarea" name="text" >{{ item.text }} </textarea>
+                                <textarea class="answer" rows="2" id="myTextarea" name="text" v-bind:class="{border_alert: hasItem('Поле ответа не может быть пустым.Проблема в блоке ' + (i+1))}" >{{ item.text }} </textarea>
                                     <div>
                                 Направляет на блок:
                                     <a href="#" v-if="item.link_id ==0" v-on:click.prevent="modal_answer(i)" >Выбрать блок</a>
@@ -47,25 +47,25 @@
 
                     <div v-for="(item_parent, numb) in parents_array">
                         <div class="col-12 d-flex parents_up_block">
-                            <div class="name_parent_text col-2"><b>Родитель:</b></div>
+                            <div class="name_parent_text col-2"><b>Родитель {{ numb+1 }}:</b></div>
                       <div class="col-4" >
                           <a href="#" v-on:click.prevent="modal_answer(i)">{{ item_parent[0].parent_block_name }}</a>
                       </div>
                             <div class="col-6">
                         Описание вопроса родителя:
-                        <textarea class="form-control parent_question" rows="2" name="text_block_parent_name" > {{ item_parent[0].parent_question }}</textarea>
+                        <textarea class="form-control parent_question" rows="2" name="text_block_parent_name"  v-bind:class="{border_alert: parents_hasItem('Поле вопроса родителя не может быть пустым.Проблема в родителе ' + (numb+1))}" > {{ item_parent[0].parent_question }}</textarea>
                             </div>
                          </div>
 
                         <div class=" col-12 d-flex">
                         <div class="name_text col-2"><b>Ответы родителя:</b></div>
-                            <div class="prokrutka col-8 d-flex" >
+                            <div class="prokrutka col-8 d-flex" v-bind:class="{border_alert: parents_numberHasItem('родитель ' + (numb))}">
                                 <div v-for="(item, number) in item_parent" class="border_content " >
                                     <div>{{ number+1 }} вариант  <a href="#"  v-on:click.prevent="delete_answer(i)"> Удалить</a></div>
-                                    <textarea class="answers_parent" rows="2"  name="text_block_name" >{{ item.parent_answer_text }} </textarea>
+                                    <textarea class="answers_parent" rows="2"  name="text_block_name" v-bind:class="{border_alert: parents_hasItem('Поле ответа родителя не может быть пустым.Проблема в родителе ' + (numb+1) + ' Блок ' + (number+1))}" >{{ item.parent_answer_text }} </textarea>
                                     <div>
                                         Направляет на блок:
-                                        <a href="#" v-if="item.parent_answer_link_id ==0" v-on:click.prevent="parents_modal_answer(item.parent_id_block, number, numb)" >Выбрать блок</a>-->
+                                        <a href="#" v-if="item.parent_answer_link_id ==0" v-on:click.prevent="parents_modal_answer(item.parent_id_block, number, numb)" >Выбрать блок</a>
                                         <a href="#" v-if="item.parent_answer_link_id !=0" v-on:click.prevent="parents_modal_answer(item.parent_id_block, number, numb)"> {{ item.parent_answer_link_name }} Изменить</a>
                                     </div>
                                 </div>
@@ -83,8 +83,21 @@
                         <hr align="center" width="90%" size="5" color="#fff" />
                     </div>
 
+                <div v-for="(item) in danger_message"  class="border_content " >
+                <div class="alert alert-danger" role="alert">
+                   {{ item }}
+                </div>
+                </div>
+                <div v-for="(item) in danger_parents_arr"  class="border_content " >
+                    <div class="alert alert-danger" role="alert">
+                        {{ item }}
+                    </div>
+                </div>
+                <div class="alert alert-success" role="alert" v-if="success_message">
+                    Изменения успешно сохранены!
+                </div>
 
-                <button type="button" class="btn btn-secondary active" v-on:click="save">Сохранить</button>
+                <button type="button" class="btn btn-secondary active btn-block" v-on:click="save">Сохранить</button>
                 <button type="button" class="btn btn-danger btn-block" v-on:click="test">Test</button>
 
                 <parents_modal v-if="parents_showModal" @parents_close="parents_close_modal" :block=parents_current_block_string[0] :string_par=parents_current_block_string[1]>
@@ -112,7 +125,12 @@
                 parents_showModal:false,
                 parents_current_block_string:[],
                 parents_modal_column:'',
-                d_flex_counter:0
+                d_flex_counter:0,
+                danger_message:[],
+                danger_ans:false,
+                danger_parents_arr:[],
+                danger_number_parent_arr:[],
+                success_message:false
             }
         },
         mounted() {
@@ -126,10 +144,24 @@
         },
         methods: {
 
+            hasItem(item)
+            {
+                return this.danger_message.indexOf(item) === -1 ? false : true
+            },
+
+            parents_hasItem(item)
+            {
+                return this.danger_parents_arr.indexOf(item) === -1 ? false : true
+            },
+            parents_numberHasItem(item)
+            {
+                return this.danger_number_parent_arr.indexOf(item) === -1 ? false : true
+            },
+
             test()
             {
-                console.log(this.parents_array);
-                alert(this.d_flex_counter);
+
+
             } ,
 
 
@@ -194,35 +226,107 @@
             add_answer()
             {
                 this.answers.push({
-                    text: "",
+                    text:'',
                     link_id:0,
-            });
+                                 });
+            },
+
+
+            validation()
+            {
+                this.success_message=false;
+                this.danger_message=[];
+                //nazvanie tekushego bloka
+                if( this.text_block_name=='')
+                {
+                    this.danger_message.push('Название блока не может быть пустым');
+                }
+
+                //tekushii vopros
+                if( this.question=='')
+                {
+                    this.danger_message.push('Поле вопроса не может быть пустым');
+                }
+
+
+                // otvety glavnogo bloka
+                var elems = document.getElementsByClassName('answer');
+                this.danger_ans_array=[];
+                this.danger_ans = false;
+                console.log(elems.length);
+                for (let i = 0; i < elems.length; i++) {
+                    if(elems[i].value==''||elems[i].value==' ')
+                    {
+                        this.danger_ans = true;
+                        this.danger_message.push('Поле ответа не может быть пустым.Проблема в блоке ' + (i+1));
+                    }
+
+                }
+
+
+
+                //voprosy roditelei
+                let parent_question = document.getElementsByClassName('parent_question');
+                this.danger_parents_arr =[];
+                this.danger_number_parent_arr=[];
+                for (let i = 0; i < parent_question.length; i++) {
+                    if(parent_question[i].value=='')
+                    {
+                        this.danger_parents_arr.push('Поле вопроса родителя не может быть пустым.Проблема в родителе ' + (i+1));
+                    }
+                }
+
+                //otvety roditelei
+                let parents_ans = document.getElementsByClassName('answers_parent');
+                let m = 0;
+                for (let j = 0; j < this.parents_array.length; j++) {
+                    for(let k = 0; k <this.parents_array[j].length; k++)
+                    {
+                        if(parents_ans[m].value==''||parents_ans[m].value==' ')
+                        {
+                            this.danger_parents_arr.push('Поле ответа родителя не может быть пустым.Проблема в родителе ' + (j+1) + ' Блок ' + (k+1));
+                            this.danger_number_parent_arr.push('родитель ' + (j));
+                        }
+                        m++;
+                    }
+                }
+                if((this.danger_message.length!==0)||(this.danger_parents_arr.length!==0))
+                {
+                    return 'error';
+                }
+                else
+                {
+                    return 'not error';
+                }
 
             },
 
             save()
             {
-            this.answer=[];
+                let valid = this.validation();
+                if(valid == 'not error')
+                {
+                    this.answer=[];
 
-            let blocks_array_to_delete =[];
-                blocks_array_to_delete.push(this.$store.state.block_id);
-                for (let i = 0; i < this.parents_array.length; i++) {
-                    blocks_array_to_delete.push(this.parents_array[i][0]['parent_id_block']);
+                    let blocks_array_to_delete =[];
+                    blocks_array_to_delete.push(this.$store.state.block_id);
+                    for (let i = 0; i < this.parents_array.length; i++) {
+                        blocks_array_to_delete.push(this.parents_array[i][0]['parent_id_block']);
+                    }
+
+                    axios
+                        .post('/api/delete',{
+                            id_post:this.$store.state.post_id,
+                            id_procedure:this.$store.state.current_main_procedure,
+                            id_block:blocks_array_to_delete,
+                        }).then(({ data }) =>{
+                            this.save_data()
+
+                        }
+                    );
+                    this.success_message=true;
                 }
-            // console.log('block to delete' + blocks_array_to_delete);
 
-                axios
-                    .post('/api/delete',{
-                        id_post:this.$store.state.post_id,
-                        id_procedure:this.$store.state.current_main_procedure,
-                        id_block:blocks_array_to_delete,
-                    }).then(({ data }) =>{
-                        this.save_data()
-
-                }
-                )
-
-                //this.save_data();
 
             },
 

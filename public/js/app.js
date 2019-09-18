@@ -3409,6 +3409,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3423,7 +3436,12 @@ __webpack_require__.r(__webpack_exports__);
       parents_showModal: false,
       parents_current_block_string: [],
       parents_modal_column: '',
-      d_flex_counter: 0
+      d_flex_counter: 0,
+      danger_message: [],
+      danger_ans: false,
+      danger_parents_arr: [],
+      danger_number_parent_arr: [],
+      success_message: false
     };
   },
   mounted: function mounted() {
@@ -3433,10 +3451,16 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {},
   methods: {
-    test: function test() {
-      console.log(this.parents_array);
-      alert(this.d_flex_counter);
+    hasItem: function hasItem(item) {
+      return this.danger_message.indexOf(item) === -1 ? false : true;
     },
+    parents_hasItem: function parents_hasItem(item) {
+      return this.danger_parents_arr.indexOf(item) === -1 ? false : true;
+    },
+    parents_numberHasItem: function parents_numberHasItem(item) {
+      return this.danger_number_parent_arr.indexOf(item) === -1 ? false : true;
+    },
+    test: function test() {},
     render_path: function render_path() {
       axios.post('/api/render_path', {
         id_post: this.$store.state.post_id,
@@ -3475,31 +3499,93 @@ __webpack_require__.r(__webpack_exports__);
     },
     add_answer: function add_answer() {
       this.answers.push({
-        text: "",
+        text: '',
         link_id: 0
       });
+    },
+    validation: function validation() {
+      this.success_message = false;
+      this.danger_message = []; //nazvanie tekushego bloka
+
+      if (this.text_block_name == '') {
+        this.danger_message.push('Название блока не может быть пустым');
+      } //tekushii vopros
+
+
+      if (this.question == '') {
+        this.danger_message.push('Поле вопроса не может быть пустым');
+      } // otvety glavnogo bloka
+
+
+      var elems = document.getElementsByClassName('answer');
+      this.danger_ans_array = [];
+      this.danger_ans = false;
+      console.log(elems.length);
+
+      for (var i = 0; i < elems.length; i++) {
+        if (elems[i].value == '' || elems[i].value == ' ') {
+          this.danger_ans = true;
+          this.danger_message.push('Поле ответа не может быть пустым.Проблема в блоке ' + (i + 1));
+        }
+      } //voprosy roditelei
+
+
+      var parent_question = document.getElementsByClassName('parent_question');
+      this.danger_parents_arr = [];
+      this.danger_number_parent_arr = [];
+
+      for (var _i = 0; _i < parent_question.length; _i++) {
+        if (parent_question[_i].value == '') {
+          this.danger_parents_arr.push('Поле вопроса родителя не может быть пустым.Проблема в родителе ' + (_i + 1));
+        }
+      } //otvety roditelei
+
+
+      var parents_ans = document.getElementsByClassName('answers_parent');
+      var m = 0;
+
+      for (var j = 0; j < this.parents_array.length; j++) {
+        for (var k = 0; k < this.parents_array[j].length; k++) {
+          if (parents_ans[m].value == '' || parents_ans[m].value == ' ') {
+            this.danger_parents_arr.push('Поле ответа родителя не может быть пустым.Проблема в родителе ' + (j + 1) + ' Блок ' + (k + 1));
+            this.danger_number_parent_arr.push('родитель ' + j);
+          }
+
+          m++;
+        }
+      }
+
+      if (this.danger_message.length !== 0 || this.danger_parents_arr.length !== 0) {
+        return 'error';
+      } else {
+        return 'not error';
+      }
     },
     save: function save() {
       var _this = this;
 
-      this.answer = [];
-      var blocks_array_to_delete = [];
-      blocks_array_to_delete.push(this.$store.state.block_id);
+      var valid = this.validation();
 
-      for (var i = 0; i < this.parents_array.length; i++) {
-        blocks_array_to_delete.push(this.parents_array[i][0]['parent_id_block']);
-      } // console.log('block to delete' + blocks_array_to_delete);
+      if (valid == 'not error') {
+        this.answer = [];
+        var blocks_array_to_delete = [];
+        blocks_array_to_delete.push(this.$store.state.block_id);
 
+        for (var i = 0; i < this.parents_array.length; i++) {
+          blocks_array_to_delete.push(this.parents_array[i][0]['parent_id_block']);
+        }
 
-      axios.post('/api/delete', {
-        id_post: this.$store.state.post_id,
-        id_procedure: this.$store.state.current_main_procedure,
-        id_block: blocks_array_to_delete
-      }).then(function (_ref) {
-        var data = _ref.data;
+        axios.post('/api/delete', {
+          id_post: this.$store.state.post_id,
+          id_procedure: this.$store.state.current_main_procedure,
+          id_block: blocks_array_to_delete
+        }).then(function (_ref) {
+          var data = _ref.data;
 
-        _this.save_data();
-      }); //this.save_data();
+          _this.save_data();
+        });
+        this.success_message = true;
+      }
     },
     save_data: function save_data() {
       //получил ответы
@@ -3519,20 +3605,20 @@ __webpack_require__.r(__webpack_exports__);
       var parent_question = document.getElementsByClassName('parent_question');
       var m = 0;
 
-      for (var _i = 0; _i < this.parents_array.length; _i++) {
-        for (var j = 0; j < this.parents_array[_i].length; j++) {
+      for (var _i2 = 0; _i2 < this.parents_array.length; _i2++) {
+        for (var j = 0; j < this.parents_array[_i2].length; j++) {
           parent_answer_arr.push({
-            parent_id_block: this.parents_array[_i][0]['parent_id_block'],
-            parent_name_block: this.parents_array[_i][0]['parent_block_name'],
-            parent_question_text: parent_question[_i].value,
-            answer_link_id: this.parents_array[_i][j]['parent_answer_link_id'],
+            parent_id_block: this.parents_array[_i2][0]['parent_id_block'],
+            parent_name_block: this.parents_array[_i2][0]['parent_block_name'],
+            parent_question_text: parent_question[_i2].value,
+            answer_link_id: this.parents_array[_i2][j]['parent_answer_link_id'],
             answer: parents_ans[m].value
           });
           m++;
         }
 
         console.log(parent_answer_arr);
-        console.log('dlina' + this.parents_array[_i].length);
+        console.log('dlina' + this.parents_array[_i2].length);
       } //конец блока родителей
 
 
@@ -40925,7 +41011,12 @@ var render = function() {
                 _vm._m(0),
                 _vm._v(" "),
                 _c("textarea-autosize", {
-                  staticClass: "form-control col-10",
+                  staticClass: "form-control col-10  ",
+                  class: {
+                    border_alert: _vm.hasItem(
+                      "Название блока не может быть пустым"
+                    )
+                  },
                   attrs: {
                     rows: "1",
                     id: "block_name",
@@ -40955,6 +41046,11 @@ var render = function() {
                 _vm._v(" "),
                 _c("textarea-autosize", {
                   staticClass: "form-control",
+                  class: {
+                    border_alert: _vm.hasItem(
+                      "Поле вопроса не может быть пустым"
+                    )
+                  },
                   attrs: { rows: "3", id: "messages", name: "text" },
                   model: {
                     value: _vm.question,
@@ -40983,7 +41079,10 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "div",
-                  { staticClass: "prokrutka col-8 d-flex" },
+                  {
+                    staticClass: "prokrutka col-8 d-flex",
+                    class: { border_alert: _vm.danger_ans }
+                  },
                   _vm._l(_vm.answers, function(item, i) {
                     return _c("div", { staticClass: "border_content " }, [
                       _c("div", [
@@ -41007,6 +41106,12 @@ var render = function() {
                         "textarea",
                         {
                           staticClass: "answer",
+                          class: {
+                            border_alert: _vm.hasItem(
+                              "Поле ответа не может быть пустым.Проблема в блоке " +
+                                (i + 1)
+                            )
+                          },
                           attrs: { rows: "2", id: "myTextarea", name: "text" }
                         },
                         [_vm._v(_vm._s(item.text) + " ")]
@@ -41091,7 +41196,9 @@ var render = function() {
             _vm._l(_vm.parents_array, function(item_parent, numb) {
               return _c("div", [
                 _c("div", { staticClass: "col-12 d-flex parents_up_block" }, [
-                  _vm._m(3, true),
+                  _c("div", { staticClass: "name_parent_text col-2" }, [
+                    _c("b", [_vm._v("Родитель " + _vm._s(numb + 1) + ":")])
+                  ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-4" }, [
                     _c(
@@ -41117,6 +41224,12 @@ var render = function() {
                       "textarea",
                       {
                         staticClass: "form-control parent_question",
+                        class: {
+                          border_alert: _vm.parents_hasItem(
+                            "Поле вопроса родителя не может быть пустым.Проблема в родителе " +
+                              (numb + 1)
+                          )
+                        },
                         attrs: { rows: "2", name: "text_block_parent_name" }
                       },
                       [_vm._v(" " + _vm._s(item_parent[0].parent_question))]
@@ -41125,11 +41238,18 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: " col-12 d-flex" }, [
-                  _vm._m(4, true),
+                  _vm._m(3, true),
                   _vm._v(" "),
                   _c(
                     "div",
-                    { staticClass: "prokrutka col-8 d-flex" },
+                    {
+                      staticClass: "prokrutka col-8 d-flex",
+                      class: {
+                        border_alert: _vm.parents_numberHasItem(
+                          "родитель " + numb
+                        )
+                      }
+                    },
                     _vm._l(item_parent, function(item, number) {
                       return _c("div", { staticClass: "border_content " }, [
                         _c("div", [
@@ -41153,6 +41273,14 @@ var render = function() {
                           "textarea",
                           {
                             staticClass: "answers_parent",
+                            class: {
+                              border_alert: _vm.parents_hasItem(
+                                "Поле ответа родителя не может быть пустым.Проблема в родителе " +
+                                  (numb + 1) +
+                                  " Блок " +
+                                  (number + 1)
+                              )
+                            },
                             attrs: { rows: "2", name: "text_block_name" }
                           },
                           [_vm._v(_vm._s(item.parent_answer_text) + " ")]
@@ -41181,9 +41309,7 @@ var render = function() {
                                 [_vm._v("Выбрать блок")]
                               )
                             : _vm._e(),
-                          _vm._v(
-                            "-->\n                                        "
-                          ),
+                          _vm._v(" "),
                           item.parent_answer_link_id != 0
                             ? _c(
                                 "a",
@@ -41248,10 +41374,63 @@ var render = function() {
               ])
             }),
             _vm._v(" "),
+            _vm._l(_vm.danger_message, function(item) {
+              return _c("div", { staticClass: "border_content " }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "alert alert-danger",
+                    attrs: { role: "alert" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                   " +
+                        _vm._s(item) +
+                        "\n                "
+                    )
+                  ]
+                )
+              ])
+            }),
+            _vm._v(" "),
+            _vm._l(_vm.danger_parents_arr, function(item) {
+              return _c("div", { staticClass: "border_content " }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "alert alert-danger",
+                    attrs: { role: "alert" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(item) +
+                        "\n                    "
+                    )
+                  ]
+                )
+              ])
+            }),
+            _vm._v(" "),
+            _vm.success_message
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "alert alert-success",
+                    attrs: { role: "alert" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    Изменения успешно сохранены!\n                "
+                    )
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
             _c(
               "button",
               {
-                staticClass: "btn btn-secondary active",
+                staticClass: "btn btn-secondary active btn-block",
                 attrs: { type: "button" },
                 on: { click: _vm.save }
               },
@@ -41315,14 +41494,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-2 name_text" }, [
       _c("b", [_vm._v("Ответы:")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "name_parent_text col-2" }, [
-      _c("b", [_vm._v("Родитель:")])
     ])
   },
   function() {
