@@ -48,6 +48,20 @@ class DBController extends Controller
 
         $parents = $request->input('parents');
 
+        if(count($answer_text)==0)
+        {
+            Post::create([
+                'id_post' => $id_post,
+                'id_procedure' => $id_procedure,
+                'id_block' => $id_block,
+                'block_name' => $block_name,
+                'question_text' => $question_text,
+                'answer_text' => '',
+                'answer_link_id' => 0,
+            ]);
+        }
+
+
       // return dd($request->input('answer_text'));
         for ($i = 0; $i < count($answer_text); $i++) {
             Post::create([
@@ -65,15 +79,31 @@ class DBController extends Controller
         //блок родителей
         foreach ($parents as $parent)
         {
-                Post::create([
-                    'id_post' => $id_post,
-                    'id_procedure' => $id_procedure,
-                    'id_block' => $parent['parent_id_block'],
-                    'block_name' => $parent['parent_name_block'],
-                    'question_text' => $parent['parent_question_text'],
-                    'answer_text' => $parent['answer'],
-                    'answer_link_id' => $parent['answer_link_id'],
-                ]);
+           if(empty($parent['answer']))
+           {
+               Post::create([
+                   'id_post' => $id_post,
+                   'id_procedure' => $id_procedure,
+                   'id_block' => $parent['parent_id_block'],
+                   'block_name' => $parent['parent_name_block'],
+                   'question_text' => $parent['parent_question_text'],
+                   'answer_text' => '',
+                   'answer_link_id' => 0,
+               ]);
+           }
+        else
+    {
+    Post::create([
+        'id_post' => $id_post,
+        'id_procedure' => $id_procedure,
+        'id_block' => $parent['parent_id_block'],
+        'block_name' => $parent['parent_name_block'],
+        'question_text' => $parent['parent_question_text'],
+        'answer_text' => $parent['answer'],
+        'answer_link_id' => $parent['answer_link_id'],
+    ]);
+    }
+
 
 
         }

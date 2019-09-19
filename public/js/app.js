@@ -3422,6 +3422,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3460,7 +3462,37 @@ __webpack_require__.r(__webpack_exports__);
     parents_numberHasItem: function parents_numberHasItem(item) {
       return this.danger_number_parent_arr.indexOf(item) === -1 ? false : true;
     },
-    test: function test() {},
+    test: function test() {
+      var parent_answer_arr = []; //TUT OSHIBKA POTOMY CHTO NETU ZNACHENIA
+
+      var parents_ans = document.getElementsByClassName('answers_parent');
+      var parent_question = document.getElementsByClassName('parent_question');
+      var m = 0;
+
+      for (var i = 0; i < this.parents_array.length; i++) {
+        if (this.parents_array[i].length == 1 && this.parents_array[i][0]['parent_answer_text'] == '') {
+          console.log('FIND EMPTY');
+          parent_answer_arr.push({
+            parent_id_block: this.parents_array[i][0]['parent_id_block'],
+            parent_name_block: this.parents_array[i][0]['parent_block_name'],
+            parent_question_text: parent_question[i].value,
+            answer_link_id: 0,
+            answer: ''
+          });
+        } else {
+          for (var j = 0; j < this.parents_array[i].length; j++) {
+            parent_answer_arr.push({
+              parent_id_block: this.parents_array[i][0]['parent_id_block'],
+              parent_name_block: this.parents_array[i][0]['parent_block_name'],
+              parent_question_text: parent_question[i].value,
+              answer_link_id: this.parents_array[i][j]['parent_answer_link_id'],
+              answer: parents_ans[m].value
+            });
+            m++;
+          }
+        }
+      }
+    },
     render_path: function render_path() {
       axios.post('/api/render_path', {
         id_post: this.$store.state.post_id,
@@ -3469,7 +3501,11 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     parents_delete_answer: function parents_delete_answer(first_number_of_array, second_number_of_array) {
-      this.parents_array[first_number_of_array].splice(second_number_of_array, 1);
+      if (this.parents_array[first_number_of_array].length == 1) {
+        this.parents_array[first_number_of_array][0]['parent_answer_link_id'] = 0, this.parents_array[first_number_of_array][0]['parent_answer_link_name'] = '', this.parents_array[first_number_of_array][0]['parent_answer_text'] = '';
+      } else {
+        this.parents_array[first_number_of_array].splice(second_number_of_array, 1);
+      }
     },
     delete_answer: function delete_answer(numb) {
       this.answers.splice(numb, 1);
@@ -3546,12 +3582,14 @@ __webpack_require__.r(__webpack_exports__);
 
       for (var j = 0; j < this.parents_array.length; j++) {
         for (var k = 0; k < this.parents_array[j].length; k++) {
-          if (parents_ans[m].value == '' || parents_ans[m].value == ' ') {
-            this.danger_parents_arr.push('Поле ответа родителя не может быть пустым.Проблема в родителе ' + (j + 1) + ' Блок ' + (k + 1));
-            this.danger_number_parent_arr.push('родитель ' + j);
-          }
+          if (this.parents_array[j].length !== 1 && this.parents_array[j][k]['parent_answer_text'] == ( false || ' ' || false)) {
+            if (parents_ans[m].value == '' || parents_ans[m].value == ' ' || parents_ans[m].value == '  ') {
+              this.danger_parents_arr.push('Поле ответа родителя не может быть пустым.Проблема в родителе ' + (j + 1) + ' Блок ' + (k + 1));
+              this.danger_number_parent_arr.push('родитель ' + j);
+            }
 
-          m++;
+            m++;
+          }
         }
       }
 
@@ -3597,8 +3635,7 @@ __webpack_require__.r(__webpack_exports__);
       for (var i = 0; i < elems.length; i++) {
         answer_arr.push(elems[i].value);
         answer_link_arr.push(this.answers[i]['link_id']);
-      } // работа с родителями
-
+      }
 
       var parent_answer_arr = [];
       var parents_ans = document.getElementsByClassName('answers_parent');
@@ -3606,19 +3643,26 @@ __webpack_require__.r(__webpack_exports__);
       var m = 0;
 
       for (var _i2 = 0; _i2 < this.parents_array.length; _i2++) {
-        for (var j = 0; j < this.parents_array[_i2].length; j++) {
+        if (this.parents_array[_i2].length == 1 && this.parents_array[_i2][0]['parent_answer_text'] == '') {
           parent_answer_arr.push({
             parent_id_block: this.parents_array[_i2][0]['parent_id_block'],
             parent_name_block: this.parents_array[_i2][0]['parent_block_name'],
             parent_question_text: parent_question[_i2].value,
-            answer_link_id: this.parents_array[_i2][j]['parent_answer_link_id'],
-            answer: parents_ans[m].value
+            answer_link_id: 0,
+            answer: ''
           });
-          m++;
+        } else {
+          for (var j = 0; j < this.parents_array[_i2].length; j++) {
+            parent_answer_arr.push({
+              parent_id_block: this.parents_array[_i2][0]['parent_id_block'],
+              parent_name_block: this.parents_array[_i2][0]['parent_block_name'],
+              parent_question_text: parent_question[_i2].value,
+              answer_link_id: this.parents_array[_i2][j]['parent_answer_link_id'],
+              answer: parents_ans[m].value
+            });
+            m++;
+          }
         }
-
-        console.log(parent_answer_arr);
-        console.log('dlina' + this.parents_array[_i2].length);
       } //конец блока родителей
 
 
@@ -3645,11 +3689,13 @@ __webpack_require__.r(__webpack_exports__);
 
         if (data.length != 0) {
           _this2.text_block_name = data[0].block_name, _this2.question = data[0].question_text, data.forEach(function (entry) {
-            inp.push({
-              text: entry.answer_text,
-              link_id: entry.answer_link_id,
-              link_name: entry.answer_link_name
-            });
+            if (entry.answer_text !== '') {
+              inp.push({
+                text: entry.answer_text,
+                link_id: entry.answer_link_id,
+                link_name: entry.answer_link_name
+              });
+            }
           });
         }
       });
@@ -3686,14 +3732,18 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     parent_add_answer: function parent_add_answer(numb, name, id, question) {
-      this.parents_array[numb].push({
-        parent_answer_link_id: 0,
-        parent_answer_link_name: "",
-        parent_answer_text: "",
-        parent_block_name: name,
-        parent_id_block: id,
-        parent_question: question
-      });
+      if (this.parents_array[numb].length == 1 && this.parents_array[numb][0]['parent_answer_text'] == '') {
+        this.parents_array[numb][0]['parent_answer_link_id'] = 0, this.parents_array[numb][0]['parent_answer_link_name'] = '', this.parents_array[numb][0]['parent_answer_text'] = " ", this.parents_array[numb][0]['parent_block_name'] = name, this.parents_array[numb][0]['parent_id_block'] = id, this.parents_array[numb][0]['parent_question'] = question;
+      } else {
+        this.parents_array[numb].push({
+          parent_answer_link_id: 0,
+          parent_answer_link_name: "",
+          parent_answer_text: " ",
+          parent_block_name: name,
+          parent_id_block: id,
+          parent_question: question
+        });
+      }
     }
   }
 });
@@ -41252,90 +41302,99 @@ var render = function() {
                     },
                     _vm._l(item_parent, function(item, number) {
                       return _c("div", { staticClass: "border_content " }, [
-                        _c("div", [
-                          _vm._v(_vm._s(number + 1) + " вариант  "),
-                          _c(
-                            "a",
-                            {
-                              attrs: { href: "#" },
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  return _vm.delete_answer(_vm.i)
-                                }
-                              }
-                            },
-                            [_vm._v(" Удалить")]
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "textarea",
-                          {
-                            staticClass: "answers_parent",
-                            class: {
-                              border_alert: _vm.parents_hasItem(
-                                "Поле ответа родителя не может быть пустым.Проблема в родителе " +
-                                  (numb + 1) +
-                                  " Блок " +
-                                  (number + 1)
-                              )
-                            },
-                            attrs: { rows: "2", name: "text_block_name" }
-                          },
-                          [_vm._v(_vm._s(item.parent_answer_text) + " ")]
-                        ),
-                        _vm._v(" "),
-                        _c("div", [
-                          _vm._v(
-                            "\n                                        Направляет на блок:\n                                        "
-                          ),
-                          item.parent_answer_link_id == 0
-                            ? _c(
-                                "a",
-                                {
-                                  attrs: { href: "#" },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      return _vm.parents_modal_answer(
-                                        item.parent_id_block,
-                                        number,
-                                        numb
-                                      )
+                        item.parent_answer_text
+                          ? _c("div", [
+                              _c("div", [
+                                _vm._v(_vm._s(number + 1) + " вариант  "),
+                                _c(
+                                  "a",
+                                  {
+                                    attrs: { href: "#" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        return _vm.parents_delete_answer(
+                                          numb,
+                                          number
+                                        )
+                                      }
                                     }
-                                  }
-                                },
-                                [_vm._v("Выбрать блок")]
-                              )
-                            : _vm._e(),
-                          _vm._v(" "),
-                          item.parent_answer_link_id != 0
-                            ? _c(
-                                "a",
+                                  },
+                                  [_vm._v(" Удалить")]
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "textarea",
                                 {
-                                  attrs: { href: "#" },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      return _vm.parents_modal_answer(
-                                        item.parent_id_block,
-                                        number,
-                                        numb
-                                      )
-                                    }
-                                  }
+                                  staticClass: "answers_parent",
+                                  class: {
+                                    border_alert: _vm.parents_hasItem(
+                                      "Поле ответа родителя не может быть пустым.Проблема в родителе " +
+                                        (numb + 1) +
+                                        " Блок " +
+                                        (number + 1)
+                                    )
+                                  },
+                                  attrs: { rows: "2", name: "text_block_name" }
                                 },
-                                [
-                                  _vm._v(
-                                    " " +
-                                      _vm._s(item.parent_answer_link_name) +
-                                      " Изменить"
-                                  )
-                                ]
-                              )
-                            : _vm._e()
-                        ])
+                                [_vm._v(_vm._s(item.parent_answer_text) + " ")]
+                              ),
+                              _vm._v(" "),
+                              _c("div", [
+                                _vm._v(
+                                  "\n                                        Направляет на блок:\n                                        "
+                                ),
+                                item.parent_answer_link_id == 0
+                                  ? _c(
+                                      "a",
+                                      {
+                                        attrs: { href: "#" },
+                                        on: {
+                                          click: function($event) {
+                                            $event.preventDefault()
+                                            return _vm.parents_modal_answer(
+                                              item.parent_id_block,
+                                              number,
+                                              numb
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Выбрать блок")]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                item.parent_answer_link_id != 0
+                                  ? _c(
+                                      "a",
+                                      {
+                                        attrs: { href: "#" },
+                                        on: {
+                                          click: function($event) {
+                                            $event.preventDefault()
+                                            return _vm.parents_modal_answer(
+                                              item.parent_id_block,
+                                              number,
+                                              numb
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          " " +
+                                            _vm._s(
+                                              item.parent_answer_link_name
+                                            ) +
+                                            " Изменить"
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e()
+                              ])
+                            ])
+                          : _vm._e()
                       ])
                     }),
                     0

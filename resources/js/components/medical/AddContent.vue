@@ -61,12 +61,14 @@
                         <div class="name_text col-2"><b>Ответы родителя:</b></div>
                             <div class="prokrutka col-8 d-flex" v-bind:class="{border_alert: parents_numberHasItem('родитель ' + (numb))}">
                                 <div v-for="(item, number) in item_parent" class="border_content " >
-                                    <div>{{ number+1 }} вариант  <a href="#"  v-on:click.prevent="delete_answer(i)"> Удалить</a></div>
+                                    <div v-if="item.parent_answer_text">
+                                    <div >{{ number+1 }} вариант  <a href="#"  v-on:click.prevent="parents_delete_answer(numb,number)"> Удалить</a></div>
                                     <textarea class="answers_parent" rows="2"  name="text_block_name" v-bind:class="{border_alert: parents_hasItem('Поле ответа родителя не может быть пустым.Проблема в родителе ' + (numb+1) + ' Блок ' + (number+1))}" >{{ item.parent_answer_text }} </textarea>
                                     <div>
                                         Направляет на блок:
                                         <a href="#" v-if="item.parent_answer_link_id ==0" v-on:click.prevent="parents_modal_answer(item.parent_id_block, number, numb)" >Выбрать блок</a>
                                         <a href="#" v-if="item.parent_answer_link_id !=0" v-on:click.prevent="parents_modal_answer(item.parent_id_block, number, numb)"> {{ item.parent_answer_link_name }} Изменить</a>
+                                    </div>
                                     </div>
                                 </div>
                             </div>
@@ -161,6 +163,39 @@
             test()
             {
 
+                let parent_answer_arr=[];
+                //TUT OSHIBKA POTOMY CHTO NETU ZNACHENIA
+                let parents_ans = document.getElementsByClassName('answers_parent');
+                let parent_question = document.getElementsByClassName('parent_question');
+                let m =0;
+                for (let i = 0; i < this.parents_array.length; i++) {
+                    if((this.parents_array[i].length==1)&&(this.parents_array[i][0]['parent_answer_text']==('')))
+                    {
+                        console.log('FIND EMPTY');
+                        parent_answer_arr.push({
+                            parent_id_block:this.parents_array[i][0]['parent_id_block'],
+                            parent_name_block:this.parents_array[i][0]['parent_block_name'],
+                            parent_question_text:parent_question[i].value,
+                            answer_link_id:0,
+                            answer:''
+                        });
+                    }
+                    else
+                    {
+                        for(let j = 0; j <this.parents_array[i].length; j++)
+                        {
+                            parent_answer_arr.push({
+                                parent_id_block:this.parents_array[i][0]['parent_id_block'],
+                                parent_name_block:this.parents_array[i][0]['parent_block_name'],
+                                parent_question_text:parent_question[i].value,
+                                answer_link_id:this.parents_array[i][j]['parent_answer_link_id'],
+                                answer:parents_ans[m].value
+                            });
+                            m++;
+                        }
+                    }
+                }
+
 
             } ,
 
@@ -177,7 +212,17 @@
 
             parents_delete_answer(first_number_of_array, second_number_of_array)
             {
-                this.parents_array[first_number_of_array].splice(second_number_of_array,1);
+                if(this.parents_array[first_number_of_array].length==1)
+                {
+                    this.parents_array[first_number_of_array][0]['parent_answer_link_id']=0,
+                    this.parents_array[first_number_of_array][0]['parent_answer_link_name']='',
+                    this.parents_array[first_number_of_array][0]['parent_answer_text']=''
+                }
+                else
+                {
+                    this.parents_array[first_number_of_array].splice(second_number_of_array,1);
+                }
+
             },
 
             delete_answer(numb)
@@ -278,18 +323,23 @@
 
                 //otvety roditelei
                 let parents_ans = document.getElementsByClassName('answers_parent');
+
                 let m = 0;
                 for (let j = 0; j < this.parents_array.length; j++) {
                     for(let k = 0; k <this.parents_array[j].length; k++)
                     {
-                        if(parents_ans[m].value==''||parents_ans[m].value==' ')
+                        if((this.parents_array[j].length!==1)&&(this.parents_array[j][k]['parent_answer_text']==(('')||(' ')||('  '))))
                         {
-                            this.danger_parents_arr.push('Поле ответа родителя не может быть пустым.Проблема в родителе ' + (j+1) + ' Блок ' + (k+1));
-                            this.danger_number_parent_arr.push('родитель ' + (j));
+                            if(parents_ans[m].value==''||parents_ans[m].value==' '||parents_ans[m].value=='  ')
+                            {
+                                this.danger_parents_arr.push('Поле ответа родителя не может быть пустым.Проблема в родителе ' + (j+1) + ' Блок ' + (k+1));
+                                this.danger_number_parent_arr.push('родитель ' + (j));
+                            }
+                            m++;
                         }
-                        m++;
                     }
                 }
+
                 if((this.danger_message.length!==0)||(this.danger_parents_arr.length!==0))
                 {
                     return 'error';
@@ -343,27 +393,36 @@
                 }
 
 
-               // работа с родителями
                 let parent_answer_arr=[];
                 let parents_ans = document.getElementsByClassName('answers_parent');
                 let parent_question = document.getElementsByClassName('parent_question');
                 let m =0;
                 for (let i = 0; i < this.parents_array.length; i++) {
-                    for(let j = 0; j <this.parents_array[i].length; j++)
+                    if((this.parents_array[i].length==1)&&(this.parents_array[i][0]['parent_answer_text']==('')))
                     {
                         parent_answer_arr.push({
                             parent_id_block:this.parents_array[i][0]['parent_id_block'],
                             parent_name_block:this.parents_array[i][0]['parent_block_name'],
                             parent_question_text:parent_question[i].value,
-                            answer_link_id:this.parents_array[i][j]['parent_answer_link_id'],
-                            answer:parents_ans[m].value
+                            answer_link_id:0,
+                            answer:''
                         });
-                        m++;
                     }
-                    console.log( parent_answer_arr);
-                    console.log('dlina' +this.parents_array[i].length);
-
-               }
+                    else
+                    {
+                        for(let j = 0; j <this.parents_array[i].length; j++)
+                        {
+                            parent_answer_arr.push({
+                                parent_id_block:this.parents_array[i][0]['parent_id_block'],
+                                parent_name_block:this.parents_array[i][0]['parent_block_name'],
+                                parent_question_text:parent_question[i].value,
+                                answer_link_id:this.parents_array[i][j]['parent_answer_link_id'],
+                                answer:parents_ans[m].value
+                            });
+                            m++;
+                        }
+                    }
+                }
                 //конец блока родителей
 
                      axios
@@ -396,12 +455,14 @@
                                this.question = data[0].question_text,
 
                         data.forEach(function(entry) {
+                            if(entry.answer_text!==''){
                             inp.push({
                                 text:entry.answer_text,
                                 link_id:entry.answer_link_id,
                                 link_name:entry.answer_link_name,
 
                             });
+                            }
                         })
                     }
 
@@ -448,14 +509,27 @@
 
             parent_add_answer(numb, name, id,question)
             {
-                this.parents_array[numb].push({
-                    parent_answer_link_id:0,
-                    parent_answer_link_name:"",
-                    parent_answer_text: "",
-                    parent_block_name:name,
-                    parent_id_block:id,
-                    parent_question:question
-                });
+                if(this.parents_array[numb].length==1&&this.parents_array[numb][0]['parent_answer_text']==(''))
+                {
+                        this.parents_array[numb][0]['parent_answer_link_id']=0,
+                        this.parents_array[numb][0]['parent_answer_link_name']='',
+                        this.parents_array[numb][0]['parent_answer_text']=" ",
+                        this.parents_array[numb][0]['parent_block_name']=name,
+                        this.parents_array[numb][0]['parent_id_block']=id,
+                        this.parents_array[numb][0]['parent_question']=question
+                }
+                else
+                {
+                    this.parents_array[numb].push({
+                        parent_answer_link_id:0,
+                        parent_answer_link_name:"",
+                        parent_answer_text: " ",
+                        parent_block_name:name,
+                        parent_id_block:id,
+                        parent_question:question
+                    });
+                }
+
             }
 
 
