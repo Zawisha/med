@@ -17,7 +17,15 @@
 <script>
     export default {
         mounted() {
-            console.log('Component mounted.')
-        }
+            this.render_start_array(this.answers);
+        },
+        methods: {
+            render_start_array()
+            {
+                Vue.router.push({name:'add_content'});
+            }
+        },
+
+
     }
 </script>

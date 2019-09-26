@@ -38,7 +38,7 @@
                 </div>
                 <hr align="center" width="90%" size="10" color="#dddddd" />
                 <modal v-if="showModal" @close="close_modal">
-                    <h3 slot="link">custom</h3>
+                    <h3 slot="link">Выберите блок</h3>
                 </modal>
 
 
@@ -49,7 +49,7 @@
                         <div class="col-12 d-flex parents_up_block">
                             <div class="name_parent_text col-2"><b>Родитель {{ numb+1 }}:</b></div>
                       <div class="col-4" >
-                          <a href="#" v-on:click.prevent="modal_answer(i)">{{ item_parent[0].parent_block_name }}</a>
+                          <a href="#" v-on:click.prevent="go_to_post(item_parent[0].parent_id_block)">{{ item_parent[0].parent_block_name }}</a>
                       </div>
                             <div class="col-6">
                         Описание вопроса родителя:
@@ -103,7 +103,7 @@
                 <button type="button" class="btn btn-danger btn-block" v-on:click="test">Test</button>
 
                 <parents_modal v-if="parents_showModal" @parents_close="parents_close_modal" :block=parents_current_block_string[0] :string_par=parents_current_block_string[1]>
-                    <h3 slot="link">custom</h3>
+                    <h3 slot="link">Выберите блок</h3>
                 </parents_modal>
               </div>
        </div>
@@ -162,41 +162,7 @@
 
             test()
             {
-
-                let parent_answer_arr=[];
-                //TUT OSHIBKA POTOMY CHTO NETU ZNACHENIA
-                let parents_ans = document.getElementsByClassName('answers_parent');
-                let parent_question = document.getElementsByClassName('parent_question');
-                let m =0;
-                for (let i = 0; i < this.parents_array.length; i++) {
-                    if((this.parents_array[i].length==1)&&(this.parents_array[i][0]['parent_answer_text']==('')))
-                    {
-                        console.log('FIND EMPTY');
-                        parent_answer_arr.push({
-                            parent_id_block:this.parents_array[i][0]['parent_id_block'],
-                            parent_name_block:this.parents_array[i][0]['parent_block_name'],
-                            parent_question_text:parent_question[i].value,
-                            answer_link_id:0,
-                            answer:''
-                        });
-                    }
-                    else
-                    {
-                        for(let j = 0; j <this.parents_array[i].length; j++)
-                        {
-                            parent_answer_arr.push({
-                                parent_id_block:this.parents_array[i][0]['parent_id_block'],
-                                parent_name_block:this.parents_array[i][0]['parent_block_name'],
-                                parent_question_text:parent_question[i].value,
-                                answer_link_id:this.parents_array[i][j]['parent_answer_link_id'],
-                                answer:parents_ans[m].value
-                            });
-                            m++;
-                        }
-                    }
-                }
-
-
+console.log(this.parents_array)
             } ,
 
 
@@ -375,9 +341,17 @@
                         }
                     );
                     this.success_message=true;
+                    this.hide_success();
                 }
 
 
+            },
+
+            hide_success()
+            {
+                setTimeout(function () {
+                    this.success_message = false
+                }.bind(this), 3000)
             },
 
             save_data()
@@ -530,7 +504,12 @@
                     });
                 }
 
-            }
+            },
+            go_to_post(numb)
+            {
+                this.$store.dispatch('setBlockCounter', numb);
+                Vue.router.push({name:'example'});
+            },
 
 
         }

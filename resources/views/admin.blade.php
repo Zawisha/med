@@ -248,7 +248,7 @@
                 </div>
 
                 <div class="col-10 admin_content">
-                    <router-view></router-view>
+                    <router-view ></router-view>
                 </div>
 
             </div>

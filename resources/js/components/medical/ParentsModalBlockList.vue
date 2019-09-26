@@ -6,27 +6,25 @@
 
                     <div class="modal-header">
                         <slot name="link">
-                            qweeee
                         </slot>
                     </div>
-<div> {{ block }} </div>
-                    <div> {{ string_par }} </div>
                     <div class="modal-body">
                         <slot name="body">
+                            <div class="alert alert-secondary my_pointer" @click="$emit('parents_close', {id_block_modal:0,
+                    block_name_modal:''})" >Ни один из блоков</div>
                             <div v-for="item in modal_blocks">
-                                <p class=" bg-success text-white rounded mybtn" style="white-space: pre-line"  @click="$emit('parents_close', {id_block_modal: item.id_block,
+                                <div class="alert alert-dark my_pointer"  @click="$emit('parents_close', {id_block_modal: item.id_block,
                     block_name_modal: item.block_name})">
-                                    {{ item.block_name }} => {{ item.id_block }}
-                                </p>
+                                    {{ item.block_name }}
+                                </div>
                             </div>
                         </slot>
                     </div>
 
                     <div class="modal-footer">
                         <slot name="footer">
-                            default footer
                             <button class="modal-default-button" @click="$emit('parents_close')">
-                                OK
+                                Закрыть
                             </button>
                         </slot>
                     </div>
@@ -134,16 +132,16 @@ console.log('qwe');
      * these styles.
      */
 
-    .modal-enter {
+    .parents_modal-enter {
         opacity: 0;
     }
 
-    .modal-leave-active {
+    .parents_modal-leave-active {
         opacity: 0;
     }
 
-    .modal-enter .modal-container,
-    .modal-leave-active .modal-container {
+    .parents_modal-enter .modal-container,
+    .parents_modal-leave-active .modal-container {
         -webkit-transform: scale(1.1);
         transform: scale(1.1);
     }

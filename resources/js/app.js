@@ -46,6 +46,7 @@ import PostsList from "./components/medical/PostsList";
 import AddProcedures from "./components/medical/AddProcedures";
 import BlockList from "./components/medical/BlockList";
 import modal from "./components/medical/ModalBlockList";
+import ExampleComponent from "./components/ExampleComponent";
 
 const router = new VueRouter({
     mode: 'history',
@@ -114,7 +115,11 @@ const router = new VueRouter({
             name: 'block_list',
             component: BlockList
         },
-
+        {
+            path: '/admin/example',
+            name: 'example',
+            component: ExampleComponent
+        },
 
     ],
 });

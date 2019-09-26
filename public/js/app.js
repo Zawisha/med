@@ -3002,7 +3002,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
-    console.log('Component mounted.');
+    this.render_start_array(this.answers);
+  },
+  methods: {
+    render_start_array: function render_start_array() {
+      Vue.router.push({
+        name: 'add_content'
+      });
+    }
   }
 });
 
@@ -3463,35 +3470,7 @@ __webpack_require__.r(__webpack_exports__);
       return this.danger_number_parent_arr.indexOf(item) === -1 ? false : true;
     },
     test: function test() {
-      var parent_answer_arr = []; //TUT OSHIBKA POTOMY CHTO NETU ZNACHENIA
-
-      var parents_ans = document.getElementsByClassName('answers_parent');
-      var parent_question = document.getElementsByClassName('parent_question');
-      var m = 0;
-
-      for (var i = 0; i < this.parents_array.length; i++) {
-        if (this.parents_array[i].length == 1 && this.parents_array[i][0]['parent_answer_text'] == '') {
-          console.log('FIND EMPTY');
-          parent_answer_arr.push({
-            parent_id_block: this.parents_array[i][0]['parent_id_block'],
-            parent_name_block: this.parents_array[i][0]['parent_block_name'],
-            parent_question_text: parent_question[i].value,
-            answer_link_id: 0,
-            answer: ''
-          });
-        } else {
-          for (var j = 0; j < this.parents_array[i].length; j++) {
-            parent_answer_arr.push({
-              parent_id_block: this.parents_array[i][0]['parent_id_block'],
-              parent_name_block: this.parents_array[i][0]['parent_block_name'],
-              parent_question_text: parent_question[i].value,
-              answer_link_id: this.parents_array[i][j]['parent_answer_link_id'],
-              answer: parents_ans[m].value
-            });
-            m++;
-          }
-        }
-      }
+      console.log(this.parents_array);
     },
     render_path: function render_path() {
       axios.post('/api/render_path', {
@@ -3623,7 +3602,13 @@ __webpack_require__.r(__webpack_exports__);
           _this.save_data();
         });
         this.success_message = true;
+        this.hide_success();
       }
+    },
+    hide_success: function hide_success() {
+      setTimeout(function () {
+        this.success_message = false;
+      }.bind(this), 3000);
     },
     save_data: function save_data() {
       //получил ответы
@@ -3744,6 +3729,12 @@ __webpack_require__.r(__webpack_exports__);
           parent_question: question
         });
       }
+    },
+    go_to_post: function go_to_post(numb) {
+      this.$store.dispatch('setBlockCounter', numb);
+      Vue.router.push({
+        name: 'example'
+      });
     }
   }
 });
@@ -3790,17 +3781,21 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/api/post_id').then(function (_ref) {
         var data = _ref.data;
         return (//установим номер поста
-          _this.$store.dispatch('setPostCounter', data + 1) // this.$store.dispatch('changeName', this.message),
-          //     Vue.router.push({name:'add_content'})
-
+          _this.$store.dispatch('setPostCounter', data + 1)
         );
       });
     },
     push_the_button: function push_the_button() {
       //установим имя поста
-      this.$store.dispatch('changeName', this.message), Vue.router.push({
+      this.$store.dispatch('changeName', this.message), //сохраним пустую процедуру
+      axios.post('/api/add_procedure', {
+        id_post: this.$store.state.post_id,
+        name_post: this.$store.state.namePost,
+        id_main_procedure: 0,
+        name_main_procedure: 0
+      }).then(Vue.router.push({
         name: 'add_procedures'
-      });
+      }));
     }
   }
 });
@@ -3836,56 +3831,141 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       inputs: [],
       message: '',
       current_line: 0,
-      procedure_number: 0
+      procedure_number: 0,
+      danger_ans: false,
+      //массив в который положится промежуточное значение постов
+      removed: [],
+      //текущий номер страницы пагинации
+      pagination_numb: 0,
+      //количество постов всего ( для пагинации )
+      posts_length: 0,
+      count_posts_arr: []
     };
   },
   mounted: function mounted() {
-    this.render_start_array(this.inputs);
+    this.render_start_array(this.inputs, this.removed, this.pagination_numb);
   },
   created: function created() {},
   methods: {
     test: function test() {
-      console.log('POST NUMBER ' + this.$store.state.post_id);
+      // console.log(this.procedure_number);
+      //  console.log(this.inputs[this.inputs.length - 1]['id_main_procedure']);
+      console.log(this.count_posts_arr);
+    },
+    delete_procedure: function delete_procedure(numb_in_arr, numb) {
+      axios.post('/api/delete_procedure', {
+        id_post: this.$store.state.post_id,
+        id_procedure: numb,
+        name_post: this.$store.state.namePost
+      });
+      this.inputs.splice(numb_in_arr, 1);
     },
     add_new_line: function add_new_line() {
-      //установим счётчик процедуры
-      this.procedure_number = this.inputs.length;
-      this.procedure_number++;
-      this.inputs.push({
-        name_main_procedure: this.message,
-        id_main_procedure: this.procedure_number
-      });
-      axios.post('/api/add_procedure', {
-        id_post: this.$store.state.post_id,
-        name_post: this.$store.state.namePost,
-        id_main_procedure: this.procedure_number,
-        name_main_procedure: this.message
-      });
-      this.message = '';
+      var _this = this;
+
+      this.danger_ans = false;
+
+      if (this.message == '' || this.message == ' ') {
+        this.danger_ans = true;
+      } else {
+        if (this.count_posts_arr.length !== 0) {
+          this.procedure_number = this.count_posts_arr[this.count_posts_arr.length - 1]['id_main_procedure'];
+        } else {
+          this.procedure_number = 0;
+        }
+
+        this.procedure_number++;
+
+        while ((this.pagination_numb + 1) * 10 < this.posts_length) {
+          this.pagination_numb++;
+        }
+
+        this.inputs = [];
+        axios.post('/api/add_procedure', {
+          id_post: this.$store.state.post_id,
+          name_post: this.$store.state.namePost,
+          id_main_procedure: this.procedure_number,
+          name_main_procedure: this.message
+        }).then(function (_ref) {
+          var data = _ref.data;
+          return _this.message = '', _this.inputs = [], _this.render_start_array(_this.inputs, _this.removed, _this.pagination_numb), _this.count_of_posts(_this.count_posts_arr);
+        });
+      }
     },
     go_to_post: function go_to_post(numb) {
       this.$store.dispatch('setCurrentMainProcedure', numb), Vue.router.push({
         name: 'block_list'
       });
     },
-    render_start_array: function render_start_array(inp) {
+    render_start_array: function render_start_array(inp, removed, pagination_numb) {
+      var _this2 = this;
+
+      pagination_numb = pagination_numb * 10;
       axios.post('/api/render_procedures', {
         id_post: this.$store.state.post_id
-      }).then(function (_ref) {
-        var data = _ref.data;
-        return data.forEach(function (entry) {
-          inp.push({
+      }).then(function (_ref2) {
+        var data = _ref2.data;
+        return (//запишем количество постов
+          _this2.posts_length = data.length, removed = data.splice(pagination_numb, 10), removed.forEach(function (entry) {
+            if (removed.length == 1 && removed[0].id_main_procedure == 0) {} else {
+              inp.push({
+                name_main_procedure: entry.name_main_procedure,
+                id_main_procedure: entry.id_main_procedure
+              });
+            }
+          }), _this2.count_of_posts(_this2.count_posts_arr)
+        );
+      });
+    },
+    count_of_posts: function count_of_posts(inp_arr) {
+      // this.count_posts_arr=[];
+      axios.post('/api/render_procedures', {
+        id_post: this.$store.state.post_id
+      }).then(function (_ref3) {
+        var data = _ref3.data;
+        data.forEach(function (entry) {
+          inp_arr.push({
             name_main_procedure: entry.name_main_procedure,
             id_main_procedure: entry.id_main_procedure
           });
         });
       });
+    },
+    next: function next() {
+      if ((this.pagination_numb + 1) * 10 < this.posts_length) {
+        this.inputs = [];
+        this.pagination_numb++;
+        this.render_start_array(this.inputs, this.removed, this.pagination_numb);
+      }
+    },
+    prev: function prev() {
+      if (this.pagination_numb != 0) {
+        this.inputs = [];
+        this.pagination_numb--;
+        this.render_start_array(this.inputs, this.removed, this.pagination_numb);
+      }
     }
   }
 });
@@ -3918,13 +3998,35 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       inputs: [],
       message: '',
       current_line: 0,
-      procedure_number: 0
+      procedure_number: 0,
+      //массив в который положится промежуточное значение постов
+      removed: [],
+      //текущий номер страницы пагинации
+      pagination_numb: 0,
+      //количество постов всего ( для пагинации )
+      posts_length: 0
     };
   },
   mounted: function mounted() {
@@ -3947,19 +4049,44 @@ __webpack_require__.r(__webpack_exports__);
         name: 'add_content'
       });
     },
-    render_start_array: function render_start_array(inp) {
+    render_start_array: function render_start_array(inp, removed, pagination_numb) {
+      var _this2 = this;
+
+      pagination_numb = pagination_numb * 10;
       axios.post('/api/render_blocks', {
         id_post: this.$store.state.post_id,
         id_procedure: this.$store.state.current_main_procedure
       }).then(function (_ref2) {
         var data = _ref2.data;
-        return data.forEach(function (entry) {
+        return _this2.posts_length = data.length, removed = data.splice(pagination_numb, 10), removed.forEach(function (entry) {
           inp.push({
             id_block: entry.id_block,
             block_name: entry.block_name
           });
         });
       });
+    },
+    next: function next() {
+      if ((this.pagination_numb + 1) * 10 < this.posts_length) {
+        this.inputs = [];
+        this.pagination_numb++;
+        this.render_start_array(this.inputs, this.removed, this.pagination_numb);
+      }
+    },
+    prev: function prev() {
+      if (this.pagination_numb != 0) {
+        this.inputs = [];
+        this.pagination_numb--;
+        this.render_start_array(this.inputs, this.removed, this.pagination_numb);
+      }
+    },
+    delete_block: function delete_block(id_block, number_in_arr) {
+      axios.post('/api/delete_block', {
+        id_post: this.$store.state.post_id,
+        id_procedure: this.$store.state.current_main_procedure,
+        id_block: id_block
+      });
+      this.inputs.splice(number_in_arr, 1);
     }
   }
 });
@@ -4090,8 +4217,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4137,7 +4262,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _app_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../app.js */ "./resources/js/app.js");
 //
 //
 //
@@ -4170,13 +4294,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4187,30 +4304,25 @@ __webpack_require__.r(__webpack_exports__);
       //текущий номер страницы пагинации
       pagination_numb: 0,
       //количество постов всего ( для пагинации )
-      posts_length: 0,
-      //массив пагинации
-      pagination: [],
-      //активная страница
-      active_page: 0
+      posts_length: 0
     };
   },
   mounted: function mounted() {
-    //  console.log('qweQQQ ');
     this.render_table(this.posts, this.removed, this.pagination_numb, this.posts_length);
   },
   methods: {
+    test: function test() {
+      console.log(this.posts);
+    },
     render_table: function render_table(inp, removed, pagination_numb) {
       var _this = this;
 
-      this.pagination = []; //множитель количества постов на странице ( он же номер )
-
+      //множитель количества постов на странице ( он же номер )
       pagination_numb = pagination_numb * 10;
-      axios.post('/api/render_posts', {
-        parent: this.current_line
-      }).then(function (_ref) {
+      axios.post('/api/render_posts', {}).then(function (_ref) {
         var data = _ref.data;
         return (//запишем количество постов
-          _this.posts_length = data.length, _this.count_pages(_this.posts_length), //пагинация с какой позиции и сколько взять
+          _this.posts_length = data.length, //пагинация с какой позиции и сколько взять
           removed = data.splice(pagination_numb, 10), removed.forEach(function (entry) {
             inp.push({
               text: entry.name_post,
@@ -4218,32 +4330,20 @@ __webpack_require__.r(__webpack_exports__);
             });
           })
         );
-      }); //проверка на начало и конец списка
-    },
-    //не использую
-    select_line: function select_line(numb) {
-      var _this2 = this;
-
-      axios.post('/api/select_line', {
-        id_post: numb
-      }).then(function (_ref2) {
-        var data = _ref2.data;
-        return _this2.$store.dispatch('setLineCounter', data);
       });
     },
     select_name: function select_name(numb) {
-      var _this3 = this;
+      var _this2 = this;
 
       axios.post('/api/select_name', {
         id_post: numb
-      }).then(function (_ref3) {
-        var data = _ref3.data;
-        return _this3.$store.dispatch('changeName', data.name_post);
+      }).then(function (_ref2) {
+        var data = _ref2.data;
+        return _this2.$store.dispatch('changeName', data.name_post);
       });
     },
     edit_post: function edit_post(numb) {
       //выбираю номер линии у поста
-      // this.select_line(numb);
       this.select_name(numb); //меняю значение поста
 
       this.$store.dispatch('setPostCounter', numb); //имя поста
@@ -4252,8 +4352,13 @@ __webpack_require__.r(__webpack_exports__);
         name: 'add_procedures'
       });
     },
-    delete_post: function delete_post(numb) {
-      console.log(this.posts_length);
+    delete_post: function delete_post(numb, numb_in_arr) {
+      console.log('nomer posta' + numb);
+      console.log('nomer stroki' + numb_in_arr);
+      axios.post('/api/delete_post', {
+        id_post: numb
+      });
+      this.posts.splice(numb_in_arr, 1);
     },
     next: function next() {
       if ((this.pagination_numb + 1) * 10 < this.posts_length) {
@@ -4267,16 +4372,6 @@ __webpack_require__.r(__webpack_exports__);
         this.posts = [];
         this.pagination_numb--;
         this.render_table(this.posts, this.removed, this.pagination_numb);
-      }
-    },
-    numb_pagination: function numb_pagination(page) {
-      this.posts = [];
-      this.pagination_numb = page;
-      this.render_table(this.posts, this.removed, this.pagination_numb);
-    },
-    count_pages: function count_pages(numb) {
-      for (var i = 1; i <= Math.ceil(numb / 10); i++) {
-        this.pagination.push(i);
       }
     }
   }
@@ -8760,7 +8855,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.modal-mask {\n    position: fixed;\n    z-index: 9998;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(0, 0, 0, .5);\n    display: table;\n    transition: opacity .3s ease;\n}\n.modal-wrapper {\n    display: table-cell;\n    vertical-align: middle;\n}\n.modal-container {\n    width: 300px;\n    margin: 0px auto;\n    padding: 20px 30px;\n    background-color: #fff;\n    border-radius: 2px;\n    box-shadow: 0 2px 8px rgba(0, 0, 0, .33);\n    transition: all .3s ease;\n    font-family: Helvetica, Arial, sans-serif;\n}\n.modal-header h3 {\n    margin-top: 0;\n    color: #42b983;\n}\n.modal-body {\n    margin: 20px 0;\n}\n.modal-default-button {\n    float: right;\n}\n\n/*\n * The following styles are auto-applied to elements with\n * transition=\"modal\" when their visibility is toggled\n * by Vue.js.\n *\n * You can easily play with the modal transition by editing\n * these styles.\n */\n.modal-enter {\n    opacity: 0;\n}\n.modal-leave-active {\n    opacity: 0;\n}\n.modal-enter .modal-container,\n.modal-leave-active .modal-container {\n    transform: scale(1.1);\n}\n", ""]);
+exports.push([module.i, "\n.modal-mask {\n    position: fixed;\n    z-index: 9998;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(0, 0, 0, .5);\n    display: table;\n    transition: opacity .3s ease;\n}\n.modal-wrapper {\n    display: table-cell;\n    vertical-align: middle;\n}\n.modal-container {\n    width: 300px;\n    margin: 0px auto;\n    padding: 20px 30px;\n    background-color: #fff;\n    border-radius: 2px;\n    box-shadow: 0 2px 8px rgba(0, 0, 0, .33);\n    transition: all .3s ease;\n    font-family: Helvetica, Arial, sans-serif;\n}\n.modal-header h3 {\n    margin-top: 0;\n    color: #42b983;\n}\n.modal-body {\n    margin: 20px 0;\n}\n.modal-default-button {\n    float: right;\n}\n\n/*\n * The following styles are auto-applied to elements with\n * transition=\"modal\" when their visibility is toggled\n * by Vue.js.\n *\n * You can easily play with the modal transition by editing\n * these styles.\n */\n.parents_modal-enter {\n    opacity: 0;\n}\n.parents_modal-leave-active {\n    opacity: 0;\n}\n.parents_modal-enter .modal-container,\n.parents_modal-leave-active .modal-container {\n    transform: scale(1.1);\n}\n", ""]);
 
 // exports
 
@@ -41238,7 +41333,7 @@ var render = function() {
             _vm.showModal
               ? _c("modal", { on: { close: _vm.close_modal } }, [
                   _c("h3", { attrs: { slot: "link" }, slot: "link" }, [
-                    _vm._v("custom")
+                    _vm._v("Выберите блок")
                   ])
                 ])
               : _vm._e(),
@@ -41258,7 +41353,9 @@ var render = function() {
                         on: {
                           click: function($event) {
                             $event.preventDefault()
-                            return _vm.modal_answer(_vm.i)
+                            return _vm.go_to_post(
+                              item_parent[0].parent_id_block
+                            )
                           }
                         }
                       },
@@ -41518,7 +41615,7 @@ var render = function() {
                   },
                   [
                     _c("h3", { attrs: { slot: "link" }, slot: "link" }, [
-                      _vm._v("custom")
+                      _vm._v("Выберите блок")
                     ])
                   ]
                 )
@@ -41661,86 +41758,154 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
-    _vm._v("\n        Список процедур:\n        "),
-    _c("div", { staticClass: "row justify-content-center" }, [
-      _c(
-        "div",
-        { staticClass: "col-md-8" },
-        [
-          _vm._l(_vm.inputs, function(item) {
-            return _c("div", [
-              _c(
-                "p",
-                {
-                  staticClass: " bg-success text-white rounded mybtn",
-                  staticStyle: { "white-space": "pre-line" },
-                  on: {
-                    click: function($event) {
-                      return _vm.go_to_post(item.id_main_procedure)
+    _c("div", { staticClass: "col" }, [
+      _c("div", [_vm._v("Список процедур")]),
+      _vm._v(" "),
+      _c("table", { staticClass: "table" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c(
+          "tbody",
+          _vm._l(_vm.inputs, function(item, number) {
+            return _c("tr", [
+              _c("td", { attrs: { scope: "col-8" } }, [
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(item.name_main_procedure) +
+                    "\n                "
+                )
+              ]),
+              _vm._v(" "),
+              _c("td", { attrs: { scope: "col-2" } }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.go_to_post(item.id_main_procedure)
+                      }
                     }
-                  }
-                },
-                [
-                  _vm._v(
-                    "\n      " +
-                      _vm._s(item.name_main_procedure) +
-                      " => " +
-                      _vm._s(item.id_main_procedure) +
-                      "\n    "
-                  )
-                ]
-              )
+                  },
+                  [_vm._v("Редактировать")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("td", { attrs: { scope: "col-2" } }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-danger",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.delete_procedure(
+                          number,
+                          item.id_main_procedure
+                        )
+                      }
+                    }
+                  },
+                  [_vm._v("Удалить")]
+                )
+              ])
             ])
           }),
-          _vm._v(" "),
-          _c("textarea", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.message,
-                expression: "message"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { rows: "2", id: "messages", name: "text" },
-            domProps: { value: _vm.message },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.message = $event.target.value
-              }
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-primary btn-block",
-              attrs: { type: "button" },
-              on: { click: _vm.add_new_line }
-            },
-            [_vm._v("Сохранить процедуру")]
-          ),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-primary btn-block",
-              attrs: { type: "button" },
-              on: { click: _vm.test }
-            },
-            [_vm._v("test")]
-          )
+          0
+        )
+      ]),
+      _vm._v(" "),
+      _c("hr", {
+        attrs: { align: "center", width: "90%", size: "10", color: "#dddddd" }
+      }),
+      _vm._v(" "),
+      _c("textarea", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.message,
+            expression: "message"
+          }
         ],
-        2
+        staticClass: "form-control",
+        class: { border_alert: _vm.danger_ans },
+        attrs: {
+          rows: "2",
+          id: "messages",
+          name: "text",
+          placeholder: "Введите название новой процедуры"
+        },
+        domProps: { value: _vm.message },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.message = $event.target.value
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary btn-block procedure_button",
+          attrs: { type: "button" },
+          on: { click: _vm.add_new_line }
+        },
+        [_vm._v("Добавить процедуру")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary btn-block",
+          attrs: { type: "button" },
+          on: { click: _vm.test }
+        },
+        [_vm._v("test")]
+      )
+    ]),
+    _vm._v(" "),
+    _c("ul", { staticClass: "pagination" }, [
+      _c(
+        "li",
+        {
+          staticClass: "page-item page-link disabled my_pointer",
+          on: { click: _vm.prev }
+        },
+        [_vm._v("Previous")]
+      ),
+      _vm._v(" "),
+      _c(
+        "li",
+        {
+          staticClass: "page-item page-link my_pointer",
+          on: { click: _vm.next }
+        },
+        [_vm._v("Next")]
       )
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", { staticClass: "thead-dark" }, [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col-8" } }, [_vm._v("Название процедуры")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col-2" } }),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col-2" } })
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -41763,54 +41928,109 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
-    _vm._v("\n        Список блоков:\n        "),
-    _c("div", { staticClass: "row justify-content-center" }, [
-      _c(
-        "div",
-        { staticClass: "col-md-8" },
-        [
-          _vm._l(_vm.inputs, function(item) {
-            return _c("div", [
-              _c(
-                "p",
-                {
-                  staticClass: " bg-success text-white rounded mybtn",
-                  staticStyle: { "white-space": "pre-line" },
-                  on: {
-                    click: function($event) {
-                      return _vm.go_to_post(item.id_block)
+    _c("div", { staticClass: "col" }, [
+      _c("div", [_vm._v("Список блоков:")]),
+      _vm._v(" "),
+      _c("table", { staticClass: "table" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c(
+          "tbody",
+          _vm._l(_vm.inputs, function(item, number) {
+            return _c("tr", [
+              _c("td", { attrs: { scope: "col-8" } }, [
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(item.block_name) +
+                    "\n                "
+                )
+              ]),
+              _vm._v(" "),
+              _c("td", { attrs: { scope: "col-2" } }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.go_to_post(item.id_block)
+                      }
                     }
-                  }
-                },
-                [
-                  _vm._v(
-                    "\n      " +
-                      _vm._s(item.block_name) +
-                      " => " +
-                      _vm._s(item.id_block) +
-                      "\n    "
-                  )
-                ]
-              )
+                  },
+                  [_vm._v("Редактировать")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("td", { attrs: { scope: "col-2" } }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-danger",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.delete_block(item.id_block, number)
+                      }
+                    }
+                  },
+                  [_vm._v("Удалить")]
+                )
+              ])
             ])
           }),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-primary btn-block",
-              attrs: { type: "button" },
-              on: { click: _vm.new_block }
-            },
-            [_vm._v("Новый блок")]
-          )
-        ],
-        2
+          0
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary btn-block",
+          attrs: { type: "button" },
+          on: { click: _vm.new_block }
+        },
+        [_vm._v("Новый блок")]
+      )
+    ]),
+    _vm._v(" "),
+    _c("ul", { staticClass: "pagination" }, [
+      _c(
+        "li",
+        {
+          staticClass: "page-item page-link disabled my_pointer",
+          on: { click: _vm.prev }
+        },
+        [_vm._v("Previous")]
+      ),
+      _vm._v(" "),
+      _c(
+        "li",
+        {
+          staticClass: "page-item page-link my_pointer",
+          on: { click: _vm.next }
+        },
+        [_vm._v("Next")]
       )
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", { staticClass: "thead-dark" }, [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col-8" } }, [_vm._v("Название блока")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col-2" } }),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col-2" } })
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -41836,30 +42056,35 @@ var render = function() {
     _c("div", { staticClass: "modal-mask" }, [
       _c("div", { staticClass: "modal-wrapper" }, [
         _c("div", { staticClass: "modal-container" }, [
-          _c(
-            "div",
-            { staticClass: "modal-header" },
-            [
-              _vm._t("link", [
-                _vm._v("\n                        qweeee\n                    ")
-              ])
-            ],
-            2
-          ),
+          _c("div", { staticClass: "modal-header" }, [_vm._t("link")], 2),
           _vm._v(" "),
           _c(
             "div",
             { staticClass: "modal-body" },
             [
-              _vm._t(
-                "body",
+              _vm._t("body", [
+                _c(
+                  "div",
+                  {
+                    staticClass: "alert alert-secondary my_pointer",
+                    on: {
+                      click: function($event) {
+                        return _vm.$emit("close", {
+                          id_block_modal: 0,
+                          block_name_modal: ""
+                        })
+                      }
+                    }
+                  },
+                  [_vm._v("Ни один из блоков")]
+                ),
+                _vm._v(" "),
                 _vm._l(_vm.modal_blocks, function(item) {
                   return _c("div", [
                     _c(
-                      "p",
+                      "div",
                       {
-                        staticClass: " bg-success text-white rounded mybtn",
-                        staticStyle: { "white-space": "pre-line" },
+                        staticClass: "alert alert-dark my_pointer",
                         on: {
                           click: function($event) {
                             return _vm.$emit("close", {
@@ -41873,15 +42098,13 @@ var render = function() {
                         _vm._v(
                           "\n                                " +
                             _vm._s(item.block_name) +
-                            " => " +
-                            _vm._s(item.id_block) +
                             "\n                            "
                         )
                       ]
                     )
                   ])
                 })
-              )
+              ])
             ],
             2
           ),
@@ -41891,9 +42114,6 @@ var render = function() {
             { staticClass: "modal-footer" },
             [
               _vm._t("footer", [
-                _vm._v(
-                  "\n                        default footer\n                        "
-                ),
                 _c(
                   "button",
                   {
@@ -41906,7 +42126,7 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                            OK\n                        "
+                      "\n                            Закрыть\n                        "
                     )
                   ]
                 )
@@ -41945,36 +42165,35 @@ var render = function() {
     _c("div", { staticClass: "modal-mask" }, [
       _c("div", { staticClass: "modal-wrapper" }, [
         _c("div", { staticClass: "modal-container" }, [
-          _c(
-            "div",
-            { staticClass: "modal-header" },
-            [
-              _vm._t("link", [
-                _vm._v(
-                  "\n                            qweeee\n                        "
-                )
-              ])
-            ],
-            2
-          ),
-          _vm._v(" "),
-          _c("div", [_vm._v(" " + _vm._s(_vm.block) + " ")]),
-          _vm._v(" "),
-          _c("div", [_vm._v(" " + _vm._s(_vm.string_par) + " ")]),
+          _c("div", { staticClass: "modal-header" }, [_vm._t("link")], 2),
           _vm._v(" "),
           _c(
             "div",
             { staticClass: "modal-body" },
             [
-              _vm._t(
-                "body",
+              _vm._t("body", [
+                _c(
+                  "div",
+                  {
+                    staticClass: "alert alert-secondary my_pointer",
+                    on: {
+                      click: function($event) {
+                        return _vm.$emit("parents_close", {
+                          id_block_modal: 0,
+                          block_name_modal: ""
+                        })
+                      }
+                    }
+                  },
+                  [_vm._v("Ни один из блоков")]
+                ),
+                _vm._v(" "),
                 _vm._l(_vm.modal_blocks, function(item) {
                   return _c("div", [
                     _c(
-                      "p",
+                      "div",
                       {
-                        staticClass: " bg-success text-white rounded mybtn",
-                        staticStyle: { "white-space": "pre-line" },
+                        staticClass: "alert alert-dark my_pointer",
                         on: {
                           click: function($event) {
                             return _vm.$emit("parents_close", {
@@ -41986,17 +42205,15 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                                    " +
+                          "\n                                " +
                             _vm._s(item.block_name) +
-                            " => " +
-                            _vm._s(item.id_block) +
-                            "\n                                "
+                            "\n                            "
                         )
                       ]
                     )
                   ])
                 })
-              )
+              ])
             ],
             2
           ),
@@ -42006,9 +42223,6 @@ var render = function() {
             { staticClass: "modal-footer" },
             [
               _vm._t("footer", [
-                _vm._v(
-                  "\n                            default footer\n                            "
-                ),
                 _c(
                   "button",
                   {
@@ -42021,7 +42235,7 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                                OK\n                            "
+                      "\n                            Закрыть\n                        "
                     )
                   ]
                 )
@@ -42057,16 +42271,20 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "col" }, [
+    _c("div", [_vm._v("Общий список постов")]),
+    _vm._v(" "),
     _c("table", { staticClass: "table" }, [
       _vm._m(0),
       _vm._v(" "),
       _c(
         "tbody",
-        _vm._l(_vm.posts, function(post) {
+        _vm._l(_vm.posts, function(post, number) {
           return _c("tr", [
             _c("td", { attrs: { scope: "col-8" } }, [
               _vm._v(
-                "\n                " + _vm._s(post.text) + "\n            "
+                "\n                    " +
+                  _vm._s(post.text) +
+                  "\n                "
               )
             ]),
             _vm._v(" "),
@@ -42094,7 +42312,7 @@ var render = function() {
                   attrs: { type: "button" },
                   on: {
                     click: function($event) {
-                      return _vm.delete_post(post.id_post)
+                      return _vm.delete_post(post.id_post, number)
                     }
                   }
                 },
@@ -42107,52 +42325,35 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _c("nav", { attrs: { "aria-label": "..." } }, [
-      _c(
-        "ul",
-        { staticClass: "pagination" },
-        [
-          _c(
-            "li",
-            {
-              staticClass: "page-item page-link disabled ",
-              on: { click: _vm.prev }
-            },
-            [_vm._v("Previous")]
-          ),
-          _vm._v(" "),
-          _vm._l(_vm.pagination, function(page) {
-            return _vm.active_page == page
-              ? _c(
-                  "li",
-                  {
-                    staticClass: "page-item page-link ",
-                    on: {
-                      click: function($event) {
-                        return _vm.numb_pagination(page - 1)
-                      }
-                    }
-                  },
-                  [
-                    _vm._v(
-                      "\n                " + _vm._s(page) + "\n            "
-                    )
-                  ]
-                )
-              : _vm._e()
-          }),
-          _vm._v(" "),
-          _c(
-            "li",
-            { staticClass: "page-item page-link ", on: { click: _vm.next } },
-            [_vm._v("Next")]
-          )
-        ],
-        2
-      )
-    ]),
+    _c(
+      "button",
+      {
+        staticClass: "btn btn-primary btn-block",
+        attrs: { type: "button" },
+        on: { click: _vm.test }
+      },
+      [_vm._v("test")]
+    ),
     _vm._v(" "),
-    _c("div", { staticClass: "active_li" }, [_vm._v("qweqweqweqwe")])
+    _c("ul", { staticClass: "pagination" }, [
+      _c(
+        "li",
+        {
+          staticClass: "page-item page-link disabled my_pointer",
+          on: { click: _vm.prev }
+        },
+        [_vm._v("Previous")]
+      ),
+      _vm._v(" "),
+      _c(
+        "li",
+        {
+          staticClass: "page-item page-link my_pointer",
+          on: { click: _vm.next }
+        },
+        [_vm._v("Next")]
+      )
+    ])
   ])
 }
 var staticRenderFns = [
@@ -42162,8 +42363,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", { staticClass: "thead-dark" }, [
       _c("tr", [
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("#")]),
-        _vm._v(" "),
         _c("th", { attrs: { scope: "col-8" } }, [_vm._v("Название поста")]),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col-2" } }),
@@ -58338,6 +58537,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_medical_AddProcedures__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/medical/AddProcedures */ "./resources/js/components/medical/AddProcedures.vue");
 /* harmony import */ var _components_medical_BlockList__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/medical/BlockList */ "./resources/js/components/medical/BlockList.vue");
 /* harmony import */ var _components_medical_ModalBlockList__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/medical/ModalBlockList */ "./resources/js/components/medical/ModalBlockList.vue");
+/* harmony import */ var _components_ExampleComponent__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/ExampleComponent */ "./resources/js/components/ExampleComponent.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
@@ -58359,6 +58559,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('modal', __webpack_require_
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('parents_modal', __webpack_require__(/*! ./components/medical/ParentsModalBlockList */ "./resources/js/components/medical/ParentsModalBlockList.vue")["default"]); // шина данных
 
 var postName = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
+
 
 
 
@@ -58426,6 +58627,10 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     path: '/admin/block_list',
     name: 'block_list',
     component: _components_medical_BlockList__WEBPACK_IMPORTED_MODULE_19__["default"]
+  }, {
+    path: '/admin/example',
+    name: 'example',
+    component: _components_ExampleComponent__WEBPACK_IMPORTED_MODULE_21__["default"]
   }]
 });
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.router = router; //websanova/vue-auth

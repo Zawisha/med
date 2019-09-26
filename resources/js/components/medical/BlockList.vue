@@ -1,18 +1,34 @@
 <template>
     <div class="container">
-        Список блоков:
-        <div class="row justify-content-center">
-            <div class="col-md-8">
 
-<div v-for="item in inputs">
-    <p class=" bg-success text-white rounded mybtn" style="white-space: pre-line" v-on:click="go_to_post(item.id_block)">
-      {{ item.block_name }} => {{ item.id_block }}
-    </p>
-</div>
-                <button type="button" class="btn btn-primary btn-block" v-on:click="new_block">Новый блок</button>
-            </div>
+        <div class="col">
+            <div>Список блоков:</div>
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col-8">Название блока</th>
+                    <th scope="col-2"></th>
+                    <th scope="col-2"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(item, number) in inputs">
+                    <td scope="col-8">
+                        {{ item.block_name }}
+                    </td>
+                    <td scope="col-2"><button type="button" class="btn btn-secondary" v-on:click="go_to_post(item.id_block)">Редактировать</button></td>
+                    <td scope="col-2"><button type="button" class="btn btn-danger" v-on:click="delete_block(item.id_block, number)">Удалить</button></td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary btn-block" v-on:click="new_block">Новый блок</button>
         </div>
+        <ul class="pagination">
+            <li class="page-item page-link disabled my_pointer" v-on:click="prev">Previous</li>
+            <li class="page-item page-link my_pointer" v-on:click="next">Next</li>
+        </ul>
     </div>
+
 </template>
 
 <script>
@@ -24,6 +40,15 @@
                 message: '' ,
                 current_line: 0,
                 procedure_number:0,
+
+                //массив в который положится промежуточное значение постов
+                removed:[],
+                //текущий номер страницы пагинации
+                pagination_numb:0,
+                //количество постов всего ( для пагинации )
+                posts_length:0,
+
+
             }
         },
         mounted() {
@@ -56,14 +81,17 @@
 
             },
 
-            render_start_array(inp)
+            render_start_array(inp, removed, pagination_numb)
             {
+                pagination_numb=pagination_numb*10;
                 axios
                     .post('/api/render_blocks',{
                         id_post:this.$store.state.post_id,
                         id_procedure:this.$store.state.current_main_procedure,
                     }).then(({ data }) => (
-                data.forEach(function(entry) {
+                        this.posts_length=data.length,
+                        removed= data.splice(pagination_numb, 10),
+                        removed.forEach(function(entry) {
                     inp.push({
                         id_block:entry.id_block,
                         block_name:entry.block_name,
@@ -73,6 +101,37 @@
                 );
             },
 
+            next()
+            {
+                if(((this.pagination_numb+1) * 10)<(this.posts_length))
+                {
+                    this.inputs=[];
+                    this.pagination_numb++;
+                    this.render_start_array(this.inputs, this.removed, this.pagination_numb);
+                }
+
+            },
+            prev()
+            {
+                if(this.pagination_numb != 0)
+                {
+                    this.inputs=[];
+                    this.pagination_numb--;
+                    this.render_start_array(this.inputs, this.removed, this.pagination_numb);
+                }
+
+            },
+
+            delete_block(id_block, number_in_arr)
+            {
+                axios
+                    .post('/api/delete_block',{
+                        id_post:this.$store.state.post_id,
+                        id_procedure:this.$store.state.current_main_procedure,
+                        id_block:id_block,
+                    });
+                this.inputs.splice(number_in_arr,1)
+            },
 
 
                      }

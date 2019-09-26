@@ -6,26 +6,26 @@
 
                     <div class="modal-header">
                         <slot name="link">
-                            qweeee
                         </slot>
                     </div>
 
                     <div class="modal-body">
                         <slot name="body">
+                            <div class="alert alert-secondary my_pointer" @click="$emit('close', {id_block_modal:0,
+                    block_name_modal:''})" >Ни один из блоков</div>
                             <div v-for="item in modal_blocks">
-                                <p class=" bg-success text-white rounded mybtn" style="white-space: pre-line"  @click="$emit('close', {id_block_modal: item.id_block,
+                                <div class="alert alert-dark my_pointer"  @click="$emit('close', {id_block_modal: item.id_block,
                     block_name_modal: item.block_name})">
-                                    {{ item.block_name }} => {{ item.id_block }}
-                                </p>
+                                    {{ item.block_name }}
+                                </div>
                             </div>
                         </slot>
                     </div>
 
                     <div class="modal-footer">
                         <slot name="footer">
-                            default footer
                             <button class="modal-default-button" @click="$emit('close')">
-                                OK
+                                Закрыть
                             </button>
                         </slot>
                     </div>
@@ -78,12 +78,6 @@
 
             },
 
-            // change_link(id_block, block_name)
-            // {
-            //     this.$emit('data_modal_window', {
-            //
-            //     })
-            // }
         }
     }
 </script>

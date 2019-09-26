@@ -35,23 +35,28 @@
             {
                 axios
                     .post('/api/post_id').then(({ data }) => (
-
                         //установим номер поста
-
                         this.$store.dispatch('setPostCounter', data+1)
-                        // this.$store.dispatch('changeName', this.message),
-                        //     Vue.router.push({name:'add_content'})
-
                     )
                 )
             },
-
 
             push_the_button()
             {
                 //установим имя поста
                 this.$store.dispatch('changeName', this.message),
-                Vue.router.push({name:'add_procedures'})
+//сохраним пустую процедуру
+                    axios
+                        .post('/api/add_procedure',{
+                            id_post:this.$store.state.post_id,
+                            name_post:this.$store.state.namePost,
+                            id_main_procedure:0,
+                            name_main_procedure:0
+                        }).then( Vue.router.push({name:'add_procedures'}));
+
+
+
+
             },
 
 

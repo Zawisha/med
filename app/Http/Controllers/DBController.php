@@ -258,7 +258,11 @@ class DBController extends Controller
     }
     public function add_procedure(Request $request)
     {
+
         $id_post = $request->input('id_post');
+       $null_procedura = Procedure::where('id_post', '=', $id_post)->first();
+        if($null_procedura['id_main_procedure']==0)
+        {$del_null  = Procedure::where('id_post', '=', $id_post)->delete();}
         $name_post = $request->input('name_post');
         $id_main_procedure = $request->input('id_main_procedure');
         $name_main_procedure = $request->input('name_main_procedure');
@@ -275,6 +279,40 @@ class DBController extends Controller
         $id_post = $request->input('id_post');
         $id_procedure = $request->input('id_procedure');
         return $posts = Post::select('id_block', 'block_name')->where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->distinct('id_block')->get();
+    }
+    public function delete_post(Request $request)
+    {
+        $id_post = $request->input('id_post');
+        Procedure::where('id_post', '=', $id_post)->delete();
+        Post::where('id_post', '=', $id_post)->delete();
+    }
+    public function delete_procedure(Request $request)
+    {
+        $id_post = $request->input('id_post');
+        $id_procedure = $request->input('id_procedure');
+        $name_post =$request->input('name_post');
+        Procedure::where('id_post', '=', $id_post)->where('id_main_procedure', '=', $id_procedure)->delete();
+        Post::where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->delete();
+        $counts_of_procedure = Procedure::where('id_post', '=', $id_post)->get();
+         if (count($counts_of_procedure)==0)
+         {
+             Procedure::create([
+                 'id_post' => $id_post,
+                 'name_post' => $name_post,
+                 'id_main_procedure' =>0,
+                 'name_main_procedure' =>0,
+             ]);
+         }
+
+    }
+
+    public function delete_block(Request $request)
+    {
+        $id_post = $request->input('id_post');
+        $id_procedure = $request->input('id_procedure');
+        $id_block = $request->input('id_block');
+        Post::where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->where('id_block', '=', $id_block)->delete();
+        Post::where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->where('answer_link_id', '=', $id_block)->update(['answer_link_id' => 0]);
     }
 
 }

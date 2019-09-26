@@ -1,20 +1,36 @@
 <template>
     <div class="container">
-        Список процедур:
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-
-<div v-for="item in inputs">
-    <p class=" bg-success text-white rounded mybtn" style="white-space: pre-line" v-on:click="go_to_post(item.id_main_procedure)">
-      {{ item.name_main_procedure }} => {{ item.id_main_procedure }}
-    </p>
-</div>
-
-                <textarea class="form-control" rows="2" id="messages" name="text"  v-model="message"> </textarea>
-                <button type="button" class="btn btn-primary btn-block" v-on:click="add_new_line">Сохранить процедуру</button>
-                <button type="button" class="btn btn-primary btn-block" v-on:click="test">test</button>
-            </div>
+        <div class="col">
+            <div>Список процедур</div>
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col-8">Название процедуры</th>
+                    <th scope="col-2"></th>
+                    <th scope="col-2"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(item, number) in inputs">
+                    <td scope="col-8">
+                        {{ item.name_main_procedure }}
+                    </td>
+                    <td scope="col-2"><button type="button" class="btn btn-secondary" v-on:click="go_to_post(item.id_main_procedure)">Редактировать</button></td>
+                    <td scope="col-2"><button type="button" class="btn btn-danger" v-on:click="delete_procedure(number,item.id_main_procedure)">Удалить</button></td>
+                </tr>
+                </tbody>
+            </table>
+            <hr align="center" width="90%" size="10" color="#dddddd" />
+            <textarea class="form-control" rows="2" id="messages" name="text" v-bind:class="{border_alert: danger_ans}" v-model="message" placeholder="Введите название новой процедуры"> </textarea>
+            <button type="button" class="btn btn-primary btn-block procedure_button" v-on:click="add_new_line">Добавить процедуру</button>
+            <button type="button" class="btn btn-primary btn-block" v-on:click="test">test</button>
         </div>
+
+        <ul class="pagination">
+            <li class="page-item page-link disabled my_pointer" v-on:click="prev">Previous</li>
+            <li class="page-item page-link my_pointer" v-on:click="next">Next</li>
+        </ul>
+
     </div>
 </template>
 
@@ -27,12 +43,21 @@
                 message: '' ,
                 current_line: 0,
                 procedure_number:0,
+
+                danger_ans:false,
+                //массив в который положится промежуточное значение постов
+                removed:[],
+                //текущий номер страницы пагинации
+                pagination_numb:0,
+                //количество постов всего ( для пагинации )
+                posts_length:0,
+
+                count_posts_arr:[],
             }
         },
         mounted() {
 
-            this.render_start_array(this.inputs);
-
+            this.render_start_array(this.inputs, this.removed, this.pagination_numb);
         },
         created(){
         },
@@ -40,28 +65,59 @@
 
             test()
             {
-                console.log('POST NUMBER '+this.$store.state.post_id);
+              // console.log(this.procedure_number);
+              //  console.log(this.inputs[this.inputs.length - 1]['id_main_procedure']);
+                console.log(this.count_posts_arr);
+            },
+
+            delete_procedure(numb_in_arr, numb)
+            {
+                axios
+                    .post('/api/delete_procedure',{
+                        id_post:this.$store.state.post_id,
+                        id_procedure:numb,
+                        name_post:this.$store.state.namePost,
+                    });
+                this.inputs.splice(numb_in_arr,1)
             },
 
             add_new_line()
             {
-                //установим счётчик процедуры
-                this.procedure_number = this.inputs.length;
-                this.procedure_number++;
-                this.inputs.push({
-                    name_main_procedure:this.message,
-                    id_main_procedure:this.procedure_number,
-                });
 
-                axios
-                    .post('/api/add_procedure',{
+                this.danger_ans = false;
+                if(this.message==''||this.message==' ')
+                {
+                    this.danger_ans = true;
+                }
+                else
+                {
+                    if(this.count_posts_arr.length!==0)
+                    {
+                        this.procedure_number = this.count_posts_arr[this.count_posts_arr.length - 1]['id_main_procedure'];
+                    }
+                    else
+                    {
+                        this.procedure_number = 0;
+                    }
+                    this.procedure_number++;
+                    while(((this.pagination_numb+1) * 10)<(this.posts_length))
+                    {
+                        this.pagination_numb++
+                    }
+                    this.inputs=[];
+                    axios
+                        .post('/api/add_procedure',{
                             id_post:this.$store.state.post_id,
                             name_post:this.$store.state.namePost,
                             id_main_procedure:this.procedure_number,
                             name_main_procedure:this.message
-                    });
-                this.message ='';
-
+                        }).then(({ data }) => (
+                        this.message ='',
+                            this.inputs=[],
+                            this.render_start_array(this.inputs, this.removed, this.pagination_numb),
+                            this.count_of_posts(this.count_posts_arr)
+                    ))
+                }
             },
 
             go_to_post(numb)
@@ -72,20 +128,73 @@
             },
 
 
-            render_start_array(inp)
+            render_start_array(inp, removed, pagination_numb)
             {
+
+                pagination_numb=pagination_numb*10;
                 axios
                     .post('/api/render_procedures',{
                         id_post:this.$store.state.post_id,
                     }).then(({ data }) => (
-                data.forEach(function(entry) {
-                    inp.push({
-                        name_main_procedure:entry.name_main_procedure,
-                        id_main_procedure:entry.id_main_procedure,
-                    });
-                })
+                    //запишем количество постов
+                        this.posts_length=data.length,
+                        removed= data.splice(pagination_numb, 10),
+                        removed.forEach(function(entry) {
+                     if(removed.length==1&&removed[0].id_main_procedure==0)
+                    {}
+                    else{
+
+                        inp.push({
+                            name_main_procedure:entry.name_main_procedure,
+                            id_main_procedure:entry.id_main_procedure,
+                        });
+                    }
+
+                }),
+                this.count_of_posts(this.count_posts_arr)
                     )
-                );
+
+                )
+
+            },
+
+            count_of_posts(inp_arr)
+            {
+               // this.count_posts_arr=[];
+                axios
+                    .post('/api/render_procedures',{
+                        id_post:this.$store.state.post_id,
+                    }).then(({ data }) =>
+                {
+                    data.forEach(function(entry) {
+                        inp_arr.push({
+                            name_main_procedure:entry.name_main_procedure,
+                            id_main_procedure:entry.id_main_procedure,
+                        });
+                    })
+                }
+                )
+            },
+
+            next()
+            {
+                if(((this.pagination_numb+1) * 10)<(this.posts_length))
+                {
+                    this.inputs=[];
+                    this.pagination_numb++;
+                    this.render_start_array(this.inputs, this.removed, this.pagination_numb);
+                }
+
+            },
+            prev()
+            {
+                if(this.pagination_numb != 0)
+                {
+                    this.inputs=[];
+                    this.pagination_numb--;
+                    this.render_start_array(this.inputs, this.removed, this.pagination_numb);
+                }
+
             },
 
 

@@ -41,3 +41,6 @@ Route::post('render_procedures', 'DBController@render_procedures');
 Route::post('render_blocks', 'DBController@render_blocks');
 Route::post('render_parents', 'DBController@render_parents');
 Route::post('max_block_id', 'DBController@max_block_id');
+Route::post('delete_post', 'DBController@delete_post');
+Route::post('delete_procedure', 'DBController@delete_procedure');
+Route::post('delete_block', 'DBController@delete_block');

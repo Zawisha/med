@@ -52,3 +52,14 @@
 .border_alert {
     border:2px solid red;
 }
+.my_pointer {
+    cursor: pointer;
+}
+
+.pagination {
+    margin-top: 10px;
+}
+
+.procedure_button {
+    margin-top: 10px;
+}
