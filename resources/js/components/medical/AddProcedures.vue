@@ -23,7 +23,7 @@
             <hr align="center" width="90%" size="10" color="#dddddd" />
             <textarea class="form-control" rows="2" id="messages" name="text" v-bind:class="{border_alert: danger_ans}" v-model="message" placeholder="Введите название новой процедуры"> </textarea>
             <button type="button" class="btn btn-primary btn-block procedure_button" v-on:click="add_new_line">Добавить процедуру</button>
-            <button type="button" class="btn btn-primary btn-block" v-on:click="test">test</button>
+
         </div>
 
         <ul class="pagination">
@@ -63,12 +63,6 @@
         },
         methods: {
 
-            test()
-            {
-              // console.log(this.procedure_number);
-              //  console.log(this.inputs[this.inputs.length - 1]['id_main_procedure']);
-                console.log(this.count_posts_arr);
-            },
 
             delete_procedure(numb_in_arr, numb)
             {

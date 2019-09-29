@@ -4,15 +4,19 @@
         <table class="table">
             <thead class="thead-dark">
             <tr>
-                <th scope="col-8">Название поста</th>
+                <th scope="col-7">Название поста</th>
+                <th scope="col-1">Активен</th>
                 <th scope="col-2"></th>
                 <th scope="col-2"></th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="(post, number) in posts">
-                <td scope="col-8">
+                <td scope="col-7">
                     {{ post.text }}
+                </td>
+                <td scope="col-1">
+                    <input class="form-check-input" type="radio" name="PostRadios" id="ExId" :checked="post.id_post == current_front_post" value="1" v-on:click="change_front_current_post(post.id_post,post.text)">
                 </td>
                 <td scope="col-2"><button type="button" class="btn btn-secondary" v-on:click="edit_post(post.id_post)">Редактировать</button></td>
                 <td scope="col-2"><button type="button" class="btn btn-danger" v-on:click="delete_post(post.id_post,number)">Удалить</button></td>
@@ -46,17 +50,19 @@
                 //количество постов всего ( для пагинации )
                 posts_length:0,
 
+                current_front_post :0
 
             }
         },
         mounted() {
             this.render_table(this.posts, this.removed, this.pagination_numb, this.posts_length);
+            this.select_front_current_post();
         },
         methods: {
 
             test()
             {
-              console.log(this.posts);
+              console.log(this.current_front_post);
             },
 
             render_table(inp, removed, pagination_numb)
@@ -94,6 +100,25 @@
                     );
             },
 
+            change_front_current_post(id_post, name_post)
+            {
+                axios
+                    .post('/api/add_current_post',{
+                        id_post:id_post,
+                        name_post:name_post
+                    });
+            },
+
+            select_front_current_post()
+            {
+                axios
+                    .post('/api/select_front_current_post',{
+                    })
+                    .then(({ data }) => (
+                        this.current_front_post=data
+                        )
+                    );
+            },
 
             edit_post(numb)
             {

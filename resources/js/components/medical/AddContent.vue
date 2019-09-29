@@ -2,7 +2,7 @@
     <div class="container justify-content-center back_content">
         <div class="row" >
             <div class="col-12">
-                <div class="col-12">Родительский блок>Процедура 1> Стоимость активов> Те же лица ... последний вопрос Стоимость активов> Те же лица ... последний вопросСтоимость активов> Те же лица ... последний вопросСтоимость активов> Те же лица ... последний вопрос</div>
+<!--                <div class="col-12">Родительский блок>Процедура 1> Стоимость активов> Те же лица ... последний вопрос Стоимость активов> Те же лица ... последний вопросСтоимость активов> Те же лица ... последний вопросСтоимость активов> Те же лица ... последний вопрос</div>-->
 
                 <div class="header_content_text col-10 ml-auto">Название блока для системы</div>
                 <div class="col-12 d-flex">
@@ -100,7 +100,7 @@
                 </div>
 
                 <button type="button" class="btn btn-secondary active btn-block" v-on:click="save">Сохранить</button>
-                <button type="button" class="btn btn-danger btn-block" v-on:click="test">Test</button>
+<!--                <button type="button" class="btn btn-danger btn-block" v-on:click="test">Test</button>-->
 
                 <parents_modal v-if="parents_showModal" @parents_close="parents_close_modal" :block=parents_current_block_string[0] :string_par=parents_current_block_string[1]>
                     <h3 slot="link">Выберите блок</h3>
@@ -160,10 +160,10 @@
                 return this.danger_number_parent_arr.indexOf(item) === -1 ? false : true
             },
 
-            test()
-            {
-console.log(this.parents_array)
-            } ,
+//             test()
+//             {
+// console.log(this.parents_array)
+//             } ,
 
 
             render_path()

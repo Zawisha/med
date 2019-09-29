@@ -63,3 +63,70 @@
 .procedure_button {
     margin-top: 10px;
 }
+
+.streak {
+    height: 20px;
+    background: #55a79a;
+}
+
+.header_img {
+    /*padding-top: 20px;*/
+    /*padding-bottom: 20px;*/
+    /*margin-bottom: 20px;*/
+    /*margin-top: 20px;*/
+    height: 100px;
+    /*width: 50px;*/
+}
+
+.exp_header_text {
+    padding-top: 30px;
+    color: #888;
+    font-size: 18px;
+}
+
+
+
+.myButton {
+    /*background-color: #DCDCDC;*/
+    border: 1px solid #D3D3D3;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin-left: 6px;
+    margin-right: 6px;
+    text-align: center;
+    font-size: 14px;
+    cursor:pointer;
+}
+
+.front_button_right {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+}
+
+.myButton:hover {
+    background: #C0C0C0;
+    border: 1px solid #00bfff;
+}
+
+.red {
+    border: 2px solid #696969;
+    /*background: #abcdef;*/
+    background: #55a79a
+}
+
+.bottom_streak {
+    height: 3px;
+    background: #55a79a;
+}
+
+.front_content_block {
+    margin-bottom: 20px;
+}
+
+.front_answers_little {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    background: #55a79a;
+    color: white;
+}

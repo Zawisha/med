@@ -6,7 +6,8 @@
             <table class="table">
                 <thead class="thead-dark">
                 <tr>
-                    <th scope="col-8">Название блока</th>
+                    <th scope="col-7">Название блока</th>
+                    <th scope="col-1"></th>
                     <th scope="col-2"></th>
                     <th scope="col-2"></th>
                 </tr>
@@ -15,6 +16,9 @@
                 <tr v-for="(item, number) in inputs">
                     <td scope="col-8">
                         {{ item.block_name }}
+                    </td>
+                    <td scope="col-1">
+                        <input class="form-check-input" type="radio" name="PostRadios" id="ExId" :checked="item.id_block == current_front_block" value="1" v-on:click="change_front_current_block(item.id_block)">
                     </td>
                     <td scope="col-2"><button type="button" class="btn btn-secondary" v-on:click="go_to_post(item.id_block)">Редактировать</button></td>
                     <td scope="col-2"><button type="button" class="btn btn-danger" v-on:click="delete_block(item.id_block, number)">Удалить</button></td>
@@ -48,20 +52,28 @@
                 //количество постов всего ( для пагинации )
                 posts_length:0,
 
-
+                current_front_block :0
             }
         },
         mounted() {
 
 
            this.render_start_array(this.inputs);
-
+           this.select_front_current_block();
         },
         created(){
         },
         methods: {
 
-
+            change_front_current_block(id_block)
+            {
+                axios
+                    .post('/api/change_current_block',{
+                        id_post:this.$store.state.post_id,
+                        id_procedure:this.$store.state.current_main_procedure,
+                        id_block:id_block
+                    });
+            },
             new_block()
             {
                 axios
@@ -133,6 +145,18 @@
                 this.inputs.splice(number_in_arr,1)
             },
 
+            select_front_current_block()
+            {
+                axios
+                    .post('/api/select_front_current_block',{
+                        id_post:this.$store.state.post_id,
+                        id_procedure:this.$store.state.current_main_procedure,
+                    })
+                    .then(({ data }) => (
+                            this.current_front_block=data
+                        )
+                    );
+            },
 
                      }
 

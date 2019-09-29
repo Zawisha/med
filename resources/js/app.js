@@ -47,6 +47,8 @@ import AddProcedures from "./components/medical/AddProcedures";
 import BlockList from "./components/medical/BlockList";
 import modal from "./components/medical/ModalBlockList";
 import ExampleComponent from "./components/ExampleComponent";
+import Expertise from "./components/Expertise";
+import ExpertiseTest from "./components/ExpertiseTest";
 
 const router = new VueRouter({
     mode: 'history',
@@ -120,7 +122,18 @@ const router = new VueRouter({
             name: 'example',
             component: ExampleComponent
         },
-
+        {
+            path: '/expertise',
+            name: 'expertise',
+            component: Expertise,
+            props: true
+        },
+        {
+            path: '/expertise_test',
+            name: 'expertise_test',
+            component: ExpertiseTest,
+            props: true
+        },
     ],
 });
 

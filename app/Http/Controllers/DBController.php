@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\CurrentPost;
 use Illuminate\Http\Request;
 use App\Temp;
 use App\Procedure;
 use App\Post;
+use App\CurrentBlock;
 
 class DBController extends Controller
 {
@@ -285,6 +287,12 @@ class DBController extends Controller
         $id_post = $request->input('id_post');
         Procedure::where('id_post', '=', $id_post)->delete();
         Post::where('id_post', '=', $id_post)->delete();
+        $id_current_post = CurrentPost::select('id_post')->where('id', '>', 0)->get();
+        if($id_current_post[0]['id_post'] == $id_post)
+        {
+            CurrentPost::where('id', '>', 0)->update(['id_post' => 0,'name_post' =>0]);
+        }
+
     }
     public function delete_procedure(Request $request)
     {
@@ -313,6 +321,100 @@ class DBController extends Controller
         $id_block = $request->input('id_block');
         Post::where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->where('id_block', '=', $id_block)->delete();
         Post::where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->where('answer_link_id', '=', $id_block)->update(['answer_link_id' => 0]);
+    }
+    public function add_current_post(Request $request)
+    {
+        $id_post = $request->input('id_post');
+        $name_post = $request->input('name_post');
+        CurrentPost::where('id', '>', 0)->update(['id_post' => $id_post,'name_post' =>$name_post]);
+    }
+    public function select_front_current_post()
+    {
+        $id_current_post = CurrentPost::select('id_post')->where('id', '>', 0)->get();
+        return $id_current_post[0]['id_post'];
+    }
+
+    public function front_render_procedures()
+    {
+        $id_current_post = CurrentPost::select('id_post')->where('id', '>', 0)->get();
+        $id_post = $id_current_post[0]['id_post'];
+        return $posts = Procedure::where('id_post', '=', $id_post)->get();
+    }
+
+    public function change_current_block(Request $request)
+    {
+        $id_post = $request->input('id_post');
+        $id_procedure = $request->input('id_procedure');
+        $id_block = $request->input('id_block');
+
+        CurrentBlock::where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->delete();
+        CurrentBlock::create([
+            'id_post' => $id_post,
+            'id_procedure' => $id_procedure,
+            'id_block' => $id_block,
+        ]);
+    }
+
+    public function select_front_current_block(Request $request)
+    {
+        $id_post = $request->input('id_post');
+        $id_procedure = $request->input('id_procedure');
+        $id_current_block = CurrentBlock::where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->get();
+        return $id_current_block[0]['id_block'];
+    }
+
+    public function front_render_start_block(Request $request)
+    {
+        $id_procedure = $request->input('id_procedure');
+        $id_current_post = CurrentPost::select('id_post')->where('id', '>', 0)->get();
+        $id_post = $id_current_post[0]['id_post'];
+        $id_block = CurrentBlock::where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->get();
+        $id_block=$id_block[0]['id_block'];
+
+        $result=Post::where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->where('id_block', '=', $id_block)->get();
+        $res_arr=[];
+        $answer_text=[];
+        $answer_link_id=[];
+        foreach ($result as $value) {
+                array_push($answer_text, $value['answer_text']);
+                array_push($answer_link_id, $value['answer_link_id']);
+        }
+        $res_arr['id']=$result[0]['id'];
+        $res_arr['id_post']=$result[0]['id_post'];
+        $res_arr['id_procedure']=$result[0]['id_procedure'];
+        $res_arr['id_block']=$result[0]['id_block'];
+        $res_arr['block_name']=$result[0]['block_name'];
+        $res_arr['question_text']=$result[0]['question_text'];
+        $res_arr['answer_text']=$answer_text;
+        $res_arr['answer_link_id']=$answer_link_id;
+        return $res_arr;
+    }
+
+    public function front_render_add_block(Request $request)
+    {
+        $id_procedure = $request->input('id_procedure');
+        $id_current_post = CurrentPost::select('id_post')->where('id', '>', 0)->get();
+        $id_post = $id_current_post[0]['id_post'];
+        $id_block = $request->input('id_block');
+
+        $result=Post::where('id_post', '=', $id_post)->where('id_procedure', '=', $id_procedure)->where('id_block', '=', $id_block)->get();
+
+        $res_arr=[];
+        $answer_text=[];
+        $answer_link_id=[];
+        foreach ($result as $value) {
+            array_push($answer_text, $value['answer_text']);
+            array_push($answer_link_id, $value['answer_link_id']);
+        }
+        $res_arr['id']=$result[0]['id'];
+        $res_arr['id_post']=$result[0]['id_post'];
+        $res_arr['id_procedure']=$result[0]['id_procedure'];
+        $res_arr['id_block']=$result[0]['id_block'];
+        $res_arr['block_name']=$result[0]['block_name'];
+        $res_arr['question_text']=$result[0]['question_text'];
+        $res_arr['answer_text']=$answer_text;
+        $res_arr['answer_link_id']=$answer_link_id;
+        return $res_arr;
     }
 
 }
