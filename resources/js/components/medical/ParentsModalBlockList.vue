@@ -117,6 +117,8 @@ console.log('qwe');
 
     .modal-body {
         margin: 20px 0;
+        overflow: auto;
+        height: 400px;
     }
 
     .modal-default-button {
