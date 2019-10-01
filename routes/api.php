@@ -21,6 +21,7 @@ Route::post('auth/login', 'MyAuth\AuthController@login');
 Route::group(['middleware' => 'jwt.auth'], function(){
     Route::get('auth/user', 'MyAuth\AuthController@user');
     Route::post('auth/logout', 'MyAuth\AuthController@logout');
+    Route::get('is_admin', 'MyAuth\AuthController@is_admin');
 });
 Route::group(['middleware' => 'jwt.refresh'], function(){
     Route::get('auth/refresh', 'MyAuth\AuthController@refresh');
@@ -28,6 +29,7 @@ Route::group(['middleware' => 'jwt.refresh'], function(){
 Route::post('confirm', 'MyAuth\AuthController@confirmToken');
 Route::post('forget', 'MyAuth\AuthController@forgetPassword');
 Route::post('ifexist', 'MyAuth\AuthController@if_exist');
+
 
 Route::post('add_content', 'DBController@store');
 Route::post('delete', 'DBController@destroy');
@@ -46,8 +48,10 @@ Route::post('delete_procedure', 'DBController@delete_procedure');
 Route::post('delete_block', 'DBController@delete_block');
 Route::post('add_current_post', 'DBController@add_current_post');
 Route::post('select_front_current_post', 'DBController@select_front_current_post');
-Route::post('front_render_procedures', 'DBController@front_render_procedures');
-Route::post('front_render_start_block', 'DBController@front_render_start_block');
 Route::post('change_current_block', 'DBController@change_current_block');
 Route::post('select_front_current_block', 'DBController@select_front_current_block');
+
+Route::post('front_render_procedures', 'DBController@front_render_procedures');
+Route::post('front_render_start_block', 'DBController@front_render_start_block');
 Route::post('front_render_add_block', 'DBController@front_render_add_block');
+

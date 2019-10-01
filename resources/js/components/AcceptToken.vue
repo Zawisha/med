@@ -34,7 +34,7 @@
             acceptUserToken()
             {
                 axios
-                    .post('/api/confirm',{
+                    .post('/confirm',{
                         tok: this.$route.params.token})
                     .then( (response)  => {
                         this.text=response.data.status;

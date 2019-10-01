@@ -46,7 +46,7 @@
                     this.error_6 = false;
                     //PROVERKA PO BD
                         axios
-                            .post('/api/ifexist',{
+                            .post('/ifexist',{
                                 id: this.$route.params.id,
                                 token:this.$route.params.token,
                                 password: this.password

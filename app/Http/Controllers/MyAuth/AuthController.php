@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\MyAuth;
 
+use App\Admin;
 use App\User;
 use App\ForgetPassword;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\MyAuth\MailController as MailCont;
 use Illuminate\Support\Facades\Validator;
+//use Tymon\JWTAuth\Contracts\Providers\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
@@ -85,7 +87,7 @@ class AuthController extends Controller
 
     public function user(Request $request)
     {
-        $user = User::find(Auth::user()->id);
+        $user = User::find(JWTAuth::user()->id);
         return response([
             'status' => 'success',
             'data' => $user
@@ -213,6 +215,21 @@ class AuthController extends Controller
             ], 400);
         }
 
+
+    }
+
+    public function is_admin(Request $request)
+    {
+        $user = User::find(JWTAuth::user()->id);
+        $is_admin = Admin::where('id_user', '=', $user['id'])->first();
+        if($is_admin)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
 
     }
 

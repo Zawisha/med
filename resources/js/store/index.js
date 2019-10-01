@@ -11,14 +11,22 @@ export const store = new Vuex.Store({
         //какой пост находится в работе сейчас
         post_id:0,
         current_main_procedure:0,
-        block_id:0
+        block_id:0,
+        is_admin:0
     },
     getters: {
         LAST_ELEM: state => {
             return state.navigation[state.navigation.length - 1];
         },
+        IS_ADMIN: state => {
+            return state.is_admin;
+        }
     },
     mutations: {
+        setAdmin(state, numb)
+        {
+            state.is_admin=numb
+        },
         removeTv(state, amount)
         {
             state.namePost = amount;
@@ -53,6 +61,10 @@ export const store = new Vuex.Store({
         }
     },
     actions: {
+        setIsAdmin(context, numb)
+        {
+            context.commit('setAdmin', numb);
+        },
         changeName(context, amount)
         {
         context.commit('removeTv', amount);

@@ -169,7 +169,7 @@
             render_path()
             {
                 axios
-                    .post('/api/render_path',{
+                    .post('/render_path',{
                         id_post:this.$store.state.post_id,
                         id_procedure:this.$store.state.current_main_procedure,
                         id_block:this.$store.state.block_id,
@@ -331,7 +331,7 @@
                     }
 
                     axios
-                        .post('/api/delete',{
+                        .post('/delete',{
                             id_post:this.$store.state.post_id,
                             id_procedure:this.$store.state.current_main_procedure,
                             id_block:blocks_array_to_delete,
@@ -400,7 +400,7 @@
                 //конец блока родителей
 
                      axios
-                        .post('/api/add_content',{
+                        .post('/add_content',{
                             id_post:this.$store.state.post_id,
                             id_procedure:this.$store.state.current_main_procedure,
                             id_block:this.$store.state.block_id,
@@ -417,7 +417,7 @@
             render_start_array(inp)
             {
                 axios
-                    .post('/api/render',{
+                    .post('/render',{
                         id_post:this.$store.state.post_id,
                         id_procedure:this.$store.state.current_main_procedure,
                         id_block:this.$store.state.block_id,
@@ -450,7 +450,7 @@
             render_start_parents_array(inp)
             {
                 axios
-                    .post('/api/render_parents',{
+                    .post('/render_parents',{
                         id_post:this.$store.state.post_id,
                         id_procedure:this.$store.state.current_main_procedure,
                         id_block:this.$store.state.block_id,

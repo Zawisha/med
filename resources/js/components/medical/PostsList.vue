@@ -70,7 +70,7 @@
                 //множитель количества постов на странице ( он же номер )
                 pagination_numb=pagination_numb*10;
                 axios
-                    .post('/api/render_posts',{
+                    .post('/render_posts',{
                     }).then(({ data }) => (
                     //запишем количество постов
                         this.posts_length=data.length,
@@ -91,7 +91,7 @@
             select_name(numb)
             {
                 axios
-                    .post('/api/select_name',{
+                    .post('/select_name',{
                         id_post:numb,
                     })
                     .then(({ data }) => (
@@ -103,7 +103,7 @@
             change_front_current_post(id_post, name_post)
             {
                 axios
-                    .post('/api/add_current_post',{
+                    .post('/add_current_post',{
                         id_post:id_post,
                         name_post:name_post
                     });
@@ -112,7 +112,7 @@
             select_front_current_post()
             {
                 axios
-                    .post('/api/select_front_current_post',{
+                    .post('/select_front_current_post',{
                     })
                     .then(({ data }) => (
                         this.current_front_post=data
@@ -134,7 +134,7 @@
                 console.log('nomer posta' + numb);
                 console.log('nomer stroki' + numb_in_arr);
                 axios
-                    .post('/api/delete_post',{
+                    .post('/delete_post',{
                         id_post:numb,
                     });
                 this.posts.splice(numb_in_arr,1)

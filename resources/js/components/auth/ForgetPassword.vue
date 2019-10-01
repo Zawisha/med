@@ -31,7 +31,7 @@
             send()
             {
                 axios
-                    .post('/api/forget',{
+                    .post('/forget',{
                         email: this.email})
                     .then( (response)  => {
                         this.done = true;

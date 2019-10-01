@@ -22,4 +22,5 @@ Auth::routes();
 
 Route::get('/', 'SpaController@index')->name('main');
 
-Route::get('/admin' ,['uses'=>'SpaController@admin_index','as'=>'admin_panel']);
+//Route::get('/admin' ,['uses'=>'SpaController@admin_index','as'=>'admin_panel'] );
+//Route::get('/admin' ,['uses'=>'SpaController@admin_index','as'=>'admin_panel'] );

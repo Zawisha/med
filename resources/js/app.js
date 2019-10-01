@@ -18,6 +18,10 @@ import {store} from './store';
 
 import TextareaAutosize from 'vue-textarea-autosize'
 
+// import is_admin from "./middleware/log_user";
+import post_name from './components/Dashboard.vue';
+console.log('POST NAMEEE' + post_name.data);
+
 Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
 Vue.use(Vuex);
@@ -49,8 +53,13 @@ import modal from "./components/medical/ModalBlockList";
 import ExampleComponent from "./components/ExampleComponent";
 import Expertise from "./components/Expertise";
 import ExpertiseTest from "./components/ExpertiseTest";
+import Admin from "./components/medical/Admin";
 
+// console.log(is_admin);
+
+axios.defaults.baseURL = 'http://localhost:/api';
 const router = new VueRouter({
+
     mode: 'history',
     routes: [
         {
@@ -74,8 +83,8 @@ const router = new VueRouter({
             name: 'dashboard',
             component: Dashboard,
            // meta: {
-               // auth: true
-         //   }
+           //     auth: true
+           // }
         },
         {
             path: '/accept/:token',
@@ -93,40 +102,76 @@ const router = new VueRouter({
             component: RenewPassword
         },
         {
-            path: '/admin/add_new',
-            name: 'add_new',
-            component: AddNewPost
+            path: '/admin',
+            name: 'admin',
+            component: Admin,
+            children: [
+                {
+                    path: '/admin/add_new',
+                    name: 'add_new',
+                    component: AddNewPost
+                },
+                {
+                    path: '/admin/add_content',
+                    name: 'add_content',
+                    component: AddContent
+                },
+                {
+                    path: '/admin/posts',
+                    name: 'posts',
+                    component: PostsList
+                },
+                {
+                    path: '/admin/add_procedures',
+                    name: 'add_procedures',
+                    component: AddProcedures
+                },
+                {
+                    path: '/admin/block_list',
+                    name: 'block_list',
+                    component: BlockList
+                },
+                {
+                    path: '/admin/example',
+                    name: 'example',
+                    component: ExampleComponent
+                },
+
+            ],
+            beforeEnter: (to, from, next) => {
+
+                // console.log(store.getters.IS_ADMIN);
+              if(store.getters.IS_ADMIN==1)
+              {
+                  next({ })
+              }
+              else
+              {
+                  next({ path: '/' })
+              }
+
+                   }
+
+                // let result_req = is_admin();
+                // console.log('resultADMIN ' + result_req);
+                // if(result_req=='1')
+                // {
+                //     return next({
+                //     });
+                // }
+                // return next({
+                //     path: '/home'
+                // })
+
+            // }
         },
-        {
-            path: '/admin/add_content',
-            name: 'add_content',
-            component: AddContent
-        },
-        {
-            path: '/admin/posts',
-            name: 'posts',
-            component: PostsList
-        },
-        {
-            path: '/admin/add_procedures',
-            name: 'add_procedures',
-            component: AddProcedures
-        },
-        {
-            path: '/admin/block_list',
-            name: 'block_list',
-            component: BlockList
-        },
-        {
-            path: '/admin/example',
-            name: 'example',
-            component: ExampleComponent
-        },
+
+
         {
             path: '/expertise',
             name: 'expertise',
             component: Expertise,
-            props: true
+            props: true,
         },
         {
             path: '/expertise_test',

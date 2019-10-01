@@ -67,7 +67,7 @@
             delete_procedure(numb_in_arr, numb)
             {
                 axios
-                    .post('/api/delete_procedure',{
+                    .post('/delete_procedure',{
                         id_post:this.$store.state.post_id,
                         id_procedure:numb,
                         name_post:this.$store.state.namePost,
@@ -100,7 +100,7 @@
                     }
                     this.inputs=[];
                     axios
-                        .post('/api/add_procedure',{
+                        .post('/add_procedure',{
                             id_post:this.$store.state.post_id,
                             name_post:this.$store.state.namePost,
                             id_main_procedure:this.procedure_number,
@@ -127,7 +127,7 @@
 
                 pagination_numb=pagination_numb*10;
                 axios
-                    .post('/api/render_procedures',{
+                    .post('/render_procedures',{
                         id_post:this.$store.state.post_id,
                     }).then(({ data }) => (
                     //запишем количество постов
@@ -156,7 +156,7 @@
             {
                // this.count_posts_arr=[];
                 axios
-                    .post('/api/render_procedures',{
+                    .post('/render_procedures',{
                         id_post:this.$store.state.post_id,
                     }).then(({ data }) =>
                 {

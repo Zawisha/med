@@ -11,18 +11,20 @@
 
             <div class="col-12 d-flex header_exp_test ">
                <div class="col-4 col-md-2 "> <a href="/" ><img :src="'/img/logo.png'"  class="header_img" alt="logo" ></a></div>
-                <div class="col-4 col-md-4 text-center exp_header_text">
-                    Юридическая система
-                </div>
-                <div class="col-4 col-md-6 text-center exp_header_text">Экспертиза</div>
+                <div class="col-4 col-md-6 text-center exp_header_text" v-on:click="go_to_expertise()">Экспертиза</div>
+                <div v-if="$auth.check()" class="col-4 col-md-6 text-center exp_header_text_us"><a href="#" @click.prevent="$auth.logout()">Logout</a></div>
+                <div v-else class="col-4 col-md-6 text-center exp_header_text_us"><router-link :to="{ name: 'login' }">Вход в сервис</router-link></div>
             </div>
 
-            <div class="col-12">
+            <div class="col-12 front_text_procedure">
                 <h1 class="h4">{{ test_front_text_procedure }}
             </h1></div>
 
             <div class="col-12">
-               <div class="front_answers_little text-center">Ответьте на следующие вопросы</div>
+                <div class="col-12 d-flex">
+               <div class="front_answers_little col-8">Ответьте на следующие вопросы </div>
+                <div class="col-4" v-on:click="refresh_expertise()"><button type="button" class="btn btn-secondary ">Пройти экспертизу заново</button></div>
+                </div>
                     <div v-for="(post, number) in blocks" class="col-12 front_content_block">
                         <div class="col-12">{{ post.question_text }}</div>
                         <div class="col-12 d-flex">
@@ -38,7 +40,8 @@
 <!--        <button type="button" class="btn btn-primary btn-block" v-on:click="test">test</button>-->
 
             </div>
-        <div class="col-2"></div>
+        <div class="col-2">
+        </div>
         </div>
     </div>
 
@@ -56,7 +59,6 @@
 //current number of id block
                 id_procedure:0,
                 test_front_text_procedure:this.front_text_procedure,
-                upHere : false
             }
         },
         props:['front_procedure_id', 'front_text_procedure'],
@@ -71,13 +73,23 @@
             },
 
             //
+
+            go_to_expertise()
+            {
+                Vue.router.push({name:'expertise'});
+            },
+
+            refresh_expertise()
+            {
+                this.blocks=[];
+                this.render_start_block(this.blocks);
+            },
+
             render_start_block(inp)
             {
 
-
-
                 axios
-                    .post('/api/front_render_start_block',{
+                    .post('/front_render_start_block',{
                         id_procedure:this.front_procedure_id,
                     }).then(({ data }) => (
                         inp.push({
@@ -113,7 +125,7 @@
                     inp.splice(number_in_array+1);
                 }
                 axios
-                    .post('/api/front_render_add_block',{
+                    .post('/front_render_add_block',{
                         id_procedure:this.id_procedure,
                         id_block:id_block
                     })
@@ -136,47 +148,3 @@
 
     }
 </script>
-<style>
-    .list-counter-square {
-        list-style: none;
-      counter-reset: list;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-    }
-
-    .list-counter-square>li {
-        position: relative;
-        display: block;
-        height: 2rem;
-        line-height: 2rem;
-        margin-left: 1.75rem;
-        margin-bottom: .25rem;
-        padding-left: 1rem;
-        padding-right: .5rem;
-        color: #fff;
-        background: #7b1fa2;
-        white-space: nowrap;
-        border-radius: .25rem
-    }
-
-    .list-counter-square>li:last-child {
-        margin-bottom: 0;
-    }
-
-    .list-counter-square>li::before {
-        content: counter(list);
-        counter-increment: list;
-        position: absolute;
-        left: -2rem;
-        top: -.25rem;
-        bottom: -.25rem;
-        width: 2.5rem;
-        line-height: 2rem;
-        border-radius: 1.25rem;
-        border: .25rem solid #fff;
-        text-align: center;
-        color: #fff;
-        background: #7b1fa2;
-    }
-</style>

@@ -59,7 +59,7 @@ console.log('qwe');
             {
 
                 axios
-                    .post('/api/render_blocks',{
+                    .post('/render_blocks',{
                         id_post:this.$store.state.post_id,
                         id_procedure:this.$store.state.current_main_procedure,
                     }).then(({ data }) => (

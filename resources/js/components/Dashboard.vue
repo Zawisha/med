@@ -18,8 +18,10 @@
 
 <script>
     export default {
-        mounted() {
-            console.log('Component mounted.')
-        }
+        data(){
+            return {
+                post_name:'1234'
+            }
+        },
     }
 </script>

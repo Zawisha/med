@@ -1,11 +1,13 @@
 <template>
     <div class="panel panel-default">
         <div class="panel-heading">
+
             <nav>
                 <ul class="list-inline">
 <!--                    <li class="pull-right">-->
 <!--                        <router-link :to="{ name: 'login' }">Login</router-link>-->
-<!--                    </li>                    <li class="pull-right">-->
+<!--                    </li>-->
+<!--                    <li class="pull-right">-->
 <!--                    <router-link :to="{ name: 'register' }">Register</router-link>-->
 <!--                </li>-->
 <!--                    <li>-->

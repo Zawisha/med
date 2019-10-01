@@ -68,7 +68,7 @@
             change_front_current_block(id_block)
             {
                 axios
-                    .post('/api/change_current_block',{
+                    .post('/change_current_block',{
                         id_post:this.$store.state.post_id,
                         id_procedure:this.$store.state.current_main_procedure,
                         id_block:id_block
@@ -77,7 +77,7 @@
             new_block()
             {
                 axios
-                    .post('/api/max_block_id',{
+                    .post('/max_block_id',{
                     }).then(({ data }) =>{
                     this.$store.dispatch('setBlockCounter', data+1),
                         Vue.router.push({name:'add_content'});
@@ -97,7 +97,7 @@
             {
                 pagination_numb=pagination_numb*10;
                 axios
-                    .post('/api/render_blocks',{
+                    .post('/render_blocks',{
                         id_post:this.$store.state.post_id,
                         id_procedure:this.$store.state.current_main_procedure,
                     }).then(({ data }) => (
@@ -137,7 +137,7 @@
             delete_block(id_block, number_in_arr)
             {
                 axios
-                    .post('/api/delete_block',{
+                    .post('/delete_block',{
                         id_post:this.$store.state.post_id,
                         id_procedure:this.$store.state.current_main_procedure,
                         id_block:id_block,
@@ -148,7 +148,7 @@
             select_front_current_block()
             {
                 axios
-                    .post('/api/select_front_current_block',{
+                    .post('/select_front_current_block',{
                         id_post:this.$store.state.post_id,
                         id_procedure:this.$store.state.current_main_procedure,
                     })

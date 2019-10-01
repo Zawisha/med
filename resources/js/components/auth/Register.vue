@@ -69,7 +69,7 @@
                 var app = this;
 
                 this.$auth.register({
-                    url: "api/auth/register",
+                    url: "/auth/register",
                     data: {
                         name: app.name,
                         email: app.email,

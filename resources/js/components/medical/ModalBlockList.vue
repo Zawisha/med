@@ -60,7 +60,7 @@
             {
                var block = this.$store.state.block_id;
                 axios
-                    .post('/api/render_blocks',{
+                    .post('/render_blocks',{
                         id_post:this.$store.state.post_id,
                         id_procedure:this.$store.state.current_main_procedure,
                     }).then(({ data }) => (
@@ -101,7 +101,7 @@
     }
 
     .modal-container {
-        width: 300px;
+        width: 400px;
         margin: 0px auto;
         padding: 20px 30px;
         background-color: #fff;
