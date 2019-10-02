@@ -14,14 +14,15 @@
                     <div class="col-4 col-md-4 text-center exp_header_text_us">
                         Экспертиза
                     </div>
-                    <div v-if="$auth.check()" class="col-4 col-md-6 text-center exp_header_text_us"><a href="#" @click.prevent="$auth.logout()">Logout</a></div>
-                    <div v-else class="col-4 col-md-6 text-center exp_header_text_us"><router-link :to="{ name: 'login' }">Вход в сервис</router-link></div>
+
+                    <div v-if="$auth.check()" class="col-4 like_button_top"><a class="text-center like_button" href="#" @click.prevent="$auth.logout()">Выйти</a></div>
+                    <div v-else class="col-4 like_button_top" ><router-link class=" text-center like_button" :to="{ name: 'login' }">Вход в сервис</router-link></div>
                 </div>
                     <div class="col-12">
                         <div class="text-center my-4">{{ post_name }}</div>
-                        <ol class="list-counter-square " style="max-width: 1200px; margin: 0 auto;" >
-                            <li class="front_expertise_list" v-for="(post, number) in posts" v-on:click="go_to_expertise_test(post.id_procedure,post.text)">{{ post.text }}</li>
-                        </ol>
+                        <div class="list-counter-square " style="max-width: 1200px; margin: 0 auto;" >
+                            <div class="front_expertise_list" v-for="(post, number) in posts" v-on:click="go_to_expertise_test(post.id_procedure,post.text)">{{ post.text }}</div>
+                        </div>
                     </div>
             </div>
             <div class="col-2">
@@ -95,10 +96,10 @@
         overflow: hidden;
     }
 
-    .list-counter-square>li {
+    .list-counter-square>div {
         position: relative;
         display: block;
-        height: 2rem;
+        /*height: 2rem;*/
         line-height: 2rem;
         margin-left: 1.75rem;
         margin-bottom: .25rem;
@@ -106,15 +107,15 @@
         padding-right: .5rem;
         color: #fff;
         background: #55a79a;
-        white-space: nowrap;
+        /*white-space: nowrap;*/
         border-radius: .25rem
     }
 
-    .list-counter-square>li:last-child {
+    .list-counter-square>div:last-child {
         margin-bottom: 0;
     }
 
-    .list-counter-square>li::before {
+    .list-counter-square>div::before {
         content: counter(list);
         counter-increment: list;
         position: absolute;
@@ -122,6 +123,7 @@
         top: -.25rem;
         bottom: -.25rem;
         width: 2.5rem;
+        height: 2.5rem;
         line-height: 2rem;
         border-radius: 1.25rem;
         border: .25rem solid #fff;
@@ -130,3 +132,4 @@
         background: #55a79a;
     }
 </style>
+

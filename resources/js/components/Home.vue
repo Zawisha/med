@@ -9,18 +9,22 @@
             <div class="row" >
                 <div class="col-2"></div>
                 <div class="content_exp_test col-8">
-                    <div class="col-12 d-flex header_exp_test ">
-                        <div class="col-4 col-md-2 "> <a href="/" ><img :src="'/img/logo.png'"  class="header_img" alt="logo" ></a></div>
-                        <div v-if="$auth.check()" class="col-4 col-md-6 text-center exp_header_text_us"><router-link :to="{ name: 'admin' }">Admin</router-link></div>
-                        <div v-else class="col-4 col-md-4 text-center exp_header_text_us"></div>
-                        <div v-if="$auth.check()" class="col-4 col-md-6 text-center exp_header_text_us"><a href="#" @click.prevent="$auth.logout()">Logout</a></div>
-                        <div v-else class="col-4 col-md-6 text-center exp_header_text_us"><router-link :to="{ name: 'login' }">Вход в сервис</router-link></div>
+                    <div class="col-12 d-flex header_exp_test">
+                        <div class="col-6 "> <a href="/" ><img :src="'/img/logo.png'"  class="header_img" alt="logo" ></a></div>
+                        <div v-if="$auth.check()" class="col-4 like_button_top "><router-link class="text-center like_button" :to="{ name: 'admin' }">Админ</router-link></div>
+                        <div v-else class="col-2 text-center exp_header_text_us"></div>
+                        <div v-if="$auth.check()" class="col-4 like_button_top"><a class="text-center like_button" href="#" @click.prevent="$auth.logout()">Выйти</a></div>
+                        <div v-else class="col-4 like_button_top" ><router-link class=" text-center like_button" :to="{ name: 'login' }">Вход в сервис</router-link></div>
                     </div>
                     <div class="col-12">
-                        <div class="text-center my-4">Помощник для бизнеса по вопросам согласования документов с МАРТ</div>
+                        <div class="text-center my-4"><h3>Помощник для бизнеса по вопросам согласования документов с МАРТ</h3></div>
                     </div>
                     <router-view></router-view>
-                    <router-link :to="{ name: 'expertise' }">Пройти экспертизу</router-link>
+                    <div class="col-4 block_exp_text">
+                        <div class="col-12 justify-content-center exp_text"><b>Экспертиза планируемой сделки</b></div>
+                        <div class="col-12 justify-content-center">Пройдите экспертизу и узнайте необходимо ли Вам обращаться в МАРТ для совершения сделки</div>
+                        <div class="col-12 go_to_exp_text "><router-link class="go_to_exp_text_color" :to="{ name: 'expertise' }">Пройти экспертизу &#8594</router-link></div>
+                    </div>
                 </div>
                 <div class="col-2">
                 </div>

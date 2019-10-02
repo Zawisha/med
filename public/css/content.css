@@ -156,3 +156,43 @@
     background-image: linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
     cursor: pointer;
 }
+
+.like_button {
+    background: #55a79a;
+    cursor: pointer;
+    color: white;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 10%;
+}
+
+.like_button_top {
+    margin-top: 40px;
+}
+
+.block_exp_text {
+    background: #55a79a;
+    color: white;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 5%;
+}
+
+.exp_text {
+    font-size: 20px;
+}
+
+.go_to_exp_text {
+    border: 1px solid white;
+    border-radius: 6%;
+    color: white;
+    font-size: 20px;
+}
+
+.go_to_exp_text_color {
+    color: white;
+}

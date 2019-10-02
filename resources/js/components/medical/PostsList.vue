@@ -4,7 +4,8 @@
         <table class="table">
             <thead class="thead-dark">
             <tr>
-                <th scope="col-7">Название поста</th>
+                <th scope="col-6">Название поста</th>
+                <th scope="col-1"></th>
                 <th scope="col-1">Активен</th>
                 <th scope="col-2"></th>
                 <th scope="col-2"></th>
@@ -12,10 +13,13 @@
             </thead>
             <tbody>
             <tr v-for="(post, number) in posts">
-                <td scope="col-7">
+                <td scope="col-6">
                     {{ post.text }}
                 </td>
-                <td scope="col-1">
+                <td scope="col-1" v-on:click="change_post_name(post.id_post)" class="my_pointer">
+                    &#128736
+                </td>
+                <td scope="col-1" align="center">
                     <input class="form-check-input" type="radio" name="PostRadios" id="ExId" :checked="post.id_post == current_front_post" value="1" v-on:click="change_front_current_post(post.id_post,post.text)">
                 </td>
                 <td scope="col-2"><button type="button" class="btn btn-secondary" v-on:click="edit_post(post.id_post)">Редактировать</button></td>
@@ -24,7 +28,7 @@
 
             </tbody>
         </table>
-        <button type="button" class="btn btn-primary btn-block" v-on:click="test">test</button>
+
 
             <ul class="pagination">
                 <li class="page-item page-link disabled my_pointer" v-on:click="prev">Previous</li>
@@ -49,8 +53,8 @@
                 pagination_numb:0,
                 //количество постов всего ( для пагинации )
                 posts_length:0,
-
-                current_front_post :0
+                current_front_post :0,
+                show_textarea:false
 
             }
         },
@@ -63,6 +67,10 @@
             test()
             {
               console.log(this.current_front_post);
+            },
+
+            change_post_name() {
+
             },
 
             render_table(inp, removed, pagination_numb)

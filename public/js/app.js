@@ -3062,6 +3062,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3257,6 +3258,10 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
 //
 //
 //
@@ -4744,6 +4749,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4755,7 +4764,8 @@ __webpack_require__.r(__webpack_exports__);
       pagination_numb: 0,
       //количество постов всего ( для пагинации )
       posts_length: 0,
-      current_front_post: 0
+      current_front_post: 0,
+      show_textarea: false
     };
   },
   mounted: function mounted() {
@@ -4766,6 +4776,7 @@ __webpack_require__.r(__webpack_exports__);
     test: function test() {
       console.log(this.current_front_post);
     },
+    change_post_name: function change_post_name() {},
     render_table: function render_table(inp, removed, pagination_numb) {
       var _this = this;
 
@@ -9302,7 +9313,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.list-counter-square {\n    list-style: none;\n  counter-reset: list;\n    margin: 0;\n    padding: 0;\n    overflow: hidden;\n}\n.list-counter-square>li {\n    position: relative;\n    display: block;\n    height: 2rem;\n    line-height: 2rem;\n    margin-left: 1.75rem;\n    margin-bottom: .25rem;\n    padding-left: 1rem;\n    padding-right: .5rem;\n    color: #fff;\n    background: #55a79a;\n    white-space: nowrap;\n    border-radius: .25rem\n}\n.list-counter-square>li:last-child {\n    margin-bottom: 0;\n}\n.list-counter-square>li::before {\n    content: counter(list);\n    counter-increment: list;\n    position: absolute;\n    left: -2rem;\n    top: -.25rem;\n    bottom: -.25rem;\n    width: 2.5rem;\n    line-height: 2rem;\n    border-radius: 1.25rem;\n    border: .25rem solid #fff;\n    text-align: center;\n    color: #fff;\n    background: #55a79a;\n}\n", ""]);
+exports.push([module.i, "\n.list-counter-square {\n    list-style: none;\n  counter-reset: list;\n    margin: 0;\n    padding: 0;\n    overflow: hidden;\n}\n.list-counter-square>div {\n    position: relative;\n    display: block;\n    /*height: 2rem;*/\n    line-height: 2rem;\n    margin-left: 1.75rem;\n    margin-bottom: .25rem;\n    padding-left: 1rem;\n    padding-right: .5rem;\n    color: #fff;\n    background: #55a79a;\n    /*white-space: nowrap;*/\n    border-radius: .25rem\n}\n.list-counter-square>div:last-child {\n    margin-bottom: 0;\n}\n.list-counter-square>div::before {\n    content: counter(list);\n    counter-increment: list;\n    position: absolute;\n    left: -2rem;\n    top: -.25rem;\n    bottom: -.25rem;\n    width: 2.5rem;\n    height: 2.5rem;\n    line-height: 2rem;\n    border-radius: 1.25rem;\n    border: .25rem solid #fff;\n    text-align: center;\n    color: #fff;\n    background: #55a79a;\n}\n", ""]);
 
 // exports
 
@@ -41069,36 +41080,34 @@ var render = function() {
           ),
           _vm._v(" "),
           _vm.$auth.check()
-            ? _c(
-                "div",
-                {
-                  staticClass: "col-4 col-md-6 text-center exp_header_text_us"
-                },
-                [
-                  _c(
-                    "a",
-                    {
-                      attrs: { href: "#" },
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          return _vm.$auth.logout()
-                        }
+            ? _c("div", { staticClass: "col-4 like_button_top" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "text-center like_button",
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.$auth.logout()
                       }
-                    },
-                    [_vm._v("Logout")]
-                  )
-                ]
-              )
+                    }
+                  },
+                  [_vm._v("Выйти")]
+                )
+              ])
             : _c(
                 "div",
-                {
-                  staticClass: "col-4 col-md-6 text-center exp_header_text_us"
-                },
+                { staticClass: "col-4 like_button_top" },
                 [
-                  _c("router-link", { attrs: { to: { name: "login" } } }, [
-                    _vm._v("Вход в сервис")
-                  ])
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: " text-center like_button",
+                      attrs: { to: { name: "login" } }
+                    },
+                    [_vm._v("Вход в сервис")]
+                  )
                 ],
                 1
               )
@@ -41110,14 +41119,14 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c(
-            "ol",
+            "div",
             {
               staticClass: "list-counter-square ",
               staticStyle: { "max-width": "1200px", margin: "0 auto" }
             },
             _vm._l(_vm.posts, function(post, number) {
               return _c(
-                "li",
+                "div",
                 {
                   staticClass: "front_expertise_list",
                   on: {
@@ -41366,8 +41375,8 @@ var render = function() {
           "div",
           { staticClass: "content_exp_test col-8" },
           [
-            _c("div", { staticClass: "col-12 d-flex header_exp_test " }, [
-              _c("div", { staticClass: "col-4 col-md-2 " }, [
+            _c("div", { staticClass: "col-12 d-flex header_exp_test" }, [
+              _c("div", { staticClass: "col-6 " }, [
                 _c("a", { attrs: { href: "/" } }, [
                   _c("img", {
                     staticClass: "header_img",
@@ -41379,54 +41388,52 @@ var render = function() {
               _vm.$auth.check()
                 ? _c(
                     "div",
-                    {
-                      staticClass:
-                        "col-4 col-md-6 text-center exp_header_text_us"
-                    },
+                    { staticClass: "col-4 like_button_top " },
                     [
-                      _c("router-link", { attrs: { to: { name: "admin" } } }, [
-                        _vm._v("Admin")
-                      ])
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "text-center like_button",
+                          attrs: { to: { name: "admin" } }
+                        },
+                        [_vm._v("Админ")]
+                      )
                     ],
                     1
                   )
                 : _c("div", {
-                    staticClass: "col-4 col-md-4 text-center exp_header_text_us"
+                    staticClass: "col-2 text-center exp_header_text_us"
                   }),
               _vm._v(" "),
               _vm.$auth.check()
-                ? _c(
-                    "div",
-                    {
-                      staticClass:
-                        "col-4 col-md-6 text-center exp_header_text_us"
-                    },
-                    [
-                      _c(
-                        "a",
-                        {
-                          attrs: { href: "#" },
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              return _vm.$auth.logout()
-                            }
+                ? _c("div", { staticClass: "col-4 like_button_top" }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "text-center like_button",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.$auth.logout()
                           }
-                        },
-                        [_vm._v("Logout")]
-                      )
-                    ]
-                  )
+                        }
+                      },
+                      [_vm._v("Выйти")]
+                    )
+                  ])
                 : _c(
                     "div",
-                    {
-                      staticClass:
-                        "col-4 col-md-6 text-center exp_header_text_us"
-                    },
+                    { staticClass: "col-4 like_button_top" },
                     [
-                      _c("router-link", { attrs: { to: { name: "login" } } }, [
-                        _vm._v("Вход в сервис")
-                      ])
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: " text-center like_button",
+                          attrs: { to: { name: "login" } }
+                        },
+                        [_vm._v("Вход в сервис")]
+                      )
                     ],
                     1
                   )
@@ -41436,8 +41443,30 @@ var render = function() {
             _vm._v(" "),
             _c("router-view"),
             _vm._v(" "),
-            _c("router-link", { attrs: { to: { name: "expertise" } } }, [
-              _vm._v("Пройти экспертизу")
+            _c("div", { staticClass: "col-4 block_exp_text" }, [
+              _vm._m(2),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-12 justify-content-center" }, [
+                _vm._v(
+                  "Пройдите экспертизу и узнайте необходимо ли Вам обращаться в МАРТ для совершения сделки"
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-12 go_to_exp_text " },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "go_to_exp_text_color",
+                      attrs: { to: { name: "expertise" } }
+                    },
+                    [_vm._v("Пройти экспертизу →")]
+                  )
+                ],
+                1
+              )
             ])
           ],
           1
@@ -41465,11 +41494,23 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-12" }, [
       _c("div", { staticClass: "text-center my-4" }, [
-        _vm._v(
-          "Помощник для бизнеса по вопросам согласования документов с МАРТ"
-        )
+        _c("h3", [
+          _vm._v(
+            "Помощник для бизнеса по вопросам согласования документов с МАРТ"
+          )
+        ])
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "col-12 justify-content-center exp_text" },
+      [_c("b", [_vm._v("Экспертиза планируемой сделки")])]
+    )
   }
 ]
 render._withStripped = true
@@ -43497,7 +43538,7 @@ var render = function() {
         "tbody",
         _vm._l(_vm.posts, function(post, number) {
           return _c("tr", [
-            _c("td", { attrs: { scope: "col-7" } }, [
+            _c("td", { attrs: { scope: "col-6" } }, [
               _vm._v(
                 "\n                    " +
                   _vm._s(post.text) +
@@ -43505,7 +43546,21 @@ var render = function() {
               )
             ]),
             _vm._v(" "),
-            _c("td", { attrs: { scope: "col-1" } }, [
+            _c(
+              "td",
+              {
+                staticClass: "my_pointer",
+                attrs: { scope: "col-1" },
+                on: {
+                  click: function($event) {
+                    return _vm.change_post_name(post.id_post)
+                  }
+                }
+              },
+              [_vm._v("\n                    🛠\n                ")]
+            ),
+            _vm._v(" "),
+            _c("td", { attrs: { scope: "col-1", align: "center" } }, [
               _c("input", {
                 staticClass: "form-check-input",
                 attrs: {
@@ -43563,16 +43618,6 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _c(
-      "button",
-      {
-        staticClass: "btn btn-primary btn-block",
-        attrs: { type: "button" },
-        on: { click: _vm.test }
-      },
-      [_vm._v("test")]
-    ),
-    _vm._v(" "),
     _c("ul", { staticClass: "pagination" }, [
       _c(
         "li",
@@ -43601,7 +43646,9 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", { staticClass: "thead-dark" }, [
       _c("tr", [
-        _c("th", { attrs: { scope: "col-7" } }, [_vm._v("Название поста")]),
+        _c("th", { attrs: { scope: "col-6" } }, [_vm._v("Название поста")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col-1" } }),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col-1" } }, [_vm._v("Активен")]),
         _vm._v(" "),
