@@ -3,14 +3,6 @@
         <div class="row" >
             <div class="col-2"></div>
             <div class="content_exp_test col-8">
-                <div class="col-12 d-flex header_exp_test ">
-                    <div class="col-4 col-md-2 "> <a href="/" ><img :src="'/img/logo.png'"  class="header_img" alt="logo" ></a></div>
-                    <div class="col-4 col-md-4 text-center exp_header_text_us">
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="text-center my-4">Помощник для бизнеса по вопросам согласования документов с МАРТ</div>
-                </div>
                 <div class="col-12">
                     <div class="alert alert-danger" v-if="error">
                         <p>Не верный логин или пароль</p>

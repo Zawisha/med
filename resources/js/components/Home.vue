@@ -1,40 +1,26 @@
 <template>
-    <div class="container">
-        <div class="row" >
-            <div class="col-12 streak">
-            </div>
-        </div>
-        <div class="col">
 
-            <div class="row" >
-                <div class="col-2"></div>
-                <div class="content_exp_test col-8">
-                    <div class="col-12 d-flex header_exp_test">
-                        <div class="col-6 "> <a href="/" ><img :src="'/img/logo.png'"  class="header_img" alt="logo" ></a></div>
-                        <div v-if="$auth.check()" class="col-4 like_button_top "><router-link class="text-center like_button" :to="{ name: 'admin' }">Админ</router-link></div>
-                        <div v-else class="col-2 text-center exp_header_text_us"></div>
-                        <div v-if="$auth.check()" class="col-4 like_button_top"><a class="text-center like_button" href="#" @click.prevent="$auth.logout()">Выйти</a></div>
-                        <div v-else class="col-4 like_button_top" ><router-link class=" text-center like_button" :to="{ name: 'login' }">Вход в сервис</router-link></div>
-                    </div>
-                    <div class="col-12">
-                        <div class="text-center my-4"><h3>Помощник для бизнеса по вопросам согласования документов с МАРТ</h3></div>
-                    </div>
-                    <router-view></router-view>
-                    <div class="col-4 block_exp_text">
-                        <div class="col-12 justify-content-center exp_text"><b>Экспертиза планируемой сделки</b></div>
-                        <div class="col-12 justify-content-center">Пройдите экспертизу и узнайте необходимо ли Вам обращаться в МАРТ для совершения сделки</div>
-                        <div class="col-12 go_to_exp_text "><router-link class="go_to_exp_text_color" :to="{ name: 'expertise' }">Пройти экспертизу &#8594</router-link></div>
-                    </div>
-                </div>
-                <div class="col-2">
-                </div>
-            </div>
-            <div class="row"></div>
 
-<!--            <router-link :to="{ name: 'register' }">Register</router-link>-->
+<div>
+    <body class="body">
+    <div class="section">
+        <div data-collapse="small" data-animation="over-right" data-duration="400" class="navbar w-nav">
+            <div class="container w-container">
+                <a href="/" class="brand w-nav-brand w--current">
+                    <div class="logo">Юран | <span class="text-span">Beta</span></div>
+                </a><nav role="navigation" class="nav-menu w-nav-menu"><a href="/" class="menu_botton w-nav-link w--current">Главная</a><a href="#" class="menu_botton w-nav-link">Услуги</a><a href="#" class="menu_botton w-nav-link">О сервисе</a><a href="#" class="menu_botton w-nav-link">О компании</a>
+                <router-link v-if="$auth.check()" :to="{ name: 'admin' }"><a target="_blank" class="menu_botton-admin w-button">Админ панель</a></router-link>
+                <router-link v-else :to="{ name: 'login' }"><a target="_blank" class="menu_botton-admin w-button">Вход в сервис</a></router-link>
 
-        </div>
-    </div>
+            </nav>
+                <div class="menu-button w-nav-button"><div class="icon w-icon-nav-menu"></div></div>
+            </div></div></div>
+    <router-view></router-view>
+    </body>
+</div>
+
+
+
 
 </template>
 
@@ -43,7 +29,7 @@
     export default {
         data(){
             return {
-
+                show_admin:true
             }
         },
         mounted() {

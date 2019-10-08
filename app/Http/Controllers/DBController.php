@@ -417,5 +417,19 @@ class DBController extends Controller
         return $res_arr;
     }
 
+    public function update_post_name(Request $request)
+    {
+        $id_post = $request->input('id_post');
+        $name_post = $request->input('name_post');
+        Procedure::where('id_post', '=', $id_post)->update(['name_post' =>$name_post]);
+    }
+    public function update_procedure_name(Request $request)
+    {
+        $id_post = $request->input('id_post');
+        $id_procedure = $request->input('id_procedure');
+        $name_procedure = $request->input('name_procedure');
+        Procedure::where('id_post', '=', $id_post)->where('id_main_procedure', '=', $id_procedure)->update(['name_main_procedure' =>$name_procedure]);
+    }
+
 
 }

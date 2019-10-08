@@ -9,7 +9,7 @@
                 <div class="collapse navbar-collapse flex-row-reverse" id="navbarNavDropdown">
                     <ul class="navbar-nav">
                         <li >
-                            <button type="button" class="btn btn-warning"><router-link :to="{ name: 'home' }">На сайт</router-link></button>
+                            <button type="button" class="btn btn-warning"><router-link :to="{ name: 'main_home' }">На сайт</router-link></button>
                         </li>
                     </ul>
                 </div>

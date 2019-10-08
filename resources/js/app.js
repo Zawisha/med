@@ -20,7 +20,7 @@ import TextareaAutosize from 'vue-textarea-autosize'
 
 // import is_admin from "./middleware/log_user";
 import post_name from './components/Dashboard.vue';
-console.log('POST NAMEEE' + post_name.data);
+
 
 Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
@@ -54,7 +54,8 @@ import ExampleComponent from "./components/ExampleComponent";
 import Expertise from "./components/Expertise";
 import ExpertiseTest from "./components/ExpertiseTest";
 import Admin from "./components/medical/Admin";
-
+import MainHome from './components/MainHome'
+import Test from './components/Test'
 // console.log(is_admin);
 
 axios.defaults.baseURL = 'http://localhost:/api';
@@ -63,43 +64,65 @@ const router = new VueRouter({
     mode: 'history',
     routes: [
         {
+
+
             path: '/',
             name: 'home',
-            component: Home
-        },
-        {
-            path: '/register',
-            name: 'register',
-            component: Register,
+            component: Home,
+            children: [
+                {
+                    path: '/',
+                    name: 'main_home',
+                    component: MainHome,
+                },
+                {
+                    path: '/register',
+                    name: 'register',
+                    component: Register,
 
-        },
-        {
-            path: '/login',
-            name: 'login',
-            component: Login
-        },
-        {
-            path: '/dashboard',
-            name: 'dashboard',
-            component: Dashboard,
-           // meta: {
-           //     auth: true
-           // }
-        },
-        {
-            path: '/accept/:token',
-            name: 'accept',
-            component: AcceptToken
-        },
-        {
-            path: '/forget',
-            name: 'forget',
-            component: ForgetPassword
-        },
-        {
-            path: '/renew_password/:id/:token',
-            name: 'renew_pass',
-            component: RenewPassword
+                },
+                {
+                    path: '/login',
+                    name: 'login',
+                    component: Login
+                },
+                {
+                    path: '/dashboard',
+                    name: 'dashboard',
+                    component: Dashboard,
+                    // meta: {
+                    //     auth: true
+                    // }
+                },
+                {
+                    path: '/accept/:token',
+                    name: 'accept',
+                    component: AcceptToken
+                },
+                {
+                    path: '/forget',
+                    name: 'forget',
+                    component: ForgetPassword
+                },
+                {
+                    path: '/renew_password/:id/:token',
+                    name: 'renew_pass',
+                    component: RenewPassword
+                },
+                {
+                    path: '/expertise',
+                    name: 'expertise',
+                    component: Expertise,
+                    props: true,
+                },
+                {
+                    path: '/expertise_test',
+                    name: 'expertise_test',
+                    component: ExpertiseTest,
+                    props: true
+                },
+
+                ]
         },
         {
             path: '/admin',
@@ -152,32 +175,11 @@ const router = new VueRouter({
 
                    }
 
-                // let result_req = is_admin();
-                // console.log('resultADMIN ' + result_req);
-                // if(result_req=='1')
-                // {
-                //     return next({
-                //     });
-                // }
-                // return next({
-                //     path: '/home'
-                // })
-
-            // }
-        },
-
-
-        {
-            path: '/expertise',
-            name: 'expertise',
-            component: Expertise,
-            props: true,
         },
         {
-            path: '/expertise_test',
-            name: 'expertise_test',
-            component: ExpertiseTest,
-            props: true
+            path: '/test',
+            name: 'test',
+            component: Test,
         },
     ],
 });

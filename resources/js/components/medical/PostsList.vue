@@ -16,13 +16,13 @@
                 <td scope="col-6">
                     {{ post.text }}
                 </td>
-                <td scope="col-1" v-on:click="change_post_name(post.id_post)" class="my_pointer">
+                <td scope="col-1" v-on:click="change_post_name(post.id_post,post.text)" class="my_pointer">
                     &#128736
                 </td>
                 <td scope="col-1" align="center">
                     <input class="form-check-input" type="radio" name="PostRadios" id="ExId" :checked="post.id_post == current_front_post" value="1" v-on:click="change_front_current_post(post.id_post,post.text)">
                 </td>
-                <td scope="col-2"><button type="button" class="btn btn-secondary" v-on:click="edit_post(post.id_post)">Редактировать</button></td>
+                <td scope="col-2"><button type="button" class="btn btn-secondary"  v-on:click="edit_post(post.id_post)">Редактировать</button></td>
                 <td scope="col-2"><button type="button" class="btn btn-danger" v-on:click="delete_post(post.id_post,number)">Удалить</button></td>
             </tr>
 
@@ -35,7 +35,8 @@
                 <li class="page-item page-link my_pointer" v-on:click="next">Next</li>
             </ul>
 
-
+        <textarea class="form-control" rows="2" id="messages" name="text" v-model="text_area_message" v-if="show_textarea" v-bind:class="{border_alert: danger_ans}" > </textarea>
+        <button type="button" class="btn btn-primary btn-block procedure_button" v-on:click="save_change_post_name" v-if="show_textarea">Сохранить</button>
     </div>
 </template>
 <script>
@@ -54,8 +55,10 @@
                 //количество постов всего ( для пагинации )
                 posts_length:0,
                 current_front_post :0,
-                show_textarea:false
-
+                show_textarea:false,
+                text_area_message:'',
+                change_name_id_post:'',
+                danger_ans:false,
             }
         },
         mounted() {
@@ -64,13 +67,38 @@
         },
         methods: {
 
-            test()
+            save_change_post_name()
             {
-              console.log(this.current_front_post);
+
+                this.danger_ans = false;
+                if(this.text_area_message==''||this.text_area_message==' ')
+                {
+                    this.danger_ans = true;
+                }
+                else
+                {
+                for (let i = 0; i < this.posts.length; i++) {
+                    if(this.posts[i]['id_post']==this.change_name_id_post)
+                    {
+                        this.posts[i]['text']=this.text_area_message;
+                        this.show_textarea = false;
+                        axios
+                            .post('/update_post_name',{
+                                id_post:this.change_name_id_post,
+                                name_post:this.text_area_message
+                            });
+                    }
+                }
+                }
+
+
+
+            // this.posts[this.change_name_id_post]['text']=this.text_area_message
             },
-
-            change_post_name() {
-
+            change_post_name(post_id, post_text) {
+            this.show_textarea = true;
+            this.text_area_message = post_text;
+            this.change_name_id_post=post_id;
             },
 
             render_table(inp, removed, pagination_numb)

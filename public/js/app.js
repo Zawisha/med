@@ -3054,15 +3054,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3165,6 +3156,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3172,7 +3186,8 @@ __webpack_require__.r(__webpack_exports__);
       blocks: [],
       //current number of id block
       id_procedure: 0,
-      test_front_text_procedure: this.front_text_procedure
+      test_front_text_procedure: this.front_text_procedure,
+      answer_choose_arr: []
     };
   },
   props: ['front_procedure_id', 'front_text_procedure'],
@@ -3180,10 +3195,9 @@ __webpack_require__.r(__webpack_exports__);
     this.render_start_block(this.blocks);
   },
   methods: {
-    test: function test() {
-      console.log(this.blocks);
+    isNullElem: function isNullElem(number) {
+      return number == 0;
     },
-    //
     go_to_expertise: function go_to_expertise() {
       Vue.router.push({
         name: 'expertise'
@@ -3210,7 +3224,9 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     front_render_add_block: function front_render_add_block(inp, id_block, number_in_array, number_clicked_button) {
-      var elem = document.getElementById(number_clicked_button); // console.log(number_clicked_button);
+      // this.answer_choose_arr[number_in_array]
+      var elem = document.getElementById(number_clicked_button);
+      this.answer_choose_arr[number_in_array] = elem.innerHTML; // console.log(number_clicked_button);
 
       var a = elem.id.split('q')[0];
       var elems = document.getElementsByClassName('myButton');
@@ -3284,6 +3300,49 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      show_admin: true
+    };
+  },
+  mounted: function mounted() {
+    this.is_admin_add();
+  },
+  created: function created() {},
+  methods: {
+    is_admin_add: function is_admin_add() {
+      var _this = this;
+
+      axios.get('/is_admin').then(function (_ref) {
+        var data = _ref.data;
+        return _this.$store.dispatch('setIsAdmin', data);
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MainHome.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/MainHome.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3315,6 +3374,85 @@ __webpack_require__.r(__webpack_exports__);
         return _this.$store.dispatch('setIsAdmin', data);
       });
     }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Test.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Test.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      post_name: '1234'
+    };
   }
 });
 
@@ -3384,14 +3522,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -4194,6 +4324,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4208,7 +4345,11 @@ __webpack_require__.r(__webpack_exports__);
       pagination_numb: 0,
       //количество постов всего ( для пагинации )
       posts_length: 0,
-      count_posts_arr: []
+      count_posts_arr: [],
+      text_area_message: '',
+      change_procedure_id_post: '',
+      show_textarea: false,
+      ch_name_danger_ans: false
     };
   },
   mounted: function mounted() {
@@ -4216,6 +4357,30 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {},
   methods: {
+    save_change_procedure_name: function save_change_procedure_name() {
+      this.ch_name_danger_ans = false;
+
+      if (this.text_area_message == '' || this.text_area_message == ' ') {
+        this.ch_name_danger_ans = true;
+      } else {
+        for (var i = 0; i < this.inputs.length; i++) {
+          if (this.inputs[i]['id_main_procedure'] == this.change_procedure_id_post) {
+            this.inputs[i]['name_main_procedure'] = this.text_area_message;
+            this.show_textarea = false;
+            axios.post('/update_procedure_name', {
+              id_post: this.$store.state.post_id,
+              id_procedure: this.change_procedure_id_post,
+              name_procedure: this.text_area_message
+            });
+          }
+        }
+      }
+    },
+    change_procedure_name: function change_procedure_name(id_procedure, name_procedure) {
+      this.show_textarea = true;
+      this.text_area_message = name_procedure;
+      this.change_procedure_id_post = id_procedure;
+    },
     delete_procedure: function delete_procedure(numb_in_arr, numb) {
       axios.post('/delete_procedure', {
         id_post: this.$store.state.post_id,
@@ -4753,6 +4918,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4765,7 +4931,10 @@ __webpack_require__.r(__webpack_exports__);
       //количество постов всего ( для пагинации )
       posts_length: 0,
       current_front_post: 0,
-      show_textarea: false
+      show_textarea: false,
+      text_area_message: '',
+      change_name_id_post: '',
+      danger_ans: false
     };
   },
   mounted: function mounted() {
@@ -4773,10 +4942,30 @@ __webpack_require__.r(__webpack_exports__);
     this.select_front_current_post();
   },
   methods: {
-    test: function test() {
-      console.log(this.current_front_post);
+    save_change_post_name: function save_change_post_name() {
+      this.danger_ans = false;
+
+      if (this.text_area_message == '' || this.text_area_message == ' ') {
+        this.danger_ans = true;
+      } else {
+        for (var i = 0; i < this.posts.length; i++) {
+          if (this.posts[i]['id_post'] == this.change_name_id_post) {
+            this.posts[i]['text'] = this.text_area_message;
+            this.show_textarea = false;
+            axios.post('/update_post_name', {
+              id_post: this.change_name_id_post,
+              name_post: this.text_area_message
+            });
+          }
+        }
+      } // this.posts[this.change_name_id_post]['text']=this.text_area_message
+
     },
-    change_post_name: function change_post_name() {},
+    change_post_name: function change_post_name(post_id, post_text) {
+      this.show_textarea = true;
+      this.text_area_message = post_text;
+      this.change_name_id_post = post_id;
+    },
     render_table: function render_table(inp, removed, pagination_numb) {
       var _this = this;
 
@@ -41052,101 +41241,46 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _vm._m(0),
-    _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-2" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "content_exp_test col-12" }, [
-        _c("div", { staticClass: "col-12 d-flex header_exp_test " }, [
-          _c("div", { staticClass: "col-4 col-md-2 " }, [
-            _c("a", { attrs: { href: "/" } }, [
-              _c("img", {
-                staticClass: "header_img",
-                attrs: { src: "/img/logo.png", alt: "logo" }
-              })
-            ])
-          ]),
-          _vm._v(" "),
+  return _c("div", [
+    _c("body", { staticClass: "body-2" }, [
+      _c("div", { staticClass: "section" }, [
+        _c("div", { staticClass: "div-screen-1" }, [
           _c(
             "div",
-            { staticClass: "col-4 col-md-4 text-center exp_header_text_us" },
+            { staticClass: "div-block-8" },
             [
-              _vm._v(
-                "\n                        Экспертиза\n                    "
-              )
-            ]
-          ),
-          _vm._v(" "),
-          _vm.$auth.check()
-            ? _c("div", { staticClass: "col-4 like_button_top" }, [
-                _c(
+              _c("h1", { staticClass: "heading" }, [
+                _vm._v("Экспертиза сделки")
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "paragraph exp" }, [
+                _vm._v(_vm._s(_vm.post_name))
+              ]),
+              _vm._v(" "),
+              _vm._l(_vm.posts, function(post, number) {
+                return _c(
                   "a",
                   {
-                    staticClass: "text-center like_button",
-                    attrs: { href: "#" },
+                    staticClass: "button-5 w-button",
                     on: {
                       click: function($event) {
-                        $event.preventDefault()
-                        return _vm.$auth.logout()
+                        return _vm.go_to_expertise_test(
+                          post.id_procedure,
+                          post.text
+                        )
                       }
                     }
                   },
-                  [_vm._v("Выйти")]
+                  [_vm._v(_vm._s(post.text))]
                 )
-              ])
-            : _c(
-                "div",
-                { staticClass: "col-4 like_button_top" },
-                [
-                  _c(
-                    "router-link",
-                    {
-                      staticClass: " text-center like_button",
-                      attrs: { to: { name: "login" } }
-                    },
-                    [_vm._v("Вход в сервис")]
-                  )
-                ],
-                1
-              )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-12" }, [
-          _c("div", { staticClass: "text-center my-4" }, [
-            _vm._v(_vm._s(_vm.post_name))
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "list-counter-square ",
-              staticStyle: { "max-width": "1200px", margin: "0 auto" }
-            },
-            _vm._l(_vm.posts, function(post, number) {
-              return _c(
-                "div",
-                {
-                  staticClass: "front_expertise_list",
-                  on: {
-                    click: function($event) {
-                      return _vm.go_to_expertise_test(
-                        post.id_procedure,
-                        post.text
-                      )
-                    }
-                  }
-                },
-                [_vm._v(_vm._s(post.text))]
-              )
-            }),
-            0
+              })
+            ],
+            2
           )
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-2" })
+      _vm._m(0)
     ])
   ])
 }
@@ -41155,8 +41289,20 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-12 streak" })
+    return _c("div", { staticClass: "section-2" }, [
+      _c("div", { staticClass: "div-block-7" }, [
+        _c("div", { staticClass: "columns w-row" }, [
+          _c("div", { staticClass: "w-col w-col-6" }, [
+            _c("div", [
+              _c("div", { staticClass: "text-block" }, [
+                _vm._v("  © Все права защищены")
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "w-col w-col-6" })
+        ])
+      ])
     ])
   }
 ]
@@ -41181,155 +41327,157 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _vm._m(0),
-    _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-2" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "content_exp_test col-8" }, [
-        _c("div", { staticClass: "col-12 d-flex header_exp_test " }, [
-          _c("div", { staticClass: "col-4 col-md-2 " }, [
-            _c("a", { attrs: { href: "/" } }, [
-              _c("img", {
-                staticClass: "header_img",
-                attrs: { src: "/img/logo.png", alt: "logo" }
-              })
-            ])
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "col-4 col-md-6 text-center exp_header_text",
-              on: {
-                click: function($event) {
-                  return _vm.go_to_expertise()
-                }
-              }
-            },
-            [_vm._v("Экспертиза")]
-          ),
-          _vm._v(" "),
-          _vm.$auth.check()
-            ? _c(
-                "div",
-                {
-                  staticClass: "col-4 col-md-6 text-center exp_header_text_us"
-                },
-                [
-                  _c(
-                    "a",
-                    {
-                      attrs: { href: "#" },
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          return _vm.$auth.logout()
-                        }
-                      }
-                    },
-                    [_vm._v("Logout")]
-                  )
-                ]
-              )
-            : _c(
-                "div",
-                {
-                  staticClass: "col-4 col-md-6 text-center exp_header_text_us"
-                },
-                [
-                  _c("router-link", { attrs: { to: { name: "login" } } }, [
-                    _vm._v("Вход в сервис")
-                  ])
-                ],
-                1
-              )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-12 front_text_procedure" }, [
-          _c("h1", { staticClass: "h4" }, [
-            _vm._v(_vm._s(_vm.test_front_text_procedure) + "\n            ")
-          ])
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "col-12" },
-          [
-            _c("div", { staticClass: "col-12 d-flex" }, [
-              _c("div", { staticClass: "front_answers_little col-8" }, [
-                _vm._v("Ответьте на следующие вопросы ")
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "col-4",
-                  on: {
-                    click: function($event) {
-                      return _vm.refresh_expertise()
-                    }
-                  }
-                },
-                [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-secondary ",
-                      attrs: { type: "button" }
-                    },
-                    [_vm._v("Пройти экспертизу заново")]
-                  )
-                ]
-              )
+  return _c("div", [
+    _c("body", { staticClass: "body-2" }, [
+      _c("div", { staticClass: "section" }, [
+        _c("div", { staticClass: "div-screen-1" }, [
+          _c("div", { staticClass: "div-block-8" }, [
+            _c("h1", { staticClass: "heading" }, [_vm._v("Экспертиза сделки")]),
+            _vm._v(" "),
+            _c("p", { staticClass: "paragraph exp vopros" }, [
+              _vm._v("Выбрана экономическая концентрация:")
             ]),
             _vm._v(" "),
-            _vm._l(_vm.blocks, function(post, number) {
-              return _c("div", { staticClass: "col-12 front_content_block" }, [
-                _c("div", { staticClass: "col-12" }, [
-                  _vm._v(_vm._s(post.question_text))
+            _c("div", { staticClass: "div-block-9" }, [
+              _c("div", { staticClass: "text-block-2" }, [
+                _vm._v(_vm._s(_vm.test_front_text_procedure))
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "div-block-10" },
+              [
+                _c("div", { staticClass: "text-block-3" }, [
+                  _vm._v("Ответьте на следующие вопросы")
                 ]),
                 _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "col-12 d-flex" },
-                  _vm._l(post.answer_text, function(question, numb) {
-                    return _c("div", { staticClass: "front_button_right" }, [
-                      post.answer_link_id[numb] !== 0
-                        ? _c(
-                            "div",
-                            {
-                              staticClass: "col-12 myButton",
-                              attrs: { id: number + "q" + numb },
-                              on: {
-                                click: function($event) {
-                                  return _vm.front_render_add_block(
-                                    _vm.blocks,
-                                    post.answer_link_id[numb],
-                                    number,
-                                    number + "q" + numb
-                                  )
+                _vm._l(_vm.blocks, function(post, number) {
+                  return _c("div", { staticClass: "columns-2 w-row" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "column-6 w-col w-col-1 w-col-small-1 w-col-tiny-1"
+                      },
+                      [
+                        number != _vm.blocks.length - 1
+                          ? _c("div", { staticClass: "div-block-14" }, [
+                              _c("img", {
+                                staticClass: "image-3",
+                                attrs: {
+                                  src:
+                                    "https://uploads-ssl.webflow.com/5d93c99b337fd39ab87ef61a/5d9a604c574a7da7ff2a659e_checked-symbol.png",
+                                  alt: ""
                                 }
-                              }
-                            },
-                            [_vm._v(_vm._s(question))]
-                          )
-                        : _vm._e()
-                    ])
-                  }),
-                  0
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-12 bottom_streak" })
-              ])
-            })
-          ],
-          2
-        )
+                              })
+                            ])
+                          : _vm._e()
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "column-5 w-col w-col-11 w-col-small-11 w-col-tiny-11"
+                      },
+                      [
+                        _c("div", { staticClass: "div-block-13" }, [
+                          _c("div", { staticClass: "text-block-4" }, [
+                            _vm._v(_vm._s(post.question_text))
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "div-block-11" },
+                            _vm._l(post.answer_text, function(question, numb) {
+                              return post.answer_link_id[numb] !== 0
+                                ? _c(
+                                    "div",
+                                    {
+                                      staticClass: "button-5 yes exp_but_5",
+                                      attrs: { id: number + "q" + numb },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.front_render_add_block(
+                                            _vm.blocks,
+                                            post.answer_link_id[numb],
+                                            number,
+                                            number + "q" + numb
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [_vm._v(_vm._s(question))]
+                                  )
+                                : _vm._e()
+                            }),
+                            0
+                          ),
+                          _vm._v(" "),
+                          post.answer_text == "" ||
+                          post.answer_link_id.every(_vm.isNullElem)
+                            ? _c(
+                                "div",
+                                { staticClass: "div-block-11 final" },
+                                [
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass: "button-5 yes new w-button",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.refresh_expertise()
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Начать сначала")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "router-link",
+                                    { attrs: { to: { name: "expertise" } } },
+                                    [
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass:
+                                            "button-5 yes new w-button"
+                                        },
+                                        [_vm._v("Новая экспертиза")]
+                                      )
+                                    ]
+                                  )
+                                ],
+                                1
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c("div"),
+                          _vm._v(" "),
+                          number != _vm.blocks.length - 1
+                            ? _c("div", { staticClass: "div-block-12" }, [
+                                _c("div", { staticClass: "text-block-5" }, [
+                                  _vm._v(
+                                    "Выбран ответ: " +
+                                      _vm._s(_vm.answer_choose_arr[number])
+                                  )
+                                ])
+                              ])
+                            : _vm._e()
+                        ])
+                      ]
+                    )
+                  ])
+                })
+              ],
+              2
+            )
+          ])
+        ])
       ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-2" })
+      _vm._m(0)
     ])
   ])
 }
@@ -41338,8 +41486,20 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-12 streak" })
+    return _c("div", { staticClass: "section-2" }, [
+      _c("div", { staticClass: "div-block-7" }, [
+        _c("div", { staticClass: "columns w-row" }, [
+          _c("div", { staticClass: "w-col w-col-6" }, [
+            _c("div", [
+              _c("div", { staticClass: "text-block" }, [
+                _vm._v("  © Все права защищены")
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "w-col w-col-6" })
+        ])
+      ])
     ])
   }
 ]
@@ -41364,118 +41524,204 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _vm._m(0),
-    _vm._v(" "),
-    _c("div", { staticClass: "col" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-2" }),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "content_exp_test col-8" },
-          [
-            _c("div", { staticClass: "col-12 d-flex header_exp_test" }, [
-              _c("div", { staticClass: "col-6 " }, [
-                _c("a", { attrs: { href: "/" } }, [
-                  _c("img", {
-                    staticClass: "header_img",
-                    attrs: { src: "/img/logo.png", alt: "logo" }
-                  })
-                ])
-              ]),
-              _vm._v(" "),
-              _vm.$auth.check()
-                ? _c(
-                    "div",
-                    { staticClass: "col-4 like_button_top " },
-                    [
-                      _c(
-                        "router-link",
-                        {
-                          staticClass: "text-center like_button",
-                          attrs: { to: { name: "admin" } }
-                        },
-                        [_vm._v("Админ")]
-                      )
-                    ],
-                    1
-                  )
-                : _c("div", {
-                    staticClass: "col-2 text-center exp_header_text_us"
-                  }),
-              _vm._v(" "),
-              _vm.$auth.check()
-                ? _c("div", { staticClass: "col-4 like_button_top" }, [
+  return _c("div", [
+    _c(
+      "body",
+      { staticClass: "body" },
+      [
+        _c("div", { staticClass: "section" }, [
+          _c(
+            "div",
+            {
+              staticClass: "navbar w-nav",
+              attrs: {
+                "data-collapse": "small",
+                "data-animation": "over-right",
+                "data-duration": "400"
+              }
+            },
+            [
+              _c("div", { staticClass: "container w-container" }, [
+                _vm._m(0),
+                _c(
+                  "nav",
+                  {
+                    staticClass: "nav-menu w-nav-menu",
+                    attrs: { role: "navigation" }
+                  },
+                  [
                     _c(
                       "a",
                       {
-                        staticClass: "text-center like_button",
-                        attrs: { href: "#" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.$auth.logout()
-                          }
-                        }
+                        staticClass: "menu_botton w-nav-link w--current",
+                        attrs: { href: "/" }
                       },
-                      [_vm._v("Выйти")]
+                      [_vm._v("Главная")]
+                    ),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "menu_botton w-nav-link",
+                        attrs: { href: "#" }
+                      },
+                      [_vm._v("Услуги")]
+                    ),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "menu_botton w-nav-link",
+                        attrs: { href: "#" }
+                      },
+                      [_vm._v("О сервисе")]
+                    ),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "menu_botton w-nav-link",
+                        attrs: { href: "#" }
+                      },
+                      [_vm._v("О компании")]
+                    ),
+                    _vm._v(" "),
+                    _vm.$auth.check()
+                      ? _c(
+                          "router-link",
+                          { attrs: { to: { name: "admin" } } },
+                          [
+                            _c(
+                              "a",
+                              {
+                                staticClass: "menu_botton-admin w-button",
+                                attrs: { target: "_blank" }
+                              },
+                              [_vm._v("Админ панель")]
+                            )
+                          ]
+                        )
+                      : _c(
+                          "router-link",
+                          { attrs: { to: { name: "login" } } },
+                          [
+                            _c(
+                              "a",
+                              {
+                                staticClass: "menu_botton-admin w-button",
+                                attrs: { target: "_blank" }
+                              },
+                              [_vm._v("Вход в сервис")]
+                            )
+                          ]
+                        )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _vm._m(1)
+              ])
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _c("router-view")
+      ],
+      1
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      { staticClass: "brand w-nav-brand w--current", attrs: { href: "/" } },
+      [
+        _c("div", { staticClass: "logo" }, [
+          _vm._v("Юран | "),
+          _c("span", { staticClass: "text-span" }, [_vm._v("Beta")])
+        ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "menu-button w-nav-button" }, [
+      _c("div", { staticClass: "icon w-icon-nav-menu" })
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MainHome.vue?vue&type=template&id=cc3db8ba&":
+/*!***********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/MainHome.vue?vue&type=template&id=cc3db8ba& ***!
+  \***********************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "div-screen-1" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("div", { staticClass: "columns-service w-row" }, [
+        _c(
+          "div",
+          {
+            staticClass: "column-expert w-col w-col-6 w-col-small-small-stack"
+          },
+          [
+            _c(
+              "div",
+              { staticClass: "div-block-expert" },
+              [
+                _vm._m(1),
+                _vm._v(" "),
+                _c("div", { staticClass: "text-1 _1" }, [
+                  _vm._v(
+                    "Пройдите экспертизу и узнайте необходимо ли вам обращаться в МАРТ для совершения сделки"
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "router-link",
+                  {
+                    staticClass: "go_to_exp_text_color",
+                    attrs: { to: { name: "expertise" } }
+                  },
+                  [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "button w-button",
+                        attrs: { target: "_blank" }
+                      },
+                      [_vm._v("Пройти экспертизу")]
                     )
-                  ])
-                : _c(
-                    "div",
-                    { staticClass: "col-4 like_button_top" },
-                    [
-                      _c(
-                        "router-link",
-                        {
-                          staticClass: " text-center like_button",
-                          attrs: { to: { name: "login" } }
-                        },
-                        [_vm._v("Вход в сервис")]
-                      )
-                    ],
-                    1
-                  )
-            ]),
-            _vm._v(" "),
-            _vm._m(1),
-            _vm._v(" "),
-            _c("router-view"),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-4 block_exp_text" }, [
-              _vm._m(2),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-12 justify-content-center" }, [
-                _vm._v(
-                  "Пройдите экспертизу и узнайте необходимо ли Вам обращаться в МАРТ для совершения сделки"
+                  ]
                 )
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "col-12 go_to_exp_text " },
-                [
-                  _c(
-                    "router-link",
-                    {
-                      staticClass: "go_to_exp_text_color",
-                      attrs: { to: { name: "expertise" } }
-                    },
-                    [_vm._v("Пройти экспертизу →")]
-                  )
-                ],
-                1
-              )
-            ])
-          ],
-          1
+              ],
+              1
+            )
+          ]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "col-2" })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "row" })
+        _vm._m(2)
+      ])
     ])
   ])
 }
@@ -41484,20 +41730,37 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-12 streak" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-12" }, [
-      _c("div", { staticClass: "text-center my-4" }, [
-        _c("h3", [
-          _vm._v(
-            "Помощник для бизнеса по вопросам согласования документов с МАРТ"
-          )
+    return _c("div", { staticClass: "_2-columns-home-page w-row" }, [
+      _c("div", { staticClass: "text-column w-col w-col-7" }, [
+        _c("div", { staticClass: "div-block-8" }, [
+          _c("h1", { staticClass: "heading" }, [
+            _vm._v("Помощник для бизнеса"),
+            _c("br"),
+            _vm._v("по вопросам согласования"),
+            _c("br"),
+            _vm._v("документов с МАРТ")
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "paragraph" }, [
+            _vm._v("Пройдите экспертизу сделки. "),
+            _c("br"),
+            _vm._v("Подготовьте документы."),
+            _c("br"),
+            _vm._v("Получите документ о согласии сделки.")
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "image-column w-col w-col-5" }, [
+        _c("div", { staticClass: "image-bg_01" }, [
+          _c("img", {
+            staticClass: "image-2",
+            attrs: {
+              src:
+                "https://uploads-ssl.webflow.com/5d93c99b337fd39ab87ef61a/5d97b354e9082900146f59a2_bg_01.jpg",
+              alt: ""
+            }
+          })
         ])
       ])
     ])
@@ -41506,11 +41769,485 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("h3", { staticClass: "heading-2" }, [
+      _vm._v("Экспертиза планируемой"),
+      _c("br"),
+      _vm._v("сделки")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "col-12 justify-content-center exp_text" },
-      [_c("b", [_vm._v("Экспертиза планируемой сделки")])]
+      { staticClass: "column-4 w-col w-col-6 w-col-small-small-stack" },
+      [
+        _c("div", { staticClass: "div-block-helper" }, [
+          _c("h3", { staticClass: "heading-2" }, [
+            _vm._v("Помощник подготовки документов")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "text-1" }, [
+            _vm._v("Подготовка всех необходимых документов для подачи в МАРТ")
+          ]),
+          _c("a", { staticClass: "button-2 w-button", attrs: { href: "#" } }, [
+            _vm._v("Подготовить документы")
+          ])
+        ])
+      ]
     )
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Test.vue?vue&type=template&id=5f45227d&":
+/*!*******************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Test.vue?vue&type=template&id=5f45227d& ***!
+  \*******************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm._m(0)
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("body", { staticClass: "body-2" }, [
+        _c("div", { staticClass: "section" }, [
+          _c("div", { staticClass: "div-screen-1" }, [
+            _c("div", { staticClass: "div-block-8" }, [
+              _c("h1", { staticClass: "heading" }, [
+                _vm._v("Экспертиза сделки")
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "paragraph exp vopros" }, [
+                _vm._v("Выбрана экономическая концентрация:")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "div-block-9" }, [
+                _c("div", { staticClass: "text-block-2" }, [
+                  _vm._v(
+                    "Реорганизацию хозяйственного субъекта в форме слияния или присоединения"
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "div-block-10" }, [
+                _c("div", { staticClass: "text-block-3" }, [
+                  _vm._v("Ответьте на следующие вопросы")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "columns-2 w-row" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "column-6 w-col w-col-1 w-col-small-1 w-col-tiny-1"
+                    },
+                    [
+                      _c("div", { staticClass: "div-block-14" }, [
+                        _c("img", {
+                          staticClass: "image-3",
+                          attrs: {
+                            src:
+                              "https://uploads-ssl.webflow.com/5d93c99b337fd39ab87ef61a/5d9a604c574a7da7ff2a659e_checked-symbol.png",
+                            alt: ""
+                          }
+                        })
+                      ])
+                    ]
+                  ),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "column-5 w-col w-col-11 w-col-small-11 w-col-tiny-11"
+                    },
+                    [
+                      _c("div", { staticClass: "div-block-13" }, [
+                        _c("div", { staticClass: "text-block-4" }, [
+                          _vm._v(
+                            "Балансовая стоимость активов одного из реорганизуемых хозсубъектов >200 тысяч базовых величин?"
+                          )
+                        ]),
+                        _c("div", { staticClass: "div-block-11" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "button-5 yes w-button",
+                              attrs: { href: "#" }
+                            },
+                            [_vm._v("Да")]
+                          ),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "button-5 yes w-button",
+                              attrs: { href: "#" }
+                            },
+                            [_vm._v("Нет")]
+                          )
+                        ]),
+                        _c("div", { staticClass: "div-block-12" }, [
+                          _c("div", { staticClass: "text-block-5" }, [
+                            _vm._v("Выбран ответ: Да")
+                          ])
+                        ])
+                      ])
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "columns-2 w-row" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "column-6 w-col w-col-1 w-col-small-1 w-col-tiny-1"
+                    },
+                    [
+                      _c("div", { staticClass: "div-block-14" }, [
+                        _c("img", {
+                          staticClass: "image-3",
+                          attrs: {
+                            src:
+                              "https://uploads-ssl.webflow.com/5d93c99b337fd39ab87ef61a/5d9a604c574a7da7ff2a659e_checked-symbol.png",
+                            alt: ""
+                          }
+                        })
+                      ])
+                    ]
+                  ),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "column-5 w-col w-col-11 w-col-small-11 w-col-tiny-11"
+                    },
+                    [
+                      _c("div", { staticClass: "div-block-13" }, [
+                        _c("div", { staticClass: "text-block-4" }, [
+                          _vm._v(
+                            "Реорганизауются лица, у которых >50% голосов, приходящихся на голосующие акции (доли), в совокупности обладают одни и те же лица?"
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "div-block-11" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "button-5 yes w-button",
+                              attrs: { href: "#" }
+                            },
+                            [_vm._v("Да")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "button-5 yes w-button",
+                              attrs: { href: "#" }
+                            },
+                            [_vm._v("Нет")]
+                          )
+                        ]),
+                        _c("div", { staticClass: "div-block-12" }, [
+                          _c("div", { staticClass: "text-block-5" }, [
+                            _vm._v("Выбран ответ: Нет")
+                          ])
+                        ])
+                      ])
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "columns-2 w-row" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "column-6 w-col w-col-1 w-col-small-1 w-col-tiny-1"
+                    },
+                    [
+                      _c("div", { staticClass: "div-block-14" }, [
+                        _c("img", {
+                          staticClass: "image-3",
+                          attrs: {
+                            src:
+                              "https://uploads-ssl.webflow.com/5d93c99b337fd39ab87ef61a/5d9a604c574a7da7ff2a659e_checked-symbol.png",
+                            alt: ""
+                          }
+                        })
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "column-5 w-col w-col-11 w-col-small-11 w-col-tiny-11"
+                    },
+                    [
+                      _c("div", { staticClass: "div-block-13" }, [
+                        _c("div", { staticClass: "text-block-4" }, [
+                          _vm._v(
+                            "Реорганизуются хозяйственное общество и юридическое лицо, которое в силу своего участия в этом хозяйственном обществе либо в соответствии с полномочиями, полученными от других лиц, обладает >50% общего количества голосов, приходящихся на голосующие акции (доли) этого хозяйственного общества?"
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "div-block-11" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "button-5 yes w-button",
+                              attrs: { href: "#" }
+                            },
+                            [_vm._v("Да")]
+                          ),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "button-5 yes w-button",
+                              attrs: { href: "#" }
+                            },
+                            [_vm._v("Нет")]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "div-block-12" }, [
+                          _c("div", { staticClass: "text-block-5" }, [
+                            _vm._v("Выбран ответ: Да")
+                          ])
+                        ])
+                      ])
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "columns-2 w-row" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "column-6 w-col w-col-1 w-col-small-1 w-col-tiny-1"
+                    },
+                    [
+                      _c("div", { staticClass: "div-block-14" }, [
+                        _c("img", {
+                          staticClass: "image-3",
+                          attrs: {
+                            src:
+                              "https://uploads-ssl.webflow.com/5d93c99b337fd39ab87ef61a/5d9a604c574a7da7ff2a659e_checked-symbol.png",
+                            alt: ""
+                          }
+                        })
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "column-5 w-col w-col-11 w-col-small-11 w-col-tiny-11"
+                    },
+                    [
+                      _c("div", { staticClass: "div-block-13 final" }, [
+                        _c("div", { staticClass: "text-block-4" }, [
+                          _vm._v(
+                            "Вам НЕ НУЖНО получать предварительное согласие МАРТ, но необходимо письменно уведомить МАРТ после проведения реорганизации."
+                          )
+                        ]),
+                        _c("div", { staticClass: "div-block-11 final" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "button-5 yes new w-button",
+                              attrs: { href: "#" }
+                            },
+                            [_vm._v("Начать сначала")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "button-5 yes new w-button",
+                              attrs: { href: "/page" }
+                            },
+                            [_vm._v("Новая экспертиза")]
+                          )
+                        ])
+                      ])
+                    ]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "columns-2 w-row" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "column-6 w-col w-col-1 w-col-small-1 w-col-tiny-1"
+                  },
+                  [
+                    _c("div", { staticClass: "div-block-14" }, [
+                      _c("img", {
+                        staticClass: "image-3",
+                        attrs: {
+                          src:
+                            "https://uploads-ssl.webflow.com/5d93c99b337fd39ab87ef61a/5d9a604c574a7da7ff2a659e_checked-symbol.png",
+                          alt: ""
+                        }
+                      })
+                    ])
+                  ]
+                ),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "column-5 w-col w-col-11 w-col-small-11 w-col-tiny-11"
+                  },
+                  [
+                    _c("div", { staticClass: "div-block-13" }, [
+                      _c("div", { staticClass: "text-block-4" }, [
+                        _vm._v(
+                          'Блок с кнопкой как выглядит кнопка, когда пользователь выбрал ответ. Ответ выбран "да"'
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "div-block-11" }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "button-5 yes passive w-button",
+                            attrs: { href: "#" }
+                          },
+                          [_vm._v("Да")]
+                        ),
+                        _c(
+                          "a",
+                          {
+                            staticClass:
+                              "button-5 yes passive noactive w-button",
+                            attrs: { href: "#" }
+                          },
+                          [_vm._v("Нет")]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "div-block-12" }, [
+                        _c("div", { staticClass: "text-block-5" }, [
+                          _vm._v("Выбран ответ: Да")
+                        ])
+                      ])
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "columns-2 w-row" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "column-6 w-col w-col-1 w-col-small-1 w-col-tiny-1"
+                  },
+                  [
+                    _c("div", { staticClass: "div-block-14" }, [
+                      _c("img", {
+                        staticClass: "image-3",
+                        attrs: {
+                          src:
+                            "https://uploads-ssl.webflow.com/5d93c99b337fd39ab87ef61a/5d9a604c574a7da7ff2a659e_checked-symbol.png",
+                          alt: ""
+                        }
+                      })
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "column-5 w-col w-col-11 w-col-small-11 w-col-tiny-11"
+                  },
+                  [
+                    _c("div", { staticClass: "div-block-13" }, [
+                      _c("div", { staticClass: "text-block-4" }, [
+                        _vm._v(
+                          "Кнопки во всех состояниях, но нужно будет проверить"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "div-block-11" }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "button-5 yes vse w-button",
+                            attrs: { href: "#" }
+                          },
+                          [_vm._v("Да")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          {
+                            staticClass: "button-5 yes vse w-button",
+                            attrs: { href: "#" }
+                          },
+                          [_vm._v("Нет")]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "div-block-12" }, [
+                        _c("div", { staticClass: "text-block-5" }, [
+                          _vm._v("Выбран ответ: Да")
+                        ])
+                      ])
+                    ])
+                  ]
+                )
+              ])
+            ])
+          ])
+        ]),
+        _c("div", { staticClass: "section-2" }, [
+          _c("div", { staticClass: "div-block-7" }, [
+            _c("div", { staticClass: "columns w-row" }, [
+              _c("div", { staticClass: "w-col w-col-6" }, [
+                _c("div", [
+                  _c("div", { staticClass: "text-block" }, [
+                    _vm._v("  © Все права защищены")
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "w-col w-col-6" })
+            ])
+          ])
+        ])
+      ])
+    ])
   }
 ]
 render._withStripped = true
@@ -41631,23 +42368,6 @@ var render = function() {
       _c("div", { staticClass: "col-2" }),
       _vm._v(" "),
       _c("div", { staticClass: "content_exp_test col-8" }, [
-        _c("div", { staticClass: "col-12 d-flex header_exp_test " }, [
-          _c("div", { staticClass: "col-4 col-md-2 " }, [
-            _c("a", { attrs: { href: "/" } }, [
-              _c("img", {
-                staticClass: "header_img",
-                attrs: { src: "/img/logo.png", alt: "logo" }
-              })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", {
-            staticClass: "col-4 col-md-4 text-center exp_header_text_us"
-          })
-        ]),
-        _vm._v(" "),
-        _vm._m(0),
-        _vm._v(" "),
         _c("div", { staticClass: "col-12" }, [
           _vm.error
             ? _c("div", { staticClass: "alert alert-danger" }, [
@@ -41738,20 +42458,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-12" }, [
-      _c("div", { staticClass: "text-center my-4" }, [
-        _vm._v(
-          "Помощник для бизнеса по вопросам согласования документов с МАРТ"
-        )
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -42710,6 +43417,23 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
+              _c(
+                "td",
+                {
+                  staticClass: "my_pointer",
+                  attrs: { scope: "col-1" },
+                  on: {
+                    click: function($event) {
+                      return _vm.change_procedure_name(
+                        item.id_main_procedure,
+                        item.name_main_procedure
+                      )
+                    }
+                  }
+                },
+                [_vm._v("\n                    🛠\n                ")]
+              ),
+              _vm._v(" "),
               _c("td", { attrs: { scope: "col-2" } }, [
                 _c(
                   "button",
@@ -42754,43 +43478,84 @@ var render = function() {
         attrs: { align: "center", width: "90%", size: "10", color: "#dddddd" }
       }),
       _vm._v(" "),
-      _c("textarea", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.message,
-            expression: "message"
-          }
-        ],
-        staticClass: "form-control",
-        class: { border_alert: _vm.danger_ans },
-        attrs: {
-          rows: "2",
-          id: "messages",
-          name: "text",
-          placeholder: "Введите название новой процедуры"
-        },
-        domProps: { value: _vm.message },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
+      !_vm.show_textarea
+        ? _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.message,
+                expression: "message"
+              }
+            ],
+            staticClass: "form-control",
+            class: { border_alert: _vm.danger_ans },
+            attrs: {
+              rows: "2",
+              id: "messages",
+              name: "text",
+              placeholder: "Введите название новой процедуры"
+            },
+            domProps: { value: _vm.message },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.message = $event.target.value
+              }
             }
-            _vm.message = $event.target.value
-          }
-        }
-      }),
+          })
+        : _vm._e(),
       _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-primary btn-block procedure_button",
-          attrs: { type: "button" },
-          on: { click: _vm.add_new_line }
-        },
-        [_vm._v("Добавить процедуру")]
-      )
+      !_vm.show_textarea
+        ? _c(
+            "button",
+            {
+              staticClass: "btn btn-primary btn-block procedure_button",
+              attrs: { type: "button" },
+              on: { click: _vm.add_new_line }
+            },
+            [_vm._v("Добавить процедуру")]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.show_textarea
+        ? _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.text_area_message,
+                expression: "text_area_message"
+              }
+            ],
+            staticClass: "form-control",
+            class: { border_alert: _vm.ch_name_danger_ans },
+            attrs: { rows: "2", name: "text" },
+            domProps: { value: _vm.text_area_message },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.text_area_message = $event.target.value
+              }
+            }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.show_textarea
+        ? _c(
+            "button",
+            {
+              staticClass: "btn btn-primary btn-block procedure_button",
+              attrs: { type: "button" },
+              on: { click: _vm.save_change_procedure_name }
+            },
+            [_vm._v("Сохранить")]
+          )
+        : _vm._e()
     ]),
     _vm._v(" "),
     _c("ul", { staticClass: "pagination" }, [
@@ -42821,7 +43586,9 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", { staticClass: "thead-dark" }, [
       _c("tr", [
-        _c("th", { attrs: { scope: "col-8" } }, [_vm._v("Название процедуры")]),
+        _c("th", { attrs: { scope: "col-7" } }, [_vm._v("Название процедуры")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col-1" } }),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col-2" } }),
         _vm._v(" "),
@@ -42875,9 +43642,11 @@ var render = function() {
                       attrs: { type: "button" }
                     },
                     [
-                      _c("router-link", { attrs: { to: { name: "home" } } }, [
-                        _vm._v("На сайт")
-                      ])
+                      _c(
+                        "router-link",
+                        { attrs: { to: { name: "main_home" } } },
+                        [_vm._v("На сайт")]
+                      )
                     ],
                     1
                   )
@@ -43553,7 +44322,7 @@ var render = function() {
                 attrs: { scope: "col-1" },
                 on: {
                   click: function($event) {
-                    return _vm.change_post_name(post.id_post)
+                    return _vm.change_post_name(post.id_post, post.text)
                   }
                 }
               },
@@ -43636,7 +44405,44 @@ var render = function() {
         },
         [_vm._v("Next")]
       )
-    ])
+    ]),
+    _vm._v(" "),
+    _vm.show_textarea
+      ? _c("textarea", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.text_area_message,
+              expression: "text_area_message"
+            }
+          ],
+          staticClass: "form-control",
+          class: { border_alert: _vm.danger_ans },
+          attrs: { rows: "2", id: "messages", name: "text" },
+          domProps: { value: _vm.text_area_message },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.text_area_message = $event.target.value
+            }
+          }
+        })
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.show_textarea
+      ? _c(
+          "button",
+          {
+            staticClass: "btn btn-primary btn-block procedure_button",
+            attrs: { type: "button" },
+            on: { click: _vm.save_change_post_name }
+          },
+          [_vm._v("Сохранить")]
+        )
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
@@ -59828,6 +60634,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Expertise__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./components/Expertise */ "./resources/js/components/Expertise.vue");
 /* harmony import */ var _components_ExpertiseTest__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./components/ExpertiseTest */ "./resources/js/components/ExpertiseTest.vue");
 /* harmony import */ var _components_medical_Admin__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./components/medical/Admin */ "./resources/js/components/medical/Admin.vue");
+/* harmony import */ var _components_MainHome__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./components/MainHome */ "./resources/js/components/MainHome.vue");
+/* harmony import */ var _components_Test__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./components/Test */ "./resources/js/components/Test.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
@@ -59841,7 +60649,6 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
  // import is_admin from "./middleware/log_user";
 
 
-console.log('POST NAMEEE' + _components_Dashboard_vue__WEBPACK_IMPORTED_MODULE_7__["default"].data);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_axios__WEBPACK_IMPORTED_MODULE_2___default.a, axios__WEBPACK_IMPORTED_MODULE_1___default.a);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_4__["default"]);
@@ -59869,6 +60676,8 @@ var postName = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
 
 
 
+
+
  // console.log(is_admin);
 
 axios__WEBPACK_IMPORTED_MODULE_1___default.a.defaults.baseURL = 'http://localhost:/api';
@@ -59877,34 +60686,49 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
   routes: [{
     path: '/',
     name: 'home',
-    component: _components_Home__WEBPACK_IMPORTED_MODULE_9__["default"]
-  }, {
-    path: '/register',
-    name: 'register',
-    component: _components_auth_Register_vue__WEBPACK_IMPORTED_MODULE_10__["default"]
-  }, {
-    path: '/login',
-    name: 'login',
-    component: _components_auth_Login_vue__WEBPACK_IMPORTED_MODULE_11__["default"]
-  }, {
-    path: '/dashboard',
-    name: 'dashboard',
-    component: _components_Dashboard_vue__WEBPACK_IMPORTED_MODULE_7__["default"] // meta: {
-    //     auth: true
-    // }
+    component: _components_Home__WEBPACK_IMPORTED_MODULE_9__["default"],
+    children: [{
+      path: '/',
+      name: 'main_home',
+      component: _components_MainHome__WEBPACK_IMPORTED_MODULE_25__["default"]
+    }, {
+      path: '/register',
+      name: 'register',
+      component: _components_auth_Register_vue__WEBPACK_IMPORTED_MODULE_10__["default"]
+    }, {
+      path: '/login',
+      name: 'login',
+      component: _components_auth_Login_vue__WEBPACK_IMPORTED_MODULE_11__["default"]
+    }, {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: _components_Dashboard_vue__WEBPACK_IMPORTED_MODULE_7__["default"] // meta: {
+      //     auth: true
+      // }
 
-  }, {
-    path: '/accept/:token',
-    name: 'accept',
-    component: _components_AcceptToken_vue__WEBPACK_IMPORTED_MODULE_12__["default"]
-  }, {
-    path: '/forget',
-    name: 'forget',
-    component: _components_auth_ForgetPassword_vue__WEBPACK_IMPORTED_MODULE_13__["default"]
-  }, {
-    path: '/renew_password/:id/:token',
-    name: 'renew_pass',
-    component: _components_auth_RenewPassword_vue__WEBPACK_IMPORTED_MODULE_14__["default"]
+    }, {
+      path: '/accept/:token',
+      name: 'accept',
+      component: _components_AcceptToken_vue__WEBPACK_IMPORTED_MODULE_12__["default"]
+    }, {
+      path: '/forget',
+      name: 'forget',
+      component: _components_auth_ForgetPassword_vue__WEBPACK_IMPORTED_MODULE_13__["default"]
+    }, {
+      path: '/renew_password/:id/:token',
+      name: 'renew_pass',
+      component: _components_auth_RenewPassword_vue__WEBPACK_IMPORTED_MODULE_14__["default"]
+    }, {
+      path: '/expertise',
+      name: 'expertise',
+      component: _components_Expertise__WEBPACK_IMPORTED_MODULE_22__["default"],
+      props: true
+    }, {
+      path: '/expertise_test',
+      name: 'expertise_test',
+      component: _components_ExpertiseTest__WEBPACK_IMPORTED_MODULE_23__["default"],
+      props: true
+    }]
   }, {
     path: '/admin',
     name: 'admin',
@@ -59943,28 +60767,11 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
           path: '/'
         });
       }
-    } // let result_req = is_admin();
-    // console.log('resultADMIN ' + result_req);
-    // if(result_req=='1')
-    // {
-    //     return next({
-    //     });
-    // }
-    // return next({
-    //     path: '/home'
-    // })
-    // }
-
+    }
   }, {
-    path: '/expertise',
-    name: 'expertise',
-    component: _components_Expertise__WEBPACK_IMPORTED_MODULE_22__["default"],
-    props: true
-  }, {
-    path: '/expertise_test',
-    name: 'expertise_test',
-    component: _components_ExpertiseTest__WEBPACK_IMPORTED_MODULE_23__["default"],
-    props: true
+    path: '/test',
+    name: 'test',
+    component: _components_Test__WEBPACK_IMPORTED_MODULE_26__["default"]
   }]
 });
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.router = router; //websanova/vue-auth
@@ -60524,6 +61331,144 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Home_vue_vue_type_template_id_f2b6376c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Home_vue_vue_type_template_id_f2b6376c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/MainHome.vue":
+/*!**********************************************!*\
+  !*** ./resources/js/components/MainHome.vue ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _MainHome_vue_vue_type_template_id_cc3db8ba___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MainHome.vue?vue&type=template&id=cc3db8ba& */ "./resources/js/components/MainHome.vue?vue&type=template&id=cc3db8ba&");
+/* harmony import */ var _MainHome_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MainHome.vue?vue&type=script&lang=js& */ "./resources/js/components/MainHome.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _MainHome_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _MainHome_vue_vue_type_template_id_cc3db8ba___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _MainHome_vue_vue_type_template_id_cc3db8ba___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/MainHome.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/MainHome.vue?vue&type=script&lang=js&":
+/*!***********************************************************************!*\
+  !*** ./resources/js/components/MainHome.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MainHome_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./MainHome.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MainHome.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MainHome_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/MainHome.vue?vue&type=template&id=cc3db8ba&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/MainHome.vue?vue&type=template&id=cc3db8ba& ***!
+  \*****************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MainHome_vue_vue_type_template_id_cc3db8ba___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./MainHome.vue?vue&type=template&id=cc3db8ba& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MainHome.vue?vue&type=template&id=cc3db8ba&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MainHome_vue_vue_type_template_id_cc3db8ba___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MainHome_vue_vue_type_template_id_cc3db8ba___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Test.vue":
+/*!******************************************!*\
+  !*** ./resources/js/components/Test.vue ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Test_vue_vue_type_template_id_5f45227d___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Test.vue?vue&type=template&id=5f45227d& */ "./resources/js/components/Test.vue?vue&type=template&id=5f45227d&");
+/* harmony import */ var _Test_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Test.vue?vue&type=script&lang=js& */ "./resources/js/components/Test.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Test_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Test_vue_vue_type_template_id_5f45227d___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Test_vue_vue_type_template_id_5f45227d___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Test.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Test.vue?vue&type=script&lang=js&":
+/*!*******************************************************************!*\
+  !*** ./resources/js/components/Test.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Test_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Test.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Test.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Test_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Test.vue?vue&type=template&id=5f45227d&":
+/*!*************************************************************************!*\
+  !*** ./resources/js/components/Test.vue?vue&type=template&id=5f45227d& ***!
+  \*************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Test_vue_vue_type_template_id_5f45227d___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Test.vue?vue&type=template&id=5f45227d& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Test.vue?vue&type=template&id=5f45227d&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Test_vue_vue_type_template_id_5f45227d___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Test_vue_vue_type_template_id_5f45227d___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

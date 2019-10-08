@@ -5,7 +5,8 @@
             <table class="table">
                 <thead class="thead-dark">
                 <tr>
-                    <th scope="col-8">Название процедуры</th>
+                    <th scope="col-7">Название процедуры</th>
+                    <th scope="col-1"></th>
                     <th scope="col-2"></th>
                     <th scope="col-2"></th>
                 </tr>
@@ -15,15 +16,21 @@
                     <td scope="col-8">
                         {{ item.name_main_procedure }}
                     </td>
+                    <td scope="col-1" v-on:click="change_procedure_name(item.id_main_procedure,item.name_main_procedure)" class="my_pointer">
+                        &#128736
+                    </td>
                     <td scope="col-2"><button type="button" class="btn btn-secondary" v-on:click="go_to_post(item.id_main_procedure)">Редактировать</button></td>
                     <td scope="col-2"><button type="button" class="btn btn-danger" v-on:click="delete_procedure(number,item.id_main_procedure)">Удалить</button></td>
                 </tr>
                 </tbody>
             </table>
             <hr align="center" width="90%" size="10" color="#dddddd" />
-            <textarea class="form-control" rows="2" id="messages" name="text" v-bind:class="{border_alert: danger_ans}" v-model="message" placeholder="Введите название новой процедуры"> </textarea>
-            <button type="button" class="btn btn-primary btn-block procedure_button" v-on:click="add_new_line">Добавить процедуру</button>
 
+            <textarea class="form-control" rows="2" id="messages" name="text" v-if="!show_textarea" v-bind:class="{border_alert: danger_ans}" v-model="message" placeholder="Введите название новой процедуры"> </textarea>
+            <button type="button" class="btn btn-primary btn-block procedure_button" v-if="!show_textarea" v-on:click="add_new_line">Добавить процедуру</button>
+
+            <textarea class="form-control" rows="2"  name="text" v-model="text_area_message" v-if="show_textarea" v-bind:class="{border_alert: ch_name_danger_ans}" > </textarea>
+            <button type="button" class="btn btn-primary btn-block procedure_button" v-on:click="save_change_procedure_name" v-if="show_textarea">Сохранить</button>
         </div>
 
         <ul class="pagination">
@@ -53,6 +60,10 @@
                 posts_length:0,
 
                 count_posts_arr:[],
+                text_area_message:'',
+                change_procedure_id_post:'',
+                show_textarea:false,
+                ch_name_danger_ans:false
             }
         },
         mounted() {
@@ -63,6 +74,35 @@
         },
         methods: {
 
+            save_change_procedure_name()
+            {
+                this.ch_name_danger_ans = false
+                if(this.text_area_message==''||this.text_area_message==' ')
+                {
+                    this.ch_name_danger_ans = true;
+                }
+                else {
+                    for (let i = 0; i < this.inputs.length; i++) {
+                        if (this.inputs[i]['id_main_procedure'] == this.change_procedure_id_post) {
+                            this.inputs[i]['name_main_procedure'] = this.text_area_message;
+                            this.show_textarea = false;
+                            axios
+                                .post('/update_procedure_name', {
+                                    id_post:this.$store.state.post_id,
+                                    id_procedure: this.change_procedure_id_post,
+                                    name_procedure: this.text_area_message
+                                });
+                        }
+                    }
+                }
+            },
+
+            change_procedure_name (id_procedure, name_procedure)
+            {
+                this.show_textarea = true;
+                this.text_area_message = name_procedure;
+                this.change_procedure_id_post=id_procedure;
+            },
 
             delete_procedure(numb_in_arr, numb)
             {

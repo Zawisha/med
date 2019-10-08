@@ -1,36 +1,27 @@
 <template>
 
-    <div class="container">
 
-        <div class="row" >
-            <div class="col-12 streak">
-            </div>
-        </div>
-        <div class="row" >
-            <div class="col-2"></div>
-            <div class="content_exp_test col-12">
-                <div class="col-12 d-flex header_exp_test ">
-                    <div class="col-4 col-md-2 "> <a href="/" ><img :src="'/img/logo.png'"  class="header_img" alt="logo" ></a></div>
-                    <div class="col-4 col-md-4 text-center exp_header_text_us">
-                        Экспертиза
-                    </div>
-
-                    <div v-if="$auth.check()" class="col-4 like_button_top"><a class="text-center like_button" href="#" @click.prevent="$auth.logout()">Выйти</a></div>
-                    <div v-else class="col-4 like_button_top" ><router-link class=" text-center like_button" :to="{ name: 'login' }">Вход в сервис</router-link></div>
+    <div>
+        <body class="body-2">
+            <div class="section">
+                 <div class="div-screen-1">
+                <div class="div-block-8">
+            <h1 class="heading">Экспертиза сделки</h1>
+            <p class="paragraph exp">{{ post_name }}</p>
+            <a class="button-5 w-button" v-for="(post, number) in posts" v-on:click="go_to_expertise_test(post.id_procedure,post.text)">{{ post.text }}</a>
                 </div>
-                    <div class="col-12">
-                        <div class="text-center my-4">{{ post_name }}</div>
-                        <div class="list-counter-square " style="max-width: 1200px; margin: 0 auto;" >
-                            <div class="front_expertise_list" v-for="(post, number) in posts" v-on:click="go_to_expertise_test(post.id_procedure,post.text)">{{ post.text }}</div>
-                        </div>
-                    </div>
-            </div>
-            <div class="col-2">
-            </div>
+             </div>
         </div>
+    <div class="section-2">
+        <div class="div-block-7">
+            <div class="columns w-row">
+                <div class="w-col w-col-6"><div><div class="text-block">  © Все права защищены</div>
+                </div>
+                </div>
+                <div class="w-col w-col-6">
 
-<!--        <button type="button" class="btn btn-primary btn-block" v-on:click="test">test</button>-->
-
+        </div></div></div></div>
+        </body>
     </div>
 
 </template>

@@ -1,49 +1,72 @@
 <template>
-    <div class="container">
-        <div class="row" >
-            <div class="col-12 streak">
-            </div>
-        </div>
-        <div class="row" >
-        <div class="col-2"></div>
-             <div class="content_exp_test col-8">
 
 
-            <div class="col-12 d-flex header_exp_test ">
-               <div class="col-4 col-md-2 "> <a href="/" ><img :src="'/img/logo.png'"  class="header_img" alt="logo" ></a></div>
-                <div class="col-4 col-md-6 text-center exp_header_text" v-on:click="go_to_expertise()">Экспертиза</div>
-                <div v-if="$auth.check()" class="col-4 col-md-6 text-center exp_header_text_us"><a href="#" @click.prevent="$auth.logout()">Logout</a></div>
-                <div v-else class="col-4 col-md-6 text-center exp_header_text_us"><router-link :to="{ name: 'login' }">Вход в сервис</router-link></div>
-            </div>
+    <div>
+        <body class="body-2">
+        <div class="section">
+            <div class="div-screen-1"><div class="div-block-8"><h1 class="heading">Экспертиза сделки</h1>
+                <p class="paragraph exp vopros">Выбрана экономическая концентрация:</p>
+                <div class="div-block-9"><div class="text-block-2">{{ test_front_text_procedure }}</div></div>
+                <div class="div-block-10"><div class="text-block-3">Ответьте на следующие вопросы</div>
 
-            <div class="col-12 front_text_procedure">
-                <h1 class="h4">{{ test_front_text_procedure }}
-            </h1></div>
-
-            <div class="col-12">
-                <div class="col-12 d-flex">
-               <div class="front_answers_little col-8">Ответьте на следующие вопросы </div>
-                <div class="col-4" v-on:click="refresh_expertise()"><button type="button" class="btn btn-secondary ">Пройти экспертизу заново</button></div>
-                </div>
-                    <div v-for="(post, number) in blocks" class="col-12 front_content_block">
-                        <div class="col-12">{{ post.question_text }}</div>
-                        <div class="col-12 d-flex">
-                        <div v-for="(question, numb) in post.answer_text" class="front_button_right">
-                            <div  class="col-12 myButton" v-bind:id="number + 'q' + numb" v-if="post.answer_link_id[numb] !==0" v-on:click="front_render_add_block(blocks,post.answer_link_id[numb],number,number + 'q' + numb)"
-                            >{{ question }}</div>
+                    <div class="columns-2 w-row" v-for="(post, number) in blocks" >
+                        <div class="column-6 w-col w-col-1 w-col-small-1 w-col-tiny-1">
+                        <div class="div-block-14" v-if="number != (blocks.length-1)">
+             <img src="https://uploads-ssl.webflow.com/5d93c99b337fd39ab87ef61a/5d9a604c574a7da7ff2a659e_checked-symbol.png" alt="" class="image-3"/>
                         </div>
+                    </div>
+                        <div class="column-5 w-col w-col-11 w-col-small-11 w-col-tiny-11"><div class="div-block-13">
+                        <div class="text-block-4">{{ post.question_text }}</div>
+                        <div class="div-block-11"  >
+                        <div  class="button-5 yes exp_but_5" v-for="(question, numb) in post.answer_text"
+                            v-bind:id="number + 'q' + numb" v-if="post.answer_link_id[numb] !==0" v-on:click="front_render_add_block(blocks,post.answer_link_id[numb],number,number + 'q' + numb)"
+                        >{{ question }}</div>
+                    </div>
+                            <div class="div-block-11 final"
+                                v-if="(post.answer_text ==((''))||(
+                        post.answer_link_id.every(isNullElem)
+                        )) ">
+                                <div  class="button-5 yes new w-button" v-on:click="refresh_expertise()" >Начать сначала</div>
+                                <router-link  :to="{ name: 'expertise' }"><div class="button-5 yes new w-button">Новая экспертиза</div></router-link>
+                            </div>
+<div></div>
+
+                        <div class="div-block-12" v-if="number != (blocks.length-1)">
+                        <div class="text-block-5"  >Выбран ответ: {{ answer_choose_arr[number]}}</div>
                         </div>
-                        <div class="col-12 bottom_streak"></div>
+
+                        </div></div>
                     </div>
 
-             </div>
-<!--        <button type="button" class="btn btn-primary btn-block" v-on:click="test">test</button>-->
 
-            </div>
-        <div class="col-2">
-        </div>
-        </div>
+<!--                    <div class="columns-2 w-row"><div class="column-6 w-col w-col-1 w-col-small-1 w-col-tiny-1"><div class="div-block-14">-->
+<!--                        <img src="https://uploads-ssl.webflow.com/5d93c99b337fd39ab87ef61a/5d9a604c574a7da7ff2a659e_checked-symbol.png" alt="" class="image-3"/></div></div>-->
+<!--                        <div class="column-5 w-col w-col-11 w-col-small-11 w-col-tiny-11"><div class="div-block-13 final">-->
+<!--                            <div class="text-block-4">Вам НЕ НУЖНО получать предварительное согласие МАРТ, но необходимо письменно уведомить МАРТ после проведения реорганизации.</div><div class="div-block-11 final">-->
+<!--                            <a href="#" class="button-5 yes new w-button">Начать сначала</a>-->
+<!--                            <a href="/page" class="button-5 yes new w-button">Новая экспертиза</a></div></div></div></div>-->
+
+                </div>
+
+<!--                <div class="columns-2 w-row"><div class="column-6 w-col w-col-1 w-col-small-1 w-col-tiny-1"><div class="div-block-14">-->
+<!--                    <img src="https://uploads-ssl.webflow.com/5d93c99b337fd39ab87ef61a/5d9a604c574a7da7ff2a659e_checked-symbol.png" alt="" class="image-3"/></div></div><div class="column-5 w-col w-col-11 w-col-small-11 w-col-tiny-11"><div class="div-block-13">-->
+<!--                    <div class="text-block-4">Блок с кнопкой как выглядит кнопка, когда пользователь выбрал ответ. Ответ выбран &quot;да&quot;</div>-->
+<!--                    <div class="div-block-11"><a href="#" class="button-5 yes passive w-button">Да</a><a href="#" class="button-5 yes passive noactive w-button">Нет</a></div>-->
+<!--                    <div class="div-block-12"><div class="text-block-5">Выбран ответ: Да</div></div></div></div>-->
+
+<!--                -->
+<!--                </div>-->
+
+
+                </div></div>
+
+        </div><div class="section-2"><div class="div-block-7">
+            <div class="columns w-row"><div class="w-col w-col-6"><div>
+                <div class="text-block">  © Все права защищены</div></div></div>
+                <div class="w-col w-col-6"></div></div></div></div>
+        </body>
     </div>
+
 
 </template>
 
@@ -59,6 +82,7 @@
 //current number of id block
                 id_procedure:0,
                 test_front_text_procedure:this.front_text_procedure,
+                answer_choose_arr:[]
             }
         },
         props:['front_procedure_id', 'front_text_procedure'],
@@ -67,12 +91,10 @@
         },
         methods: {
 
-            test()
+            isNullElem(number)
             {
-               console.log(this.blocks);
+                return number == 0;
             },
-
-            //
 
             go_to_expertise()
             {
@@ -107,7 +129,9 @@
 
             front_render_add_block(inp, id_block, number_in_array, number_clicked_button)
             {
+                // this.answer_choose_arr[number_in_array]
                 let elem = document.getElementById(number_clicked_button);
+                this.answer_choose_arr[number_in_array]=elem.innerHTML;
 
 // console.log(number_clicked_button);
                 let a = elem.id.split('q')[0];
