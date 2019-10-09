@@ -16,7 +16,8 @@
 
             </div></div>
                 <div class="column-4 w-col w-col-6 w-col-small-small-stack"><div class="div-block-helper"><h3 class="heading-2">Помощник подготовки документов</h3>
-                    <div class="text-1">Подготовка всех необходимых документов для подачи в МАРТ</div><a href="#" class="button-2 w-button">Подготовить документы</a></div></div></div>
+                    <div class="text-1">Подготовка всех необходимых документов для подачи в МАРТ</div>
+                    <router-link class="go_to_exp_text_color" :to="{ name: 'doc' }"><a  class="button-2 w-button">Подготовить документы</a></router-link></div></div></div>
         </div>
     </div>
 

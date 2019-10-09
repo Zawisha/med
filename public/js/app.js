@@ -3357,6 +3357,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {};
@@ -3771,6 +3772,269 @@ __webpack_require__.r(__webpack_exports__);
           _this.error_6 = true;
         });
       }
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/Document.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/document/Document.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      //главный массив постов
+      posts: [],
+      post_name: ''
+    };
+  },
+  mounted: function mounted() {},
+  methods: {
+    test: function test() {
+      axios.post('/save_first_text', {});
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/GetDocument.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/document/GetDocument.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      //главный массив постов
+      posts: [],
+      post_name: ''
+    };
+  },
+  mounted: function mounted() {},
+  methods: {
+    get_file: function get_file() {
+      // var fileURL = window.URL.createObjectURL(new Blob(['text/Expertise']));
+      var fileLink = document.createElement('a'); // fileLink.href = fileURL;
+
+      fileLink.href = 'text/Expertise.txt';
+      fileLink.setAttribute('download', 'Expertise.txt');
+      document.body.appendChild(fileLink);
+      fileLink.click();
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/PrepareDocument.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/document/PrepareDocument.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      rezident: 0,
+      status: 0,
+      polnoe_nazvanie: '',
+      firmennoe_naimenovanie: '',
+      FIO: '',
+      mesto_nahozdenia: '',
+      mesto_zitelstva: '',
+      pochtovyi_adres: '',
+      razmer_ust_fonda: '',
+      nomer_rasch_sheta: '',
+      naimenovanie_banka: '',
+      BIC: '',
+      balansov_stoim_aktivov_inostr: '',
+      vidy_tovarov: ''
+    };
+  },
+  mounted: function mounted() {},
+  methods: {
+    save: function save() {
+      axios.post('/save_first_text', {
+        rezident: this.rezident,
+        status: this.status,
+        polnoe_nazvanie: this.polnoe_nazvanie,
+        firmennoe_naimenovanie: this.firmennoe_naimenovanie,
+        FIO: this.FIO,
+        mesto_nahozdenia: this.mesto_nahozdenia,
+        mesto_zitelstva: this.mesto_zitelstva,
+        pochtovyi_adres: this.pochtovyi_adres,
+        razmer_ust_fonda: this.razmer_ust_fonda,
+        nomer_rasch_sheta: this.nomer_rasch_sheta,
+        naimenovanie_banka: this.naimenovanie_banka,
+        BIC: this.BIC,
+        balansov_stoim_aktivov_inostr: this.balansov_stoim_aktivov_inostr,
+        vidy_tovarov: this.vidy_tovarov
+      }).then(Vue.router.push({
+        name: 'get_doc'
+      }));
     }
   }
 });
@@ -41720,7 +41984,41 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _vm._m(2)
+        _c(
+          "div",
+          { staticClass: "column-4 w-col w-col-6 w-col-small-small-stack" },
+          [
+            _c(
+              "div",
+              { staticClass: "div-block-helper" },
+              [
+                _c("h3", { staticClass: "heading-2" }, [
+                  _vm._v("Помощник подготовки документов")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "text-1" }, [
+                  _vm._v(
+                    "Подготовка всех необходимых документов для подачи в МАРТ"
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "router-link",
+                  {
+                    staticClass: "go_to_exp_text_color",
+                    attrs: { to: { name: "doc" } }
+                  },
+                  [
+                    _c("a", { staticClass: "button-2 w-button" }, [
+                      _vm._v("Подготовить документы")
+                    ])
+                  ]
+                )
+              ],
+              1
+            )
+          ]
+        )
       ])
     ])
   ])
@@ -41774,29 +42072,6 @@ var staticRenderFns = [
       _c("br"),
       _vm._v("сделки")
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "column-4 w-col w-col-6 w-col-small-small-stack" },
-      [
-        _c("div", { staticClass: "div-block-helper" }, [
-          _c("h3", { staticClass: "heading-2" }, [
-            _vm._v("Помощник подготовки документов")
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "text-1" }, [
-            _vm._v("Подготовка всех необходимых документов для подачи в МАРТ")
-          ]),
-          _c("a", { staticClass: "button-2 w-button", attrs: { href: "#" } }, [
-            _vm._v("Подготовить документы")
-          ])
-        ])
-      ]
-    )
   }
 ]
 render._withStripped = true
@@ -42765,6 +43040,924 @@ var render = function() {
   ])
 }
 var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/Document.vue?vue&type=template&id=0e5e3d18&":
+/*!********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/document/Document.vue?vue&type=template&id=0e5e3d18& ***!
+  \********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "section" }, [
+      _c("div", { staticClass: "div-screen-1" }, [
+        _c(
+          "div",
+          { staticClass: "div-block-8" },
+          [
+            _c("h1", { staticClass: "heading" }, [
+              _vm._v("Подготовка документов для подачи в МАРТ")
+            ]),
+            _vm._v(" "),
+            _c("p", { staticClass: "paragraph exp" }, [
+              _vm._v("Какой документ вы хотите составить?")
+            ]),
+            _vm._v(" "),
+            _c("router-link", { attrs: { to: { name: "prep_doc" } } }, [
+              _c("div", { staticClass: "button-5 post" }, [
+                _c("a", { staticClass: "link-post w-inline-block" }, [
+                  _c("div", { staticClass: "text-block-7" }, [
+                    _vm._v("Постановление МАРТ от 10.08.2018 №62 - уведомление")
+                  ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass: "link-block w-inline-block",
+                    attrs: {
+                      href: "https://yadi.sk/i/EqBg0wf5HVheDQ",
+                      target: "_blank"
+                    }
+                  },
+                  [
+                    _c("img", {
+                      attrs: {
+                        src:
+                          "https://uploads-ssl.webflow.com/5d93c99b337fd39ab87ef61a/5d9d0a74b01a536db15dac8c_document.svg",
+                        width: "32",
+                        alt: ""
+                      }
+                    })
+                  ]
+                )
+              ])
+            ])
+          ],
+          1
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _vm._m(0)
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "section-2" }, [
+      _c("div", { staticClass: "div-block-7" }, [
+        _c("div", { staticClass: "columns w-row" }, [
+          _c("div", { staticClass: "w-col w-col-6" }, [
+            _c("div", [
+              _c("div", { staticClass: "text-block" }, [
+                _vm._v("  © Все права защищены")
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "w-col w-col-6" })
+        ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/GetDocument.vue?vue&type=template&id=5bdf59c8&":
+/*!***********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/document/GetDocument.vue?vue&type=template&id=5bdf59c8& ***!
+  \***********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "container w-container" }, [
+      _c("div", [_vm._v("Ваш документ готов.")]),
+      _vm._v(" "),
+      _c("div", [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary procedure_button",
+            attrs: { type: "button" },
+            on: { click: _vm.get_file }
+          },
+          [_vm._v("Скачать документ")]
+        )
+      ]),
+      _vm._v(" "),
+      _vm._m(0)
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "section-2" }, [
+      _c("div", { staticClass: "div-block-7" }, [
+        _c("div", { staticClass: "columns w-row" }, [
+          _c("div", { staticClass: "w-col w-col-6" }, [
+            _c("div", [
+              _c("div", { staticClass: "text-block" }, [
+                _vm._v("  © Все права защищены")
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "w-col w-col-6" })
+        ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/PrepareDocument.vue?vue&type=template&id=c4dfa30e&":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/document/PrepareDocument.vue?vue&type=template&id=c4dfa30e& ***!
+  \***************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "section" }, [
+      _c("div", { staticClass: "div-screen-1" }, [
+        _c("div", { staticClass: "div-block-8" }, [
+          _c("h1", { staticClass: "heading" }, [
+            _vm._v("Подготовка документов")
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "paragraph exp vopros" }, [
+            _vm._v("Создание заявления для подачи в МАРТ:")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "div-block-10" }, [
+            _c("div", { staticClass: "text-block-3" }, [
+              _vm._v("Заполните следующие поля и получите готовый документ:")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "w-form" }, [
+              _c(
+                "form",
+                {
+                  attrs: {
+                    id: "wf-form-Form-Doc",
+                    name: "wf-form-Form-Doc",
+                    "data-name": "Form Doc"
+                  },
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.save($event)
+                    }
+                  }
+                },
+                [
+                  _c("label", { staticClass: "field-label" }, [
+                    _vm._v("Выберите принадлежность субьекта")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "div-block-15" }, [
+                    _c("label", { staticClass: "radio-button-field w-radio" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.rezident,
+                            expression: "rezident"
+                          }
+                        ],
+                        staticClass: "w-form-formradioinput w-radio-input",
+                        attrs: {
+                          type: "radio",
+                          "data-name": "Radio1",
+                          name: "Radio1",
+                          value: "Резидент Беларуси"
+                        },
+                        domProps: {
+                          checked: _vm._q(_vm.rezident, "Резидент Беларуси")
+                        },
+                        on: {
+                          change: function($event) {
+                            _vm.rezident = "Резидент Беларуси"
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "span",
+                        {
+                          staticClass: "radio-button-label w-form-label",
+                          attrs: { for: "node-2" }
+                        },
+                        [_vm._v("Резидент Беларуси")]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("label", { staticClass: "w-radio" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.rezident,
+                            expression: "rezident"
+                          }
+                        ],
+                        staticClass: "w-form-formradioinput w-radio-input",
+                        attrs: {
+                          type: "radio",
+                          "data-name": "Radio1",
+                          name: "Radio1",
+                          value: "Нерезидент Беларуси"
+                        },
+                        domProps: {
+                          checked: _vm._q(_vm.rezident, "Нерезидент Беларуси")
+                        },
+                        on: {
+                          change: function($event) {
+                            _vm.rezident = "Нерезидент Беларуси"
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "span",
+                        {
+                          staticClass: "radio-button-label-2 w-form-label",
+                          attrs: { for: "node" }
+                        },
+                        [_vm._v("Нерезидент Беларуси")]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("label", { staticClass: "field-label" }, [
+                    _vm._v("Статус субъекта")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "div-block-15" }, [
+                    _c("label", { staticClass: "radio-button-field w-radio" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.status,
+                            expression: "status"
+                          }
+                        ],
+                        staticClass: "w-form-formradioinput w-radio-input",
+                        attrs: {
+                          type: "radio",
+                          "data-name": "Radio2",
+                          id: "node-2",
+                          name: "Radio2",
+                          value: "Юридическое лицо"
+                        },
+                        domProps: {
+                          checked: _vm._q(_vm.status, "Юридическое лицо")
+                        },
+                        on: {
+                          change: function($event) {
+                            _vm.status = "Юридическое лицо"
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "span",
+                        {
+                          staticClass: "radio-button-label w-form-label",
+                          attrs: { for: "node-3" }
+                        },
+                        [_vm._v("Юридическое лицо")]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("label", { staticClass: "radio-button-field w-radio" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.status,
+                            expression: "status"
+                          }
+                        ],
+                        staticClass: "w-form-formradioinput w-radio-input",
+                        attrs: {
+                          type: "radio",
+                          "data-name": "Radio2",
+                          id: "node",
+                          name: "Radio2",
+                          value: "Предприниматель"
+                        },
+                        domProps: {
+                          checked: _vm._q(_vm.status, "Предприниматель")
+                        },
+                        on: {
+                          change: function($event) {
+                            _vm.status = "Предприниматель"
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "span",
+                        {
+                          staticClass: "radio-button-label-2 w-form-label",
+                          attrs: { for: "node-3" }
+                        },
+                        [_vm._v("Предприниматель")]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("label", { staticClass: "w-radio" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.status,
+                            expression: "status"
+                          }
+                        ],
+                        staticClass: "w-form-formradioinput w-radio-input",
+                        attrs: {
+                          type: "radio",
+                          "data-name": "Radio2",
+                          id: "node-3",
+                          name: "Radio2",
+                          value: "Физическое лицо"
+                        },
+                        domProps: {
+                          checked: _vm._q(_vm.status, "Физическое лицо")
+                        },
+                        on: {
+                          change: function($event) {
+                            _vm.status = "Физическое лицо"
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "span",
+                        {
+                          staticClass: "radio-button-label-2 w-form-label",
+                          attrs: { for: "node-3" }
+                        },
+                        [_vm._v("Физическое лицо")]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "field-label _1", attrs: { for: "name" } },
+                    [
+                      _vm._v(
+                        "Введите полное название организационно-правовой формы юридического лица"
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.polnoe_nazvanie,
+                        expression: "polnoe_nazvanie"
+                      }
+                    ],
+                    staticClass: "textarea w-input",
+                    attrs: {
+                      placeholder: 'ООО "Конфетка"',
+                      maxlength: "5000",
+                      id: "field",
+                      name: "field"
+                    },
+                    domProps: { value: _vm.polnoe_nazvanie },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.polnoe_nazvanie = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "field-label _1", attrs: { for: "name-2" } },
+                    [
+                      _vm._v(
+                        "Фирменное наименование / написанное кириллицей фирменное наименование"
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.firmennoe_naimenovanie,
+                        expression: "firmennoe_naimenovanie"
+                      }
+                    ],
+                    staticClass: "textarea w-input",
+                    attrs: {
+                      placeholder: "Конфетка",
+                      maxlength: "5000",
+                      id: "field-2",
+                      name: "field-2",
+                      "data-name": "Field 2"
+                    },
+                    domProps: { value: _vm.firmennoe_naimenovanie },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.firmennoe_naimenovanie = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "field-label _1", attrs: { for: "name-2" } },
+                    [
+                      _vm._v(
+                        "Фамилия, имя, отчество индивидуального предпринимателя"
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.FIO,
+                        expression: "FIO"
+                      }
+                    ],
+                    staticClass: "textarea w-input",
+                    attrs: {
+                      placeholder: "Иванова Ольга Николаева",
+                      maxlength: "5000",
+                      id: "field-3",
+                      name: "field-3",
+                      "data-name": "Field 3"
+                    },
+                    domProps: { value: _vm.FIO },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.FIO = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "field-label _1", attrs: { for: "name-4" } },
+                    [_vm._v("Место нахождения юридического лица")]
+                  ),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.mesto_nahozdenia,
+                        expression: "mesto_nahozdenia"
+                      }
+                    ],
+                    staticClass: "textarea w-input",
+                    attrs: {
+                      placeholder:
+                        "Республика Беларусь, г. Минск, ул. Гоголя 14, оф.15",
+                      maxlength: "5000",
+                      id: "field-4",
+                      name: "field-4",
+                      "data-name": "Field 4"
+                    },
+                    domProps: { value: _vm.mesto_nahozdenia },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.mesto_nahozdenia = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "field-label _1", attrs: { for: "name-4" } },
+                    [
+                      _vm._v(
+                        "Место жительства/пребывания индивидуального предпринимателя"
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.mesto_zitelstva,
+                        expression: "mesto_zitelstva"
+                      }
+                    ],
+                    staticClass: "textarea w-input",
+                    attrs: {
+                      placeholder: 'ООО "Конфетка"',
+                      maxlength: "5000",
+                      id: "field-12",
+                      name: "field-12",
+                      "data-name": "Field 12"
+                    },
+                    domProps: { value: _vm.mesto_zitelstva },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.mesto_zitelstva = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "field-label _1", attrs: { for: "name-4" } },
+                    [_vm._v("Почтовый адрес")]
+                  ),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.pochtovyi_adres,
+                        expression: "pochtovyi_adres"
+                      }
+                    ],
+                    staticClass: "textarea w-input",
+                    attrs: {
+                      "data-name": "Field 11",
+                      maxlength: "5000",
+                      id: "field-11",
+                      name: "field-11"
+                    },
+                    domProps: { value: _vm.pochtovyi_adres },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.pochtovyi_adres = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "field-label _1", attrs: { for: "name-4" } },
+                    [_vm._v("Размер уставного фонда юридического лица")]
+                  ),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.razmer_ust_fonda,
+                        expression: "razmer_ust_fonda"
+                      }
+                    ],
+                    staticClass: "textarea w-input",
+                    attrs: {
+                      "data-name": "Field 10",
+                      maxlength: "5000",
+                      id: "field-10",
+                      name: "field-10"
+                    },
+                    domProps: { value: _vm.razmer_ust_fonda },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.razmer_ust_fonda = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "field-label _1", attrs: { for: "name-4" } },
+                    [_vm._v("Номер расчётного счёта ")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.nomer_rasch_sheta,
+                        expression: "nomer_rasch_sheta"
+                      }
+                    ],
+                    staticClass: "w-input",
+                    attrs: {
+                      type: "text",
+                      maxlength: "256",
+                      name: "name-3",
+                      "data-name": "Name 3",
+                      id: "name-3"
+                    },
+                    domProps: { value: _vm.nomer_rasch_sheta },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.nomer_rasch_sheta = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "field-label _1", attrs: { for: "name-4" } },
+                    [_vm._v("Наименование банка ")]
+                  ),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.naimenovanie_banka,
+                        expression: "naimenovanie_banka"
+                      }
+                    ],
+                    staticClass: "textarea w-input",
+                    attrs: {
+                      "data-name": "Field 9",
+                      maxlength: "5000",
+                      id: "field-9",
+                      name: "field-9"
+                    },
+                    domProps: { value: _vm.naimenovanie_banka },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.naimenovanie_banka = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "field-label _1", attrs: { for: "name-4" } },
+                    [_vm._v("BIC-код банка")]
+                  ),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.BIC,
+                        expression: "BIC"
+                      }
+                    ],
+                    staticClass: "textarea w-input",
+                    attrs: {
+                      "data-name": "Field 8",
+                      maxlength: "5000",
+                      id: "field-8",
+                      name: "field-8"
+                    },
+                    domProps: { value: _vm.BIC },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.BIC = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "field-label _1", attrs: { for: "name-4" } },
+                    [
+                      _vm._v(
+                        "Балансовая стоимость активов / стоимость общих активов (для иностранных юридических лиц)"
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.balansov_stoim_aktivov_inostr,
+                        expression: "balansov_stoim_aktivov_inostr"
+                      }
+                    ],
+                    staticClass: "textarea w-input",
+                    attrs: {
+                      "data-name": "Field 6",
+                      maxlength: "5000",
+                      id: "field-6",
+                      name: "field-6"
+                    },
+                    domProps: { value: _vm.balansov_stoim_aktivov_inostr },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.balansov_stoim_aktivov_inostr = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm._m(0),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.vidy_tovarov,
+                        expression: "vidy_tovarov"
+                      }
+                    ],
+                    staticClass: "textarea w-input",
+                    attrs: {
+                      "data-name": "Field 7",
+                      maxlength: "5000",
+                      id: "field-7",
+                      name: "field-7"
+                    },
+                    domProps: { value: _vm.vidy_tovarov },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.vidy_tovarov = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm._m(1)
+                ]
+              ),
+              _vm._v(" "),
+              _vm._m(2),
+              _vm._v(" "),
+              _vm._m(3)
+            ])
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _vm._m(4)
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "label",
+      { staticClass: "field-label _1", attrs: { for: "name-4" } },
+      [
+        _vm._v(
+          "Основные виды товаров (работ, услуг), поставляемых на товарный рынок "
+        ),
+        _c("em", [_vm._v("(выбор из справочника)")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "div-block-16" }, [
+      _c("input", {
+        staticClass: "button-5 yes new w-button",
+        attrs: {
+          type: "submit",
+          value: "Сохранить",
+          "data-wait": "Please wait..."
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-form-done" }, [
+      _c("div", [_vm._v("Thank you! Your submission has been received!")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-form-fail" }, [
+      _c("div", [
+        _vm._v("Oops! Something went wrong while submitting the form.")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "section-2" }, [
+      _c("div", { staticClass: "div-block-7" }, [
+        _c("div", { staticClass: "columns w-row" }, [
+          _c("div", { staticClass: "w-col w-col-6" }, [
+            _c("div", [
+              _c("div", { staticClass: "text-block" }, [
+                _vm._v("  © Все права защищены")
+              ])
+            ])
+          ]),
+          _c("div", { staticClass: "w-col w-col-6" })
+        ])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -60636,6 +61829,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_medical_Admin__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./components/medical/Admin */ "./resources/js/components/medical/Admin.vue");
 /* harmony import */ var _components_MainHome__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./components/MainHome */ "./resources/js/components/MainHome.vue");
 /* harmony import */ var _components_Test__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./components/Test */ "./resources/js/components/Test.vue");
+/* harmony import */ var _components_document_Document__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./components/document/Document */ "./resources/js/components/document/Document.vue");
+/* harmony import */ var _components_document_GetDocument__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./components/document/GetDocument */ "./resources/js/components/document/GetDocument.vue");
+/* harmony import */ var _components_document_PrepareDocument__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./components/document/PrepareDocument */ "./resources/js/components/document/PrepareDocument.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
@@ -60659,6 +61855,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('modal', __webpack_require_
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('parents_modal', __webpack_require__(/*! ./components/medical/ParentsModalBlockList */ "./resources/js/components/medical/ParentsModalBlockList.vue")["default"]); // шина данных
 
 var postName = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
+
+
+
 
 
 
@@ -60728,6 +61927,18 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
       name: 'expertise_test',
       component: _components_ExpertiseTest__WEBPACK_IMPORTED_MODULE_23__["default"],
       props: true
+    }, {
+      path: '/doc',
+      name: 'doc',
+      component: _components_document_Document__WEBPACK_IMPORTED_MODULE_27__["default"]
+    }, {
+      path: '/get_doc',
+      name: 'get_doc',
+      component: _components_document_GetDocument__WEBPACK_IMPORTED_MODULE_28__["default"]
+    }, {
+      path: '/prep_doc',
+      name: 'prep_doc',
+      component: _components_document_PrepareDocument__WEBPACK_IMPORTED_MODULE_29__["default"]
     }]
   }, {
     path: '/admin',
@@ -61745,6 +62956,213 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RenewPassword_vue_vue_type_template_id_4bfaad0c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RenewPassword_vue_vue_type_template_id_4bfaad0c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/document/Document.vue":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/document/Document.vue ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Document_vue_vue_type_template_id_0e5e3d18___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Document.vue?vue&type=template&id=0e5e3d18& */ "./resources/js/components/document/Document.vue?vue&type=template&id=0e5e3d18&");
+/* harmony import */ var _Document_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Document.vue?vue&type=script&lang=js& */ "./resources/js/components/document/Document.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Document_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Document_vue_vue_type_template_id_0e5e3d18___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Document_vue_vue_type_template_id_0e5e3d18___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/document/Document.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/document/Document.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/document/Document.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Document_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Document.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/Document.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Document_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/document/Document.vue?vue&type=template&id=0e5e3d18&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/document/Document.vue?vue&type=template&id=0e5e3d18& ***!
+  \**************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Document_vue_vue_type_template_id_0e5e3d18___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Document.vue?vue&type=template&id=0e5e3d18& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/Document.vue?vue&type=template&id=0e5e3d18&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Document_vue_vue_type_template_id_0e5e3d18___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Document_vue_vue_type_template_id_0e5e3d18___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/document/GetDocument.vue":
+/*!**********************************************************!*\
+  !*** ./resources/js/components/document/GetDocument.vue ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _GetDocument_vue_vue_type_template_id_5bdf59c8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GetDocument.vue?vue&type=template&id=5bdf59c8& */ "./resources/js/components/document/GetDocument.vue?vue&type=template&id=5bdf59c8&");
+/* harmony import */ var _GetDocument_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GetDocument.vue?vue&type=script&lang=js& */ "./resources/js/components/document/GetDocument.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _GetDocument_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _GetDocument_vue_vue_type_template_id_5bdf59c8___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _GetDocument_vue_vue_type_template_id_5bdf59c8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/document/GetDocument.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/document/GetDocument.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/document/GetDocument.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GetDocument_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./GetDocument.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/GetDocument.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GetDocument_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/document/GetDocument.vue?vue&type=template&id=5bdf59c8&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/components/document/GetDocument.vue?vue&type=template&id=5bdf59c8& ***!
+  \*****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GetDocument_vue_vue_type_template_id_5bdf59c8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./GetDocument.vue?vue&type=template&id=5bdf59c8& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/GetDocument.vue?vue&type=template&id=5bdf59c8&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GetDocument_vue_vue_type_template_id_5bdf59c8___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GetDocument_vue_vue_type_template_id_5bdf59c8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/document/PrepareDocument.vue":
+/*!**************************************************************!*\
+  !*** ./resources/js/components/document/PrepareDocument.vue ***!
+  \**************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _PrepareDocument_vue_vue_type_template_id_c4dfa30e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PrepareDocument.vue?vue&type=template&id=c4dfa30e& */ "./resources/js/components/document/PrepareDocument.vue?vue&type=template&id=c4dfa30e&");
+/* harmony import */ var _PrepareDocument_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PrepareDocument.vue?vue&type=script&lang=js& */ "./resources/js/components/document/PrepareDocument.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _PrepareDocument_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PrepareDocument_vue_vue_type_template_id_c4dfa30e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _PrepareDocument_vue_vue_type_template_id_c4dfa30e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/document/PrepareDocument.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/document/PrepareDocument.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/components/document/PrepareDocument.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PrepareDocument_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./PrepareDocument.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/PrepareDocument.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PrepareDocument_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/document/PrepareDocument.vue?vue&type=template&id=c4dfa30e&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/document/PrepareDocument.vue?vue&type=template&id=c4dfa30e& ***!
+  \*********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PrepareDocument_vue_vue_type_template_id_c4dfa30e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./PrepareDocument.vue?vue&type=template&id=c4dfa30e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/PrepareDocument.vue?vue&type=template&id=c4dfa30e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PrepareDocument_vue_vue_type_template_id_c4dfa30e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PrepareDocument_vue_vue_type_template_id_c4dfa30e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

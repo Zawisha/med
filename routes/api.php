@@ -56,4 +56,5 @@ Route::post('front_render_start_block', 'DBController@front_render_start_block')
 Route::post('front_render_add_block', 'DBController@front_render_add_block');
 Route::post('update_post_name', 'DBController@update_post_name');
 Route::post('update_procedure_name', 'DBController@update_procedure_name');
+Route::post('save_first_text', 'TextController@save_first_text');
 

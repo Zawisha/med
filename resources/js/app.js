@@ -56,6 +56,9 @@ import ExpertiseTest from "./components/ExpertiseTest";
 import Admin from "./components/medical/Admin";
 import MainHome from './components/MainHome'
 import Test from './components/Test'
+import Document from './components/document/Document'
+import GetDocument from "./components/document/GetDocument";
+import PrepareDocument from "./components/document/PrepareDocument";
 // console.log(is_admin);
 
 axios.defaults.baseURL = 'http://localhost:/api';
@@ -121,7 +124,21 @@ const router = new VueRouter({
                     component: ExpertiseTest,
                     props: true
                 },
-
+                {
+                    path: '/doc',
+                    name: 'doc',
+                    component: Document,
+                },
+                {
+                    path: '/get_doc',
+                    name: 'get_doc',
+                    component: GetDocument,
+                },
+                {
+                    path: '/prep_doc',
+                    name: 'prep_doc',
+                    component: PrepareDocument,
+                }
                 ]
         },
         {
