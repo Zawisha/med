@@ -56,9 +56,9 @@
 
 
                     // fileLink.href = fileURL;
-                    fileLink.href = 'text/Expertise.txt';
+                    fileLink.href = 'text/Expertise.doc';
 
-                    fileLink.setAttribute('download', 'Expertise.txt');
+                    fileLink.setAttribute('download', 'Expertise.doc');
 
                     document.body.appendChild(fileLink);
 

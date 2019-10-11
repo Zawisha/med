@@ -3178,7 +3178,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3195,9 +3194,6 @@ __webpack_require__.r(__webpack_exports__);
     this.render_start_block(this.blocks);
   },
   methods: {
-    test: function test() {
-      console.log(this.blocks);
-    },
     isNullElem: function isNullElem(number) {
       return number == 0;
     },
@@ -3871,13 +3867,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      adresat: '',
       cel: '',
       sdelka_soversh: '',
       status: 0,
@@ -3911,7 +3903,6 @@ __webpack_require__.r(__webpack_exports__);
     save: function save() {
       this.alarm = false;
       this.alarm_arr = [];
-      this.check(this.adresat, 13);
       this.check(this.select_zaint_lico, 30);
       this.check(this.lico_v_otnoshenii, 31);
       this.check(this.cel, 3);
@@ -3931,7 +3922,6 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.alarm == false) {
         axios.post('/save_first_text', {
-          adresat: this.adresat,
           select_zaint_lico: this.select_zaint_lico,
           lico_v_otnoshenii: this.lico_v_otnoshenii,
           cel: this.cel,
@@ -4224,8 +4214,8 @@ __webpack_require__.r(__webpack_exports__);
       // var fileURL = window.URL.createObjectURL(new Blob(['text/Expertise']));
       var fileLink = document.createElement('a'); // fileLink.href = fileURL;
 
-      fileLink.href = 'text/Expertise.txt';
-      fileLink.setAttribute('download', 'Expertise.txt');
+      fileLink.href = 'text/Expertise.doc';
+      fileLink.setAttribute('download', 'Expertise.doc');
       document.body.appendChild(fileLink);
       fileLink.click();
     }
@@ -42052,8 +42042,7 @@ var render = function() {
                             "div",
                             { staticClass: "div-block-11" },
                             _vm._l(post.answer_text, function(question, numb) {
-                              return post.answer_link_id[numb] !== 0 ||
-                                post.answer_text[numb] !== ""
+                              return post.answer_link_id[numb] !== 0
                                 ? _c(
                                     "div",
                                     {
@@ -42131,17 +42120,7 @@ var render = function() {
                       ]
                     )
                   ])
-                }),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary btn-block procedure_button",
-                    attrs: { type: "button" },
-                    on: { click: _vm.test }
-                  },
-                  [_vm._v("test")]
-                )
+                })
               ],
               2
             )
@@ -43501,35 +43480,6 @@ var render = function() {
                   _c(
                     "label",
                     { staticClass: "field-label _1", attrs: { for: "name" } },
-                    [_vm._v("Адресат")]
-                  ),
-                  _vm._v(" "),
-                  _c("textarea", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.adresat,
-                        expression: "adresat"
-                      }
-                    ],
-                    staticClass: "textarea",
-                    class: { border_alert: _vm.elemInArr(13) },
-                    attrs: { maxlength: "5000", id: "field13", name: "field" },
-                    domProps: { value: _vm.adresat },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.adresat = $event.target.value
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "label",
-                    { staticClass: "field-label _1", attrs: { for: "name" } },
                     [
                       _vm._v(
                         "Заинтересованное лицо (которое обращается за согласием)"
@@ -44046,7 +43996,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "div-block-16" }, [
+    return _c("div", { staticClass: "div-block-16 get_deal_but" }, [
       _c("input", {
         staticClass: "button-5 yes new w-button",
         attrs: {
@@ -44135,7 +44085,7 @@ var render = function() {
               _c("div", { staticClass: "button-5 post" }, [
                 _c("a", { staticClass: "link-post w-inline-block" }, [
                   _c("div", { staticClass: "text-block-7" }, [
-                    _vm._v("Постановление МАРТ от 10.08.2018 №62 - уведомление")
+                    _vm._v("Заявление на получение согласия")
                   ])
                 ]),
                 _vm._v(" "),

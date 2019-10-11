@@ -10,9 +10,6 @@
                     <div class="w-form">
                         <form id="wf-form-Form-Doc" name="wf-form-Form-Doc" data-name="Form Doc" v-on:submit.prevent="save">
 
-                            <label for="name" class="field-label _1">Адресат</label>
-                            <textarea v-bind:class="{border_alert: elemInArr(13)}"  maxlength="5000" id="field13" name="field" class="textarea" v-model="adresat"></textarea>
-
                             <label for="name" class="field-label _1">Заинтересованное лицо (которое обращается за согласием)</label>
                             <select v-model="select_zaint_lico" v-bind:class="{border_alert: elemInArr(30)}">
                                 <option value="" style="display:none">Выберите заинтересованное лицо</option>
@@ -62,7 +59,7 @@
                             <textarea v-bind:class="{border_alert: elemInArr(10)}" data-name="Field 10" maxlength="5000" id="field-10" name="field-10" class="textarea " v-model="razmer_dolei_ust_fonda"></textarea>
 </div>
 
-                            <div class="div-block-16">
+                            <div class="div-block-16 get_deal_but">
                                 <input type="submit" value="Сохранить" data-wait="Please wait..." class="button-5 yes new w-button" />
                             </div>
 
@@ -88,7 +85,6 @@
         data(){
 
             return {
-                adresat:'',
                 cel:'',
                 sdelka_soversh:'',
                 status:0,
@@ -126,7 +122,6 @@ save()
       this.alarm =false;
       this.alarm_arr=[];
 
-    this.check(this.adresat, 13);
     this.check(this.select_zaint_lico, 30);
     this.check(this.lico_v_otnoshenii, 31);
     this.check(this.cel, 3);
@@ -149,7 +144,6 @@ if(this.alarm==false)
 {
     axios
         .post('/save_first_text',{
-            adresat:this.adresat,
             select_zaint_lico:this.select_zaint_lico,
             lico_v_otnoshenii:this.lico_v_otnoshenii,
             cel:this.cel,

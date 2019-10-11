@@ -144,6 +144,10 @@
 .front_text_procedure {
     padding-top: 20px;
 }
+.get_deal_but {
+    padding-top: 20px;
+}
+
 
 .front_expertise_list:hover {
     -webkit-border-radius: 15px;
