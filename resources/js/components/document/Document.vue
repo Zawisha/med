@@ -5,7 +5,7 @@
             <div class="div-block-8">
                 <h1 class="heading">Подготовка документов для подачи в МАРТ</h1>
                 <p class="paragraph exp">Какой документ вы хотите составить?</p>
-                <router-link  :to="{ name: 'prep_doc' }"><div class="button-5 post"><a  class="link-post w-inline-block">
+                <router-link  :to="{ name: 'deal_doc' }"><div class="button-5 post"><a  class="link-post w-inline-block">
                     <div class="text-block-7">Постановление МАРТ от 10.08.2018 №62 - уведомление</div>
                 </a>
                     <a href="https://yadi.sk/i/EqBg0wf5HVheDQ" target="_blank" class="link-block w-inline-block">

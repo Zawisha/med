@@ -57,4 +57,6 @@ Route::post('front_render_add_block', 'DBController@front_render_add_block');
 Route::post('update_post_name', 'DBController@update_post_name');
 Route::post('update_procedure_name', 'DBController@update_procedure_name');
 Route::post('save_first_text', 'TextController@save_first_text');
+Route::post('save_subject', 'DBController@save_subject');
+Route::post('polute_start_array', 'DBController@polute_start_array');
 

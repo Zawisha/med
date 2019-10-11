@@ -59,9 +59,13 @@ import Test from './components/Test'
 import Document from './components/document/Document'
 import GetDocument from "./components/document/GetDocument";
 import PrepareDocument from "./components/document/PrepareDocument";
+import DocumentSubject from "./components/document/DocumentSubject";
+import FormDocument from "./components/document/FormDocument";
+import DealDocument from "./components/document/DealDocument";
 // console.log(is_admin);
 
 axios.defaults.baseURL = 'http://localhost:/api';
+// axios.defaults.baseURL = 'http://mart.juran.by:/api';
 const router = new VueRouter({
 
     mode: 'history',
@@ -138,7 +142,24 @@ const router = new VueRouter({
                     path: '/prep_doc',
                     name: 'prep_doc',
                     component: PrepareDocument,
-                }
+                    props: true,
+                },
+                {
+                    path: '/doc_subject',
+                    name: 'doc_subject',
+                    component: DocumentSubject,
+                    props: true,
+                },
+                {
+                    path: '/form_doc',
+                    name: 'form_doc',
+                    component: FormDocument,
+                },
+                {
+                    path: '/deal_doc',
+                    name: 'deal_doc',
+                    component: DealDocument,
+                },
                 ]
         },
         {

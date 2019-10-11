@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CurrentPost;
+use App\Subject;
 use Illuminate\Http\Request;
 use App\Temp;
 use App\Procedure;
@@ -431,5 +432,48 @@ class DBController extends Controller
         Procedure::where('id_post', '=', $id_post)->where('id_main_procedure', '=', $id_procedure)->update(['name_main_procedure' =>$name_procedure]);
     }
 
+    public function save_subject(Request $request)
+    {
+        $UNP = $request->input('UNP');
+        $polnoe_naimenovanie = $request->input('polnoe_naimenovanie');
+        $socrasch_naimenovanie = $request->input('socrasch_naimenovanie');
+        $FIO = $request->input('FIO');
+        $mesto_nahozdenia = $request->input('mesto_nahozdenia');
+        $pochtovyi_adres = $request->input('pochtovyi_adres');
+        $nomer_rasch_sheta = $request->input('nomer_rasch_sheta');
+        $naimenovanie_banka = $request->input('naimenovanie_banka');
+        $BIC = $request->input('BIC');
+        $razmer_ust_fonda = $request->input('razmer_ust_fonda');
+        $balansovaja_stoim_aktivov = $request->input('balansovaja_stoim_aktivov');
+        $objem_viruchki = $request->input('objem_viruchki');
+        $vidy_tovarov = $request->input('vidy_tovarov');
+        $rezident = $request->input('rezident');
+        $status = $request->input('status');
+        $dominant = $request->input('dominant');
+
+        Subject::create([
+            'UNP' => $UNP,
+            'polnoe_naimenovanie' => $polnoe_naimenovanie,
+            'socrasch_naimenovanie' => $socrasch_naimenovanie,
+            'FIO' => $FIO,
+            'mesto_nahozdenia' => $mesto_nahozdenia,
+            'pochtovyi_adres' => $pochtovyi_adres,
+            'nomer_rasch_sheta' => $nomer_rasch_sheta,
+            'naimenovanie_banka' => $naimenovanie_banka,
+            'BIC' => $BIC,
+            'razmer_ust_fonda' => $razmer_ust_fonda,
+            'balansovaja_stoim_aktivov' => $balansovaja_stoim_aktivov,
+            'objem_viruchki' => $objem_viruchki,
+            'vidy_tovarov' => $vidy_tovarov,
+            'rezident' => $rezident,
+            'status' => $status,
+            'dominant' => $dominant,
+        ]);
+    }
+    public function polute_start_array()
+    {
+        $name = Subject::select('polnoe_naimenovanie')->get();
+        return $name;
+    }
 
 }

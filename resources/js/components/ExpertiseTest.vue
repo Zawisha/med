@@ -19,7 +19,7 @@
                         <div class="text-block-4">{{ post.question_text }}</div>
                         <div class="div-block-11"  >
                         <div  class="button-5 yes exp_but_5" v-for="(question, numb) in post.answer_text"
-                            v-bind:id="number + 'q' + numb" v-if="post.answer_link_id[numb] !==0" v-on:click="front_render_add_block(blocks,post.answer_link_id[numb],number,number + 'q' + numb)"
+                            v-bind:id="number + 'q' + numb" v-if="((post.answer_link_id[numb] !==0)||(post.answer_text[numb] !==''))" v-on:click="front_render_add_block(blocks,post.answer_link_id[numb],number,number + 'q' + numb)"
                         >{{ question }}</div>
                     </div>
                             <div class="div-block-11 final"
@@ -45,7 +45,7 @@
 <!--                            <div class="text-block-4">Вам НЕ НУЖНО получать предварительное согласие МАРТ, но необходимо письменно уведомить МАРТ после проведения реорганизации.</div><div class="div-block-11 final">-->
 <!--                            <a href="#" class="button-5 yes new w-button">Начать сначала</a>-->
 <!--                            <a href="/page" class="button-5 yes new w-button">Новая экспертиза</a></div></div></div></div>-->
-
+                    <button type="button" class="btn btn-primary btn-block procedure_button" v-on:click="test">test</button>
                 </div>
 
 <!--                <div class="columns-2 w-row"><div class="column-6 w-col w-col-1 w-col-small-1 w-col-tiny-1"><div class="div-block-14">-->
@@ -90,6 +90,10 @@
             this.render_start_block(this.blocks);
         },
         methods: {
+            test()
+            {
+              console.log(this.blocks);
+            },
 
             isNullElem(number)
             {

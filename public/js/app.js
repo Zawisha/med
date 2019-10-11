@@ -3195,6 +3195,9 @@ __webpack_require__.r(__webpack_exports__);
     this.render_start_block(this.blocks);
   },
   methods: {
+    test: function test() {
+      console.log(this.blocks);
+    },
     isNullElem: function isNullElem(number) {
       return number == 0;
     },
@@ -3333,6 +3336,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -3778,6 +3782,193 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/DealDocument.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/document/DealDocument.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      adresat: '',
+      cel: '',
+      sdelka_soversh: '',
+      status: 0,
+      polnoe_naimenovanie: '',
+      socrasch_naimenovanie: '',
+      sdelka_s_akc: '',
+      kolichestvo_akcii: '',
+      razmer_dolei_ust_fonda: '',
+      dolia_akcii: '',
+      stoimost_akcii: '',
+      sdelka_s_doliami: '',
+      vidy_tovarov: '',
+      balansovaja_stoim_aktivov: '',
+      objem_viruchki: '',
+      dominant: '',
+      alarm: false,
+      alarm_arr: [],
+      zaint_lico_arr: [],
+      select_zaint_lico: '',
+      lico_v_otnoshenii: '',
+      deal_with: 0
+    };
+  },
+  mounted: function mounted() {
+    this.polute_start_array(this.zaint_lico_arr);
+  },
+  methods: {
+    elemInArr: function elemInArr(numb) {
+      return this.alarm_arr.indexOf(numb) === -1 ? false : true;
+    },
+    save: function save() {
+      this.alarm = false;
+      this.alarm_arr = [];
+      this.check(this.adresat, 13);
+      this.check(this.select_zaint_lico, 30);
+      this.check(this.lico_v_otnoshenii, 31);
+      this.check(this.cel, 3);
+      this.check(this.sdelka_soversh, 20);
+
+      if (this.sdelka_soversh == 'акциями в уставном фонде') {
+        this.check(this.sdelka_s_akc, 4);
+        this.check(this.kolichestvo_akcii, 11);
+        this.check(this.dolia_akcii, 5);
+        this.check(this.stoimost_akcii, 9);
+      }
+
+      if (this.sdelka_soversh == 'долями в уставном фонде') {
+        this.check(this.sdelka_s_doliami, 8);
+        this.check(this.razmer_dolei_ust_fonda, 10);
+      }
+
+      if (this.alarm == false) {
+        axios.post('/save_first_text', {
+          adresat: this.adresat,
+          select_zaint_lico: this.select_zaint_lico,
+          lico_v_otnoshenii: this.lico_v_otnoshenii,
+          cel: this.cel,
+          sdelka_soversh: this.sdelka_soversh,
+          sdelka_s_akc: this.sdelka_s_akc,
+          kolichestvo_akcii: this.kolichestvo_akcii,
+          dolia_akcii: this.dolia_akcii,
+          stoimost_akcii: this.stoimost_akcii,
+          sdelka_s_doliami: this.sdelka_s_doliami,
+          razmer_dolei_ust_fonda: this.razmer_dolei_ust_fonda
+        }).then(Vue.router.push({
+          name: 'get_doc'
+        }));
+      }
+    },
+    check: function check(inp, numb) {
+      if (inp == '') {
+        this.alarm = true;
+        this.alarm_arr.push(numb);
+      }
+    },
+    polute_start_array: function polute_start_array(inp) {
+      axios.post('/polute_start_array', {// id_post:this.$store.state.post_id,
+      }).then(function (_ref) {
+        var data = _ref.data;
+        data.forEach(function (entry) {
+          inp.push({
+            name: entry.polnoe_naimenovanie
+          });
+        });
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/Document.vue?vue&type=script&lang=js&":
 /*!****************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/document/Document.vue?vue&type=script&lang=js& ***!
@@ -3836,6 +4027,143 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     test: function test() {
       axios.post('/save_first_text', {});
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/DocumentSubject.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/document/DocumentSubject.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      //главный массив постов
+      posts: [],
+      post_name: ''
+    };
+  },
+  props: ['notification_sub'],
+  mounted: function mounted() {},
+  methods: {
+    get_file: function get_file() {
+      // var fileURL = window.URL.createObjectURL(new Blob(['text/Expertise']));
+      var fileLink = document.createElement('a'); // fileLink.href = fileURL;
+
+      fileLink.href = 'text/Expertise.txt';
+      fileLink.setAttribute('download', 'Expertise.txt');
+      document.body.appendChild(fileLink);
+      fileLink.click();
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/FormDocument.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/document/FormDocument.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      //главный массив постов
+      posts: [],
+      post_name: ''
+    };
+  },
+  mounted: function mounted() {},
+  methods: {
+    get_file: function get_file() {
+      // var fileURL = window.URL.createObjectURL(new Blob(['text/Expertise']));
+      var fileLink = document.createElement('a'); // fileLink.href = fileURL;
+
+      fileLink.href = 'text/Expertise.txt';
+      fileLink.setAttribute('download', 'Expertise.txt');
+      document.body.appendChild(fileLink);
+      fileLink.click();
     }
   }
 });
@@ -3995,46 +4323,114 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       rezident: 0,
       status: 0,
-      polnoe_nazvanie: '',
-      firmennoe_naimenovanie: '',
+      polnoe_naimenovanie: '',
+      socrasch_naimenovanie: '',
       FIO: '',
       mesto_nahozdenia: '',
-      mesto_zitelstva: '',
       pochtovyi_adres: '',
       razmer_ust_fonda: '',
       nomer_rasch_sheta: '',
       naimenovanie_banka: '',
       BIC: '',
-      balansov_stoim_aktivov_inostr: '',
-      vidy_tovarov: ''
+      vidy_tovarov: '',
+      UNP: '',
+      balansovaja_stoim_aktivov: '',
+      objem_viruchki: '',
+      dominant: '',
+      alarm: false,
+      alarm_arr: []
     };
   },
   mounted: function mounted() {},
   methods: {
+    elemInArr: function elemInArr(numb) {
+      return this.alarm_arr.indexOf(numb) === -1 ? false : true;
+    },
     save: function save() {
-      axios.post('/save_first_text', {
-        rezident: this.rezident,
-        status: this.status,
-        polnoe_nazvanie: this.polnoe_nazvanie,
-        firmennoe_naimenovanie: this.firmennoe_naimenovanie,
-        FIO: this.FIO,
-        mesto_nahozdenia: this.mesto_nahozdenia,
-        mesto_zitelstva: this.mesto_zitelstva,
-        pochtovyi_adres: this.pochtovyi_adres,
-        razmer_ust_fonda: this.razmer_ust_fonda,
-        nomer_rasch_sheta: this.nomer_rasch_sheta,
-        naimenovanie_banka: this.naimenovanie_banka,
-        BIC: this.BIC,
-        balansov_stoim_aktivov_inostr: this.balansov_stoim_aktivov_inostr,
-        vidy_tovarov: this.vidy_tovarov
-      }).then(Vue.router.push({
-        name: 'get_doc'
-      }));
+      this.alarm = false;
+      this.alarm_arr = [];
+      this.check(this.UNP, 13);
+      this.check(this.polnoe_naimenovanie, 1);
+      this.check(this.socrasch_naimenovanie, 2);
+      this.check(this.FIO, 3);
+      this.check(this.mesto_nahozdenia, 4);
+      this.check(this.pochtovyi_adres, 11);
+      this.check(this.nomer_rasch_sheta, 5);
+      this.check(this.naimenovanie_banka, 9);
+      this.check(this.BIC, 8);
+      this.check(this.razmer_ust_fonda, 10);
+      this.check(this.balansovaja_stoim_aktivov, 14);
+      this.check(this.objem_viruchki, 15);
+      this.check(this.vidy_tovarov, 7);
+      this.check(this.rezident, 20);
+      this.check(this.status, 21);
+      this.check(this.dominant, 22);
+
+      if (this.alarm == false) {
+        axios.post('/save_subject', {
+          UNP: this.UNP,
+          polnoe_naimenovanie: this.polnoe_naimenovanie,
+          socrasch_naimenovanie: this.socrasch_naimenovanie,
+          FIO: this.FIO,
+          mesto_nahozdenia: this.mesto_nahozdenia,
+          pochtovyi_adres: this.pochtovyi_adres,
+          nomer_rasch_sheta: this.nomer_rasch_sheta,
+          naimenovanie_banka: this.naimenovanie_banka,
+          BIC: this.BIC,
+          razmer_ust_fonda: this.razmer_ust_fonda,
+          balansovaja_stoim_aktivov: this.balansovaja_stoim_aktivov,
+          objem_viruchki: this.objem_viruchki,
+          vidy_tovarov: this.vidy_tovarov,
+          rezident: this.rezident,
+          status: this.status,
+          dominant: this.dominant
+        }).then(Vue.router.push({
+          name: 'doc_subject',
+          params: {
+            notification_sub: true
+          }
+        }));
+      }
+    },
+    check: function check(inp, numb) {
+      if (inp == '') {
+        this.alarm = true;
+        this.alarm_arr.push(numb);
+      }
     }
   }
 });
@@ -41656,7 +42052,8 @@ var render = function() {
                             "div",
                             { staticClass: "div-block-11" },
                             _vm._l(post.answer_text, function(question, numb) {
-                              return post.answer_link_id[numb] !== 0
+                              return post.answer_link_id[numb] !== 0 ||
+                                post.answer_text[numb] !== ""
                                 ? _c(
                                     "div",
                                     {
@@ -41734,7 +42131,17 @@ var render = function() {
                       ]
                     )
                   ])
-                })
+                }),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary btn-block procedure_button",
+                    attrs: { type: "button" },
+                    on: { click: _vm.test }
+                  },
+                  [_vm._v("test")]
+                )
               ],
               2
             )
@@ -42006,7 +42413,7 @@ var render = function() {
                   "router-link",
                   {
                     staticClass: "go_to_exp_text_color",
-                    attrs: { to: { name: "doc" } }
+                    attrs: { to: { name: "doc_subject" } }
                   },
                   [
                     _c("a", { staticClass: "button-2 w-button" }, [
@@ -43046,6 +43453,654 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/DealDocument.vue?vue&type=template&id=7da26780&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/document/DealDocument.vue?vue&type=template&id=7da26780& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "section" }, [
+      _c("div", { staticClass: "div-screen-1" }, [
+        _c("div", { staticClass: "div-block-8" }, [
+          _c("h1", { staticClass: "heading" }, [
+            _vm._v("Подготовка документов")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "div-block-10" }, [
+            _c("div", { staticClass: "text-block-3" }, [
+              _vm._v("Заполните следующие поля:")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "w-form" }, [
+              _c(
+                "form",
+                {
+                  attrs: {
+                    id: "wf-form-Form-Doc",
+                    name: "wf-form-Form-Doc",
+                    "data-name": "Form Doc"
+                  },
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.save($event)
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "label",
+                    { staticClass: "field-label _1", attrs: { for: "name" } },
+                    [_vm._v("Адресат")]
+                  ),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.adresat,
+                        expression: "adresat"
+                      }
+                    ],
+                    staticClass: "textarea",
+                    class: { border_alert: _vm.elemInArr(13) },
+                    attrs: { maxlength: "5000", id: "field13", name: "field" },
+                    domProps: { value: _vm.adresat },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.adresat = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "field-label _1", attrs: { for: "name" } },
+                    [
+                      _vm._v(
+                        "Заинтересованное лицо (которое обращается за согласием)"
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.select_zaint_lico,
+                          expression: "select_zaint_lico"
+                        }
+                      ],
+                      class: { border_alert: _vm.elemInArr(30) },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.select_zaint_lico = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "option",
+                        {
+                          staticStyle: { display: "none" },
+                          attrs: { value: "" }
+                        },
+                        [_vm._v("Выберите заинтересованное лицо")]
+                      ),
+                      _vm._v(" "),
+                      _vm._l(_vm.zaint_lico_arr, function(user) {
+                        return _c(
+                          "option",
+                          { domProps: { value: user.name } },
+                          [_vm._v(_vm._s(user.name))]
+                        )
+                      })
+                    ],
+                    2
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "field-label _1", attrs: { for: "name-2" } },
+                    [_vm._v("Лицо, в отношении которого осуществляется сделка")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.lico_v_otnoshenii,
+                          expression: "lico_v_otnoshenii"
+                        }
+                      ],
+                      class: { border_alert: _vm.elemInArr(31) },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.lico_v_otnoshenii = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "option",
+                        {
+                          staticStyle: { display: "none" },
+                          attrs: { value: "" }
+                        },
+                        [
+                          _vm._v(
+                            "Выберите лицо, в отношении которого осуществляется сделка"
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _vm._l(_vm.zaint_lico_arr, function(user) {
+                        return _c(
+                          "option",
+                          { domProps: { value: user.name } },
+                          [_vm._v(_vm._s(user.name))]
+                        )
+                      })
+                    ],
+                    2
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "field-label _1", attrs: { for: "name-2" } },
+                    [_vm._v("Цель совершаемой сделки")]
+                  ),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.cel,
+                        expression: "cel"
+                      }
+                    ],
+                    staticClass: "textarea ",
+                    class: { border_alert: _vm.elemInArr(3) },
+                    attrs: {
+                      maxlength: "5000",
+                      id: "field-3",
+                      name: "field-3",
+                      "data-name": "Field 3"
+                    },
+                    domProps: { value: _vm.cel },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.cel = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("label", { staticClass: "field-label" }, [
+                    _vm._v("Сделка совершается с")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "div-block-15",
+                      class: { border_alert: _vm.elemInArr(20) }
+                    },
+                    [
+                      _c(
+                        "label",
+                        { staticClass: "radio-button-field w-radio" },
+                        [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.sdelka_soversh,
+                                expression: "sdelka_soversh"
+                              }
+                            ],
+                            staticClass: "w-form-formradioinput w-radio-input",
+                            attrs: {
+                              type: "radio",
+                              "data-name": "Radio1",
+                              name: "Radio1",
+                              value: "акциями в уставном фонде"
+                            },
+                            domProps: {
+                              checked: _vm._q(
+                                _vm.sdelka_soversh,
+                                "акциями в уставном фонде"
+                              )
+                            },
+                            on: {
+                              change: function($event) {
+                                _vm.sdelka_soversh = "акциями в уставном фонде"
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              staticClass: "radio-button-label w-form-label",
+                              attrs: { for: "node-2" }
+                            },
+                            [_vm._v("акциями в уставном фонде")]
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("label", { staticClass: "w-radio" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.sdelka_soversh,
+                              expression: "sdelka_soversh"
+                            }
+                          ],
+                          staticClass: "w-form-formradioinput w-radio-input",
+                          attrs: {
+                            type: "radio",
+                            "data-name": "Radio1",
+                            name: "Radio1",
+                            value: "долями в уставном фонде"
+                          },
+                          domProps: {
+                            checked: _vm._q(
+                              _vm.sdelka_soversh,
+                              "долями в уставном фонде"
+                            )
+                          },
+                          on: {
+                            change: function($event) {
+                              _vm.sdelka_soversh = "долями в уставном фонде"
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            staticClass: "radio-button-label-2 w-form-label",
+                            attrs: { for: "node" }
+                          },
+                          [_vm._v("долями в уставном фонде")]
+                        )
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _vm.sdelka_soversh == "акциями в уставном фонде"
+                    ? _c("div", [
+                        _c(
+                          "label",
+                          {
+                            staticClass: "field-label _1",
+                            attrs: { for: "name-4" }
+                          },
+                          [
+                            _vm._v(
+                              "Сделка с акциями будет совершена посредством"
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("textarea", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.sdelka_s_akc,
+                              expression: "sdelka_s_akc"
+                            }
+                          ],
+                          staticClass: "textarea ",
+                          class: { border_alert: _vm.elemInArr(4) },
+                          attrs: {
+                            placeholder:
+                              "заключения договора (купли-продажи, доверительного управления имуществом, поручения, иной договор)",
+                            maxlength: "5000",
+                            id: "field-4",
+                            name: "field-4",
+                            "data-name": "Field 4"
+                          },
+                          domProps: { value: _vm.sdelka_s_akc },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.sdelka_s_akc = $event.target.value
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "label",
+                          {
+                            staticClass: "field-label _1",
+                            attrs: { for: "name-4" }
+                          },
+                          [_vm._v("Количество приобретаемых акций")]
+                        ),
+                        _vm._v(" "),
+                        _c("textarea", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.kolichestvo_akcii,
+                              expression: "kolichestvo_akcii"
+                            }
+                          ],
+                          staticClass: "textarea ",
+                          class: { border_alert: _vm.elemInArr(11) },
+                          attrs: {
+                            "data-name": "Field 11",
+                            maxlength: "5000",
+                            id: "field-11",
+                            name: "field-11"
+                          },
+                          domProps: { value: _vm.kolichestvo_akcii },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.kolichestvo_akcii = $event.target.value
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "label",
+                          {
+                            staticClass: "field-label _1",
+                            attrs: { for: "name-4" }
+                          },
+                          [_vm._v("Доля приобретаемых акций")]
+                        ),
+                        _vm._v(" "),
+                        _c("textarea", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.dolia_akcii,
+                              expression: "dolia_akcii"
+                            }
+                          ],
+                          staticClass: "textarea",
+                          class: { border_alert: _vm.elemInArr(5) },
+                          attrs: {
+                            placeholder:
+                              "в процентах от уставного фонда юридического лица, акции которого приобретаются",
+                            type: "text",
+                            maxlength: "256",
+                            name: "name-3",
+                            "data-name": "Name 3",
+                            id: "name-5"
+                          },
+                          domProps: { value: _vm.dolia_akcii },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.dolia_akcii = $event.target.value
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "label",
+                          {
+                            staticClass: "field-label _1",
+                            attrs: { for: "name-4" }
+                          },
+                          [_vm._v("Стоимость приобретаемых акций")]
+                        ),
+                        _vm._v(" "),
+                        _c("textarea", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.stoimost_akcii,
+                              expression: "stoimost_akcii"
+                            }
+                          ],
+                          staticClass: "textarea ",
+                          class: { border_alert: _vm.elemInArr(9) },
+                          attrs: {
+                            "data-name": "Field 9",
+                            maxlength: "5000",
+                            id: "field-9",
+                            name: "field-9"
+                          },
+                          domProps: { value: _vm.stoimost_akcii },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.stoimost_akcii = $event.target.value
+                            }
+                          }
+                        })
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.sdelka_soversh == "долями в уставном фонде"
+                    ? _c("div", [
+                        _c(
+                          "label",
+                          {
+                            staticClass: "field-label _1",
+                            attrs: { for: "name-4" }
+                          },
+                          [
+                            _vm._v(
+                              "Сделка с долями будет совершена посредством"
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("textarea", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.sdelka_s_doliami,
+                              expression: "sdelka_s_doliami"
+                            }
+                          ],
+                          staticClass: "textarea ",
+                          class: { border_alert: _vm.elemInArr(8) },
+                          attrs: {
+                            placeholder:
+                              "заключения договора (купли-продажи, доверительного управления имуществом, поручения, иной договор",
+                            "data-name": "Field 8",
+                            maxlength: "5000",
+                            id: "field-8",
+                            name: "field-8"
+                          },
+                          domProps: { value: _vm.sdelka_s_doliami },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.sdelka_s_doliami = $event.target.value
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "label",
+                          {
+                            staticClass: "field-label _1",
+                            attrs: { for: "name-4" }
+                          },
+                          [
+                            _vm._v(
+                              "Размер долей в процентах от уставного фонда"
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("textarea", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.razmer_dolei_ust_fonda,
+                              expression: "razmer_dolei_ust_fonda"
+                            }
+                          ],
+                          staticClass: "textarea ",
+                          class: { border_alert: _vm.elemInArr(10) },
+                          attrs: {
+                            "data-name": "Field 10",
+                            maxlength: "5000",
+                            id: "field-10",
+                            name: "field-10"
+                          },
+                          domProps: { value: _vm.razmer_dolei_ust_fonda },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.razmer_dolei_ust_fonda = $event.target.value
+                            }
+                          }
+                        })
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm._m(0)
+                ]
+              ),
+              _vm._v(" "),
+              _vm._m(1),
+              _vm._v(" "),
+              _vm._m(2)
+            ])
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _vm._m(3)
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "div-block-16" }, [
+      _c("input", {
+        staticClass: "button-5 yes new w-button",
+        attrs: {
+          type: "submit",
+          value: "Сохранить",
+          "data-wait": "Please wait..."
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-form-done" }, [
+      _c("div", [_vm._v("Thank you! Your submission has been received!")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-form-fail" }, [
+      _c("div", [
+        _vm._v("Oops! Something went wrong while submitting the form.")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "section-2" }, [
+      _c("div", { staticClass: "div-block-7" }, [
+        _c("div", { staticClass: "columns w-row" }, [
+          _c("div", { staticClass: "w-col w-col-6" }, [
+            _c("div", [
+              _c("div", { staticClass: "text-block" }, [
+                _vm._v("  © Все права защищены")
+              ])
+            ])
+          ]),
+          _c("div", { staticClass: "w-col w-col-6" })
+        ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/Document.vue?vue&type=template&id=0e5e3d18&":
 /*!********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/document/Document.vue?vue&type=template&id=0e5e3d18& ***!
@@ -43076,7 +44131,7 @@ var render = function() {
               _vm._v("Какой документ вы хотите составить?")
             ]),
             _vm._v(" "),
-            _c("router-link", { attrs: { to: { name: "prep_doc" } } }, [
+            _c("router-link", { attrs: { to: { name: "deal_doc" } } }, [
               _c("div", { staticClass: "button-5 post" }, [
                 _c("a", { staticClass: "link-post w-inline-block" }, [
                   _c("div", { staticClass: "text-block-7" }, [
@@ -43132,6 +44187,130 @@ var staticRenderFns = [
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "w-col w-col-6" })
+        ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/DocumentSubject.vue?vue&type=template&id=c6064970&":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/document/DocumentSubject.vue?vue&type=template&id=c6064970& ***!
+  \***************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "div",
+      { staticClass: "container w-container" },
+      [
+        _vm.notification_sub
+          ? _c(
+              "div",
+              { staticClass: "alert alert-success", attrs: { role: "alert" } },
+              [_vm._v("\n            Субъект добавлен\n        ")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _c("router-link", { attrs: { to: { name: "prep_doc" } } }, [
+          _c("a", { staticClass: "button-2 w-button" }, [
+            _vm._v("Добавить субъект")
+          ])
+        ]),
+        _vm._v(" "),
+        _c("router-link", { attrs: { to: { name: "doc" } } }, [
+          _c("a", { staticClass: "button-2 w-button" }, [
+            _vm._v("Сформировать документ")
+          ])
+        ]),
+        _vm._v(" "),
+        _vm._m(0)
+      ],
+      1
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "section-2" }, [
+      _c("div", { staticClass: "div-block-7" }, [
+        _c("div", { staticClass: "columns w-row" }, [
+          _c("div", { staticClass: "w-col w-col-6" }, [
+            _c("div", [
+              _c("div", { staticClass: "text-block" }, [
+                _vm._v("  © Все права защищены")
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "w-col w-col-6" })
+        ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/FormDocument.vue?vue&type=template&id=9cd49850&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/document/FormDocument.vue?vue&type=template&id=9cd49850& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm._m(0)
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("div", { staticClass: "container w-container" }, [
+        _vm._v("\n  Forming document\n\n\n    "),
+        _c("div", { staticClass: "section-2" }, [
+          _c("div", { staticClass: "div-block-7" }, [
+            _c("div", { staticClass: "columns w-row" }, [
+              _c("div", { staticClass: "w-col w-col-6" }, [
+                _c("div", [
+                  _c("div", { staticClass: "text-block" }, [
+                    _vm._v("  © Все права защищены")
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "w-col w-col-6" })
+            ])
+          ])
         ])
       ])
     ])
@@ -43235,7 +44414,7 @@ var render = function() {
           _vm._v(" "),
           _c("div", { staticClass: "div-block-10" }, [
             _c("div", { staticClass: "text-block-3" }, [
-              _vm._v("Заполните следующие поля и получите готовый документ:")
+              _vm._v("Заполните следующие поля:")
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "w-form" }, [
@@ -43256,213 +44435,237 @@ var render = function() {
                 },
                 [
                   _c("label", { staticClass: "field-label" }, [
-                    _vm._v("Выберите принадлежность субьекта")
+                    _vm._v("Выберите принадлежность субъекта")
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "div-block-15" }, [
-                    _c("label", { staticClass: "radio-button-field w-radio" }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.rezident,
-                            expression: "rezident"
-                          }
-                        ],
-                        staticClass: "w-form-formradioinput w-radio-input",
-                        attrs: {
-                          type: "radio",
-                          "data-name": "Radio1",
-                          name: "Radio1",
-                          value: "Резидент Беларуси"
-                        },
-                        domProps: {
-                          checked: _vm._q(_vm.rezident, "Резидент Беларуси")
-                        },
-                        on: {
-                          change: function($event) {
-                            _vm.rezident = "Резидент Беларуси"
-                          }
-                        }
-                      }),
-                      _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "div-block-15",
+                      class: { border_alert: _vm.elemInArr(20) }
+                    },
+                    [
                       _c(
-                        "span",
-                        {
-                          staticClass: "radio-button-label w-form-label",
-                          attrs: { for: "node-2" }
-                        },
-                        [_vm._v("Резидент Беларуси")]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("label", { staticClass: "w-radio" }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.rezident,
-                            expression: "rezident"
-                          }
-                        ],
-                        staticClass: "w-form-formradioinput w-radio-input",
-                        attrs: {
-                          type: "radio",
-                          "data-name": "Radio1",
-                          name: "Radio1",
-                          value: "Нерезидент Беларуси"
-                        },
-                        domProps: {
-                          checked: _vm._q(_vm.rezident, "Нерезидент Беларуси")
-                        },
-                        on: {
-                          change: function($event) {
-                            _vm.rezident = "Нерезидент Беларуси"
-                          }
-                        }
-                      }),
+                        "label",
+                        { staticClass: "radio-button-field w-radio" },
+                        [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.rezident,
+                                expression: "rezident"
+                              }
+                            ],
+                            staticClass: "w-form-formradioinput w-radio-input",
+                            attrs: {
+                              type: "radio",
+                              "data-name": "Radio1",
+                              name: "Radio1",
+                              value: "Резидент Беларуси"
+                            },
+                            domProps: {
+                              checked: _vm._q(_vm.rezident, "Резидент Беларуси")
+                            },
+                            on: {
+                              change: function($event) {
+                                _vm.rezident = "Резидент Беларуси"
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              staticClass: "radio-button-label w-form-label",
+                              attrs: { for: "node-2" }
+                            },
+                            [_vm._v("Резидент Беларуси")]
+                          )
+                        ]
+                      ),
                       _vm._v(" "),
-                      _c(
-                        "span",
-                        {
-                          staticClass: "radio-button-label-2 w-form-label",
-                          attrs: { for: "node" }
-                        },
-                        [_vm._v("Нерезидент Беларуси")]
-                      )
-                    ])
-                  ]),
+                      _c("label", { staticClass: "w-radio" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.rezident,
+                              expression: "rezident"
+                            }
+                          ],
+                          staticClass: "w-form-formradioinput w-radio-input",
+                          attrs: {
+                            type: "radio",
+                            checked: "checked",
+                            "data-name": "Radio1",
+                            name: "Radio1",
+                            value: "Нерезидент Беларуси"
+                          },
+                          domProps: {
+                            checked: _vm._q(_vm.rezident, "Нерезидент Беларуси")
+                          },
+                          on: {
+                            change: function($event) {
+                              _vm.rezident = "Нерезидент Беларуси"
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            staticClass: "radio-button-label-2 w-form-label",
+                            attrs: { for: "node" }
+                          },
+                          [_vm._v("Нерезидент Беларуси")]
+                        )
+                      ])
+                    ]
+                  ),
                   _vm._v(" "),
                   _c("label", { staticClass: "field-label" }, [
                     _vm._v("Статус субъекта")
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "div-block-15" }, [
-                    _c("label", { staticClass: "radio-button-field w-radio" }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.status,
-                            expression: "status"
-                          }
-                        ],
-                        staticClass: "w-form-formradioinput w-radio-input",
-                        attrs: {
-                          type: "radio",
-                          "data-name": "Radio2",
-                          id: "node-2",
-                          name: "Radio2",
-                          value: "Юридическое лицо"
-                        },
-                        domProps: {
-                          checked: _vm._q(_vm.status, "Юридическое лицо")
-                        },
-                        on: {
-                          change: function($event) {
-                            _vm.status = "Юридическое лицо"
-                          }
-                        }
-                      }),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "div-block-15",
+                      class: { border_alert: _vm.elemInArr(21) }
+                    },
+                    [
+                      _c(
+                        "label",
+                        { staticClass: "radio-button-field w-radio" },
+                        [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.status,
+                                expression: "status"
+                              }
+                            ],
+                            staticClass: "w-form-formradioinput w-radio-input",
+                            attrs: {
+                              type: "radio",
+                              checked: "checked",
+                              "data-name": "Radio2",
+                              id: "node-2",
+                              name: "Radio2",
+                              value: "Юридическое лицо"
+                            },
+                            domProps: {
+                              checked: _vm._q(_vm.status, "Юридическое лицо")
+                            },
+                            on: {
+                              change: function($event) {
+                                _vm.status = "Юридическое лицо"
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              staticClass: "radio-button-label w-form-label",
+                              attrs: { for: "node-3" }
+                            },
+                            [_vm._v("Юридическое лицо")]
+                          )
+                        ]
+                      ),
                       _vm._v(" "),
                       _c(
-                        "span",
-                        {
-                          staticClass: "radio-button-label w-form-label",
-                          attrs: { for: "node-3" }
-                        },
-                        [_vm._v("Юридическое лицо")]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("label", { staticClass: "radio-button-field w-radio" }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.status,
-                            expression: "status"
-                          }
-                        ],
-                        staticClass: "w-form-formradioinput w-radio-input",
-                        attrs: {
-                          type: "radio",
-                          "data-name": "Radio2",
-                          id: "node",
-                          name: "Radio2",
-                          value: "Предприниматель"
-                        },
-                        domProps: {
-                          checked: _vm._q(_vm.status, "Предприниматель")
-                        },
-                        on: {
-                          change: function($event) {
-                            _vm.status = "Предприниматель"
-                          }
-                        }
-                      }),
+                        "label",
+                        { staticClass: "radio-button-field w-radio" },
+                        [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.status,
+                                expression: "status"
+                              }
+                            ],
+                            staticClass: "w-form-formradioinput w-radio-input",
+                            attrs: {
+                              type: "radio",
+                              "data-name": "Radio2",
+                              id: "node",
+                              name: "Radio2",
+                              value: "Предприниматель"
+                            },
+                            domProps: {
+                              checked: _vm._q(_vm.status, "Предприниматель")
+                            },
+                            on: {
+                              change: function($event) {
+                                _vm.status = "Предприниматель"
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              staticClass: "radio-button-label-2 w-form-label",
+                              attrs: { for: "node-3" }
+                            },
+                            [_vm._v("Предприниматель")]
+                          )
+                        ]
+                      ),
                       _vm._v(" "),
-                      _c(
-                        "span",
-                        {
-                          staticClass: "radio-button-label-2 w-form-label",
-                          attrs: { for: "node-3" }
-                        },
-                        [_vm._v("Предприниматель")]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("label", { staticClass: "w-radio" }, [
-                      _c("input", {
-                        directives: [
+                      _c("label", { staticClass: "w-radio" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.status,
+                              expression: "status"
+                            }
+                          ],
+                          staticClass: "w-form-formradioinput w-radio-input",
+                          attrs: {
+                            type: "radio",
+                            "data-name": "Radio2",
+                            id: "node-3",
+                            name: "Radio2",
+                            value: "Физическое лицо"
+                          },
+                          domProps: {
+                            checked: _vm._q(_vm.status, "Физическое лицо")
+                          },
+                          on: {
+                            change: function($event) {
+                              _vm.status = "Физическое лицо"
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "span",
                           {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.status,
-                            expression: "status"
-                          }
-                        ],
-                        staticClass: "w-form-formradioinput w-radio-input",
-                        attrs: {
-                          type: "radio",
-                          "data-name": "Radio2",
-                          id: "node-3",
-                          name: "Radio2",
-                          value: "Физическое лицо"
-                        },
-                        domProps: {
-                          checked: _vm._q(_vm.status, "Физическое лицо")
-                        },
-                        on: {
-                          change: function($event) {
-                            _vm.status = "Физическое лицо"
-                          }
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c(
-                        "span",
-                        {
-                          staticClass: "radio-button-label-2 w-form-label",
-                          attrs: { for: "node-3" }
-                        },
-                        [_vm._v("Физическое лицо")]
-                      )
-                    ])
-                  ]),
+                            staticClass: "radio-button-label-2 w-form-label",
+                            attrs: { for: "node-3" }
+                          },
+                          [_vm._v("Физическое лицо")]
+                        )
+                      ])
+                    ]
+                  ),
                   _vm._v(" "),
                   _c(
                     "label",
                     { staticClass: "field-label _1", attrs: { for: "name" } },
-                    [
-                      _vm._v(
-                        "Введите полное название организационно-правовой формы юридического лица"
-                      )
-                    ]
+                    [_vm._v("Учётный номер плательщика")]
                   ),
                   _vm._v(" "),
                   _c("textarea", {
@@ -43470,24 +44673,60 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.polnoe_nazvanie,
-                        expression: "polnoe_nazvanie"
+                        value: _vm.UNP,
+                        expression: "UNP"
                       }
                     ],
-                    staticClass: "textarea w-input",
+                    staticClass: "textarea",
+                    class: { border_alert: _vm.elemInArr(13) },
                     attrs: {
-                      placeholder: 'ООО "Конфетка"',
+                      placeholder: "УНП",
                       maxlength: "5000",
-                      id: "field",
+                      id: "field13",
                       name: "field"
                     },
-                    domProps: { value: _vm.polnoe_nazvanie },
+                    domProps: { value: _vm.UNP },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
                           return
                         }
-                        _vm.polnoe_nazvanie = $event.target.value
+                        _vm.UNP = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "field-label _1", attrs: { for: "name" } },
+                    [_vm._v("Полное наименование юридического лица")]
+                  ),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.polnoe_naimenovanie,
+                        expression: "polnoe_naimenovanie"
+                      }
+                    ],
+                    staticClass: "textarea ",
+                    class: { border_alert: _vm.elemInArr(1) },
+                    attrs: {
+                      placeholder:
+                        '«Общество с ограниченной ответственностью "Ромашка"',
+                      maxlength: "5000",
+                      id: "field",
+                      name: "field"
+                    },
+                    domProps: { value: _vm.polnoe_naimenovanie },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.polnoe_naimenovanie = $event.target.value
                       }
                     }
                   }),
@@ -43495,11 +44734,7 @@ var render = function() {
                   _c(
                     "label",
                     { staticClass: "field-label _1", attrs: { for: "name-2" } },
-                    [
-                      _vm._v(
-                        "Фирменное наименование / написанное кириллицей фирменное наименование"
-                      )
-                    ]
+                    [_vm._v("Сокращённое наименование юридического лица")]
                   ),
                   _vm._v(" "),
                   _c("textarea", {
@@ -43507,25 +44742,26 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.firmennoe_naimenovanie,
-                        expression: "firmennoe_naimenovanie"
+                        value: _vm.socrasch_naimenovanie,
+                        expression: "socrasch_naimenovanie"
                       }
                     ],
-                    staticClass: "textarea w-input",
+                    staticClass: "textarea ",
+                    class: { border_alert: _vm.elemInArr(2) },
                     attrs: {
-                      placeholder: "Конфетка",
+                      placeholder: 'ООО "Ромашка"',
                       maxlength: "5000",
                       id: "field-2",
                       name: "field-2",
                       "data-name": "Field 2"
                     },
-                    domProps: { value: _vm.firmennoe_naimenovanie },
+                    domProps: { value: _vm.socrasch_naimenovanie },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
                           return
                         }
-                        _vm.firmennoe_naimenovanie = $event.target.value
+                        _vm.socrasch_naimenovanie = $event.target.value
                       }
                     }
                   }),
@@ -43549,9 +44785,10 @@ var render = function() {
                         expression: "FIO"
                       }
                     ],
-                    staticClass: "textarea w-input",
+                    staticClass: "textarea ",
+                    class: { border_alert: _vm.elemInArr(3) },
                     attrs: {
-                      placeholder: "Иванова Ольга Николаева",
+                      placeholder: "Иванов Пётр Иванович",
                       maxlength: "5000",
                       id: "field-3",
                       name: "field-3",
@@ -43571,7 +44808,11 @@ var render = function() {
                   _c(
                     "label",
                     { staticClass: "field-label _1", attrs: { for: "name-4" } },
-                    [_vm._v("Место нахождения юридического лица")]
+                    [
+                      _vm._v(
+                        "Место нахождения юридического лица (место жительства либо место пребывания индивидуального предпринимателя)"
+                      )
+                    ]
                   ),
                   _vm._v(" "),
                   _c("textarea", {
@@ -43583,10 +44824,10 @@ var render = function() {
                         expression: "mesto_nahozdenia"
                       }
                     ],
-                    staticClass: "textarea w-input",
+                    staticClass: "textarea ",
+                    class: { border_alert: _vm.elemInArr(4) },
                     attrs: {
-                      placeholder:
-                        "Республика Беларусь, г. Минск, ул. Гоголя 14, оф.15",
+                      placeholder: "Адрес",
                       maxlength: "5000",
                       id: "field-4",
                       name: "field-4",
@@ -43606,45 +44847,7 @@ var render = function() {
                   _c(
                     "label",
                     { staticClass: "field-label _1", attrs: { for: "name-4" } },
-                    [
-                      _vm._v(
-                        "Место жительства/пребывания индивидуального предпринимателя"
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("textarea", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.mesto_zitelstva,
-                        expression: "mesto_zitelstva"
-                      }
-                    ],
-                    staticClass: "textarea w-input",
-                    attrs: {
-                      placeholder: 'ООО "Конфетка"',
-                      maxlength: "5000",
-                      id: "field-12",
-                      name: "field-12",
-                      "data-name": "Field 12"
-                    },
-                    domProps: { value: _vm.mesto_zitelstva },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.mesto_zitelstva = $event.target.value
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "label",
-                    { staticClass: "field-label _1", attrs: { for: "name-4" } },
-                    [_vm._v("Почтовый адрес")]
+                    [_vm._v("Почтовый адрес значение")]
                   ),
                   _vm._v(" "),
                   _c("textarea", {
@@ -43656,8 +44859,10 @@ var render = function() {
                         expression: "pochtovyi_adres"
                       }
                     ],
-                    staticClass: "textarea w-input",
+                    staticClass: "textarea ",
+                    class: { border_alert: _vm.elemInArr(11) },
                     attrs: {
+                      placeholder: "Индекс",
                       "data-name": "Field 11",
                       maxlength: "5000",
                       id: "field-11",
@@ -43677,40 +44882,7 @@ var render = function() {
                   _c(
                     "label",
                     { staticClass: "field-label _1", attrs: { for: "name-4" } },
-                    [_vm._v("Размер уставного фонда юридического лица")]
-                  ),
-                  _vm._v(" "),
-                  _c("textarea", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.razmer_ust_fonda,
-                        expression: "razmer_ust_fonda"
-                      }
-                    ],
-                    staticClass: "textarea w-input",
-                    attrs: {
-                      "data-name": "Field 10",
-                      maxlength: "5000",
-                      id: "field-10",
-                      name: "field-10"
-                    },
-                    domProps: { value: _vm.razmer_ust_fonda },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.razmer_ust_fonda = $event.target.value
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "label",
-                    { staticClass: "field-label _1", attrs: { for: "name-4" } },
-                    [_vm._v("Номер расчётного счёта ")]
+                    [_vm._v("Расчетный счет № (наименование банка, филиала)")]
                   ),
                   _vm._v(" "),
                   _c("input", {
@@ -43722,13 +44894,15 @@ var render = function() {
                         expression: "nomer_rasch_sheta"
                       }
                     ],
-                    staticClass: "w-input",
+                    staticClass: "textarea",
+                    class: { border_alert: _vm.elemInArr(5) },
                     attrs: {
+                      placeholder: "Расчётный счёт",
                       type: "text",
                       maxlength: "256",
                       name: "name-3",
                       "data-name": "Name 3",
-                      id: "name-3"
+                      id: "name-5"
                     },
                     domProps: { value: _vm.nomer_rasch_sheta },
                     on: {
@@ -43756,8 +44930,10 @@ var render = function() {
                         expression: "naimenovanie_banka"
                       }
                     ],
-                    staticClass: "textarea w-input",
+                    staticClass: "textarea ",
+                    class: { border_alert: _vm.elemInArr(9) },
                     attrs: {
+                      placeholder: "Наименование банка",
                       "data-name": "Field 9",
                       maxlength: "5000",
                       id: "field-9",
@@ -43777,7 +44953,11 @@ var render = function() {
                   _c(
                     "label",
                     { staticClass: "field-label _1", attrs: { for: "name-4" } },
-                    [_vm._v("BIC-код банка")]
+                    [
+                      _vm._v(
+                        "Банковский идентификационный код (далее – БИК) банка"
+                      )
+                    ]
                   ),
                   _vm._v(" "),
                   _c("textarea", {
@@ -43789,7 +44969,8 @@ var render = function() {
                         expression: "BIC"
                       }
                     ],
-                    staticClass: "textarea w-input",
+                    staticClass: "textarea ",
+                    class: { border_alert: _vm.elemInArr(8) },
                     attrs: {
                       "data-name": "Field 8",
                       maxlength: "5000",
@@ -43810,9 +44991,43 @@ var render = function() {
                   _c(
                     "label",
                     { staticClass: "field-label _1", attrs: { for: "name-4" } },
+                    [_vm._v("Размер уставного фонда юридического лица")]
+                  ),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.razmer_ust_fonda,
+                        expression: "razmer_ust_fonda"
+                      }
+                    ],
+                    staticClass: "textarea ",
+                    class: { border_alert: _vm.elemInArr(10) },
+                    attrs: {
+                      "data-name": "Field 10",
+                      maxlength: "5000",
+                      id: "field-10",
+                      name: "field-10"
+                    },
+                    domProps: { value: _vm.razmer_ust_fonda },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.razmer_ust_fonda = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "field-label _1", attrs: { for: "name-4" } },
                     [
                       _vm._v(
-                        "Балансовая стоимость активов / стоимость общих активов (для иностранных юридических лиц)"
+                        "Балансовая стоимость активов (для иностранных юридических лиц – стоимость общих активов), бел.руб."
                       )
                     ]
                   ),
@@ -43822,29 +45037,78 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.balansov_stoim_aktivov_inostr,
-                        expression: "balansov_stoim_aktivov_inostr"
+                        value: _vm.balansovaja_stoim_aktivov,
+                        expression: "balansovaja_stoim_aktivov"
                       }
                     ],
-                    staticClass: "textarea w-input",
+                    staticClass: "textarea ",
+                    class: { border_alert: _vm.elemInArr(14) },
                     attrs: {
-                      "data-name": "Field 6",
+                      placeholder: "На 12.10.2019",
+                      "data-name": "Field 10",
                       maxlength: "5000",
-                      id: "field-6",
-                      name: "field-6"
+                      id: "field-14",
+                      name: "field-10"
                     },
-                    domProps: { value: _vm.balansov_stoim_aktivov_inostr },
+                    domProps: { value: _vm.balansovaja_stoim_aktivov },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
                           return
                         }
-                        _vm.balansov_stoim_aktivov_inostr = $event.target.value
+                        _vm.balansovaja_stoim_aktivov = $event.target.value
                       }
                     }
                   }),
                   _vm._v(" "),
-                  _vm._m(0),
+                  _c(
+                    "label",
+                    { staticClass: "field-label _1", attrs: { for: "name-4" } },
+                    [
+                      _vm._v(
+                        "Объем выручки от реализации товаров (работ, услуг) по итогам финансового года, предшествующего году приобретения, бел.руб."
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.objem_viruchki,
+                        expression: "objem_viruchki"
+                      }
+                    ],
+                    staticClass: "textarea ",
+                    class: { border_alert: _vm.elemInArr(15) },
+                    attrs: {
+                      placeholder: "За период 1.03.2019-1.06.2019",
+                      "data-name": "Field 10",
+                      maxlength: "5000",
+                      id: "field-15",
+                      name: "field-10"
+                    },
+                    domProps: { value: _vm.objem_viruchki },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.objem_viruchki = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "field-label _1", attrs: { for: "name-4" } },
+                    [
+                      _vm._v(
+                        "Основные виды товаров (работ, услуг), поставляемых на товарный рынок заинтересованным лицом (в отношении иностранного юридического лица – также его филиалом, представительством, дочерним предприятием)"
+                      )
+                    ]
+                  ),
                   _vm._v(" "),
                   _c("textarea", {
                     directives: [
@@ -43855,7 +45119,8 @@ var render = function() {
                         expression: "vidy_tovarov"
                       }
                     ],
-                    staticClass: "textarea w-input",
+                    staticClass: "textarea ",
+                    class: { border_alert: _vm.elemInArr(7) },
                     attrs: {
                       "data-name": "Field 7",
                       maxlength: "5000",
@@ -43873,38 +45138,114 @@ var render = function() {
                     }
                   }),
                   _vm._v(" "),
-                  _vm._m(1)
+                  _c("label", { staticClass: "field-label" }, [
+                    _vm._v(
+                      "Доминант/Естественный монополист (республиканский уровень"
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "div-block-15",
+                      class: { border_alert: _vm.elemInArr(22) }
+                    },
+                    [
+                      _c(
+                        "label",
+                        { staticClass: "radio-button-field w-radio" },
+                        [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.dominant,
+                                expression: "dominant"
+                              }
+                            ],
+                            staticClass: "w-form-formradioinput w-radio-input",
+                            attrs: {
+                              type: "radio",
+                              "data-name": "Radio2",
+                              id: "node-4",
+                              name: "Radio3",
+                              value: "Да"
+                            },
+                            domProps: { checked: _vm._q(_vm.dominant, "Да") },
+                            on: {
+                              change: function($event) {
+                                _vm.dominant = "Да"
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              staticClass: "radio-button-label-2 w-form-label",
+                              attrs: { for: "node-3" }
+                            },
+                            [_vm._v("Да")]
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("label", { staticClass: "w-radio" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.dominant,
+                              expression: "dominant"
+                            }
+                          ],
+                          staticClass: "w-form-formradioinput w-radio-input",
+                          attrs: {
+                            type: "radio",
+                            "data-name": "Radio2",
+                            id: "node-5",
+                            name: "Radio3",
+                            value: "Нет"
+                          },
+                          domProps: { checked: _vm._q(_vm.dominant, "Нет") },
+                          on: {
+                            change: function($event) {
+                              _vm.dominant = "Нет"
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            staticClass: "radio-button-label-2 w-form-label",
+                            attrs: { for: "node-3" }
+                          },
+                          [_vm._v("Нет")]
+                        )
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _vm._m(0)
                 ]
               ),
               _vm._v(" "),
-              _vm._m(2),
+              _vm._m(1),
               _vm._v(" "),
-              _vm._m(3)
+              _vm._m(2)
             ])
           ])
         ])
       ])
     ]),
     _vm._v(" "),
-    _vm._m(4)
+    _vm._m(3)
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "label",
-      { staticClass: "field-label _1", attrs: { for: "name-4" } },
-      [
-        _vm._v(
-          "Основные виды товаров (работ, услуг), поставляемых на товарный рынок "
-        ),
-        _c("em", [_vm._v("(выбор из справочника)")])
-      ]
-    )
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -61832,6 +63173,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_document_Document__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./components/document/Document */ "./resources/js/components/document/Document.vue");
 /* harmony import */ var _components_document_GetDocument__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./components/document/GetDocument */ "./resources/js/components/document/GetDocument.vue");
 /* harmony import */ var _components_document_PrepareDocument__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./components/document/PrepareDocument */ "./resources/js/components/document/PrepareDocument.vue");
+/* harmony import */ var _components_document_DocumentSubject__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./components/document/DocumentSubject */ "./resources/js/components/document/DocumentSubject.vue");
+/* harmony import */ var _components_document_FormDocument__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./components/document/FormDocument */ "./resources/js/components/document/FormDocument.vue");
+/* harmony import */ var _components_document_DealDocument__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./components/document/DealDocument */ "./resources/js/components/document/DealDocument.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
@@ -61877,9 +63221,13 @@ var postName = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
 
 
 
+
+
+
  // console.log(is_admin);
 
-axios__WEBPACK_IMPORTED_MODULE_1___default.a.defaults.baseURL = 'http://localhost:/api';
+axios__WEBPACK_IMPORTED_MODULE_1___default.a.defaults.baseURL = 'http://localhost:/api'; // axios.defaults.baseURL = 'http://mart.juran.by:/api';
+
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
   mode: 'history',
   routes: [{
@@ -61938,7 +63286,21 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
     }, {
       path: '/prep_doc',
       name: 'prep_doc',
-      component: _components_document_PrepareDocument__WEBPACK_IMPORTED_MODULE_29__["default"]
+      component: _components_document_PrepareDocument__WEBPACK_IMPORTED_MODULE_29__["default"],
+      props: true
+    }, {
+      path: '/doc_subject',
+      name: 'doc_subject',
+      component: _components_document_DocumentSubject__WEBPACK_IMPORTED_MODULE_30__["default"],
+      props: true
+    }, {
+      path: '/form_doc',
+      name: 'form_doc',
+      component: _components_document_FormDocument__WEBPACK_IMPORTED_MODULE_31__["default"]
+    }, {
+      path: '/deal_doc',
+      name: 'deal_doc',
+      component: _components_document_DealDocument__WEBPACK_IMPORTED_MODULE_32__["default"]
     }]
   }, {
     path: '/admin',
@@ -62961,6 +64323,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/document/DealDocument.vue":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/document/DealDocument.vue ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _DealDocument_vue_vue_type_template_id_7da26780___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DealDocument.vue?vue&type=template&id=7da26780& */ "./resources/js/components/document/DealDocument.vue?vue&type=template&id=7da26780&");
+/* harmony import */ var _DealDocument_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DealDocument.vue?vue&type=script&lang=js& */ "./resources/js/components/document/DealDocument.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _DealDocument_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _DealDocument_vue_vue_type_template_id_7da26780___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _DealDocument_vue_vue_type_template_id_7da26780___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/document/DealDocument.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/document/DealDocument.vue?vue&type=script&lang=js&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/document/DealDocument.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DealDocument_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./DealDocument.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/DealDocument.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DealDocument_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/document/DealDocument.vue?vue&type=template&id=7da26780&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/document/DealDocument.vue?vue&type=template&id=7da26780& ***!
+  \******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DealDocument_vue_vue_type_template_id_7da26780___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./DealDocument.vue?vue&type=template&id=7da26780& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/DealDocument.vue?vue&type=template&id=7da26780&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DealDocument_vue_vue_type_template_id_7da26780___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DealDocument_vue_vue_type_template_id_7da26780___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/document/Document.vue":
 /*!*******************************************************!*\
   !*** ./resources/js/components/document/Document.vue ***!
@@ -63025,6 +64456,144 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Document_vue_vue_type_template_id_0e5e3d18___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Document_vue_vue_type_template_id_0e5e3d18___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/document/DocumentSubject.vue":
+/*!**************************************************************!*\
+  !*** ./resources/js/components/document/DocumentSubject.vue ***!
+  \**************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _DocumentSubject_vue_vue_type_template_id_c6064970___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DocumentSubject.vue?vue&type=template&id=c6064970& */ "./resources/js/components/document/DocumentSubject.vue?vue&type=template&id=c6064970&");
+/* harmony import */ var _DocumentSubject_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DocumentSubject.vue?vue&type=script&lang=js& */ "./resources/js/components/document/DocumentSubject.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _DocumentSubject_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _DocumentSubject_vue_vue_type_template_id_c6064970___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _DocumentSubject_vue_vue_type_template_id_c6064970___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/document/DocumentSubject.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/document/DocumentSubject.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/components/document/DocumentSubject.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DocumentSubject_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./DocumentSubject.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/DocumentSubject.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DocumentSubject_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/document/DocumentSubject.vue?vue&type=template&id=c6064970&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/document/DocumentSubject.vue?vue&type=template&id=c6064970& ***!
+  \*********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DocumentSubject_vue_vue_type_template_id_c6064970___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./DocumentSubject.vue?vue&type=template&id=c6064970& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/DocumentSubject.vue?vue&type=template&id=c6064970&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DocumentSubject_vue_vue_type_template_id_c6064970___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DocumentSubject_vue_vue_type_template_id_c6064970___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/document/FormDocument.vue":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/document/FormDocument.vue ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _FormDocument_vue_vue_type_template_id_9cd49850___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FormDocument.vue?vue&type=template&id=9cd49850& */ "./resources/js/components/document/FormDocument.vue?vue&type=template&id=9cd49850&");
+/* harmony import */ var _FormDocument_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FormDocument.vue?vue&type=script&lang=js& */ "./resources/js/components/document/FormDocument.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _FormDocument_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _FormDocument_vue_vue_type_template_id_9cd49850___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _FormDocument_vue_vue_type_template_id_9cd49850___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/document/FormDocument.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/document/FormDocument.vue?vue&type=script&lang=js&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/document/FormDocument.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FormDocument_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./FormDocument.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/FormDocument.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FormDocument_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/document/FormDocument.vue?vue&type=template&id=9cd49850&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/document/FormDocument.vue?vue&type=template&id=9cd49850& ***!
+  \******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FormDocument_vue_vue_type_template_id_9cd49850___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./FormDocument.vue?vue&type=template&id=9cd49850& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/document/FormDocument.vue?vue&type=template&id=9cd49850&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FormDocument_vue_vue_type_template_id_9cd49850___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FormDocument_vue_vue_type_template_id_9cd49850___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
