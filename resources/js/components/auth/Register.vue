@@ -1,5 +1,8 @@
 <template>
-    <div>
+    <div class="container">
+        <div class="row" >
+            <div class="col-2"></div>
+            <div class="content_exp_test col-8">
         <div class="alert alert-danger" v-if="error">
            <p>There was an error, unable to complete registration.</p>
 
@@ -38,6 +41,9 @@
 <!--            </div>-->
             <button type="submit" class="btn btn-default">Submit</button>
         </form>
+         </div>
+            <div class="col-2"></div>
+      </div>
     </div>
 </template>
 

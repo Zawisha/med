@@ -35,8 +35,17 @@
                 <li class="page-item page-link my_pointer" v-on:click="next">Next</li>
             </ul>
 
-        <textarea class="form-control" rows="2" id="messages" name="text" v-model="text_area_message" v-if="show_textarea" v-bind:class="{border_alert: danger_ans}" > </textarea>
-        <button type="button" class="btn btn-primary btn-block procedure_button" v-on:click="save_change_post_name" v-if="show_textarea">Сохранить</button>
+        <div v-if="show_textarea">
+            <div>Редактировать название поста</div>
+        <textarea class="form-control" rows="2" id="messages" name="text" v-model="text_area_message" v-bind:class="{border_alert: danger_ans}" > </textarea>
+        <button type="button" class="btn btn-primary btn-block procedure_button" v-on:click="save_change_post_name">Сохранить</button>
+        </div>
+
+    <div v-if="!show_textarea">
+        <div>Добавить пост</div>
+        <textarea class="form-control" rows="2"  name="text" v-model="new_post_message" placeholder="Введите название нового поста"> </textarea>
+        <button type="button" class="btn btn-success btn-block procedure_button" v-on:click="push_the_button" >Добавить пост</button>
+    </div>
     </div>
 </template>
 <script>
@@ -59,13 +68,48 @@
                 text_area_message:'',
                 change_name_id_post:'',
                 danger_ans:false,
+                new_post_message:''
             }
         },
         mounted() {
             this.render_table(this.posts, this.removed, this.pagination_numb, this.posts_length);
             this.select_front_current_post();
+            this.find_post_id();
         },
         methods: {
+
+            push_the_button()
+            {
+                this.danger_ans = false;
+                if(this.new_post_message==''||this.new_post_message==' '||this.new_post_message=='  ')
+                {
+                    this.danger_ans = true;
+                }
+                else
+                {
+                    //установим имя поста
+                    this.$store.dispatch('changeName', this.new_post_message),
+                        //сохраним пустую процедуру
+                        axios
+                            .post('/add_procedure',{
+                                id_post:this.$store.state.post_id,
+                                name_post:this.$store.state.namePost,
+                                id_main_procedure:0,
+                                name_main_procedure:0
+                            }).then( Vue.router.push({name:'add_procedures'}));
+                }
+            },
+
+
+            find_post_id()
+            {
+                axios
+                    .post('/post_id').then(({ data }) => (
+                        //установим номер поста
+                        this.$store.dispatch('setPostCounter', data+1)
+                    )
+                )
+            },
 
             save_change_post_name()
             {

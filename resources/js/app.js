@@ -1,4 +1,4 @@
-
+import ForgetPasswordJuran from "./components/auth/ForgetPasswordJuran";
 
 
 require('./bootstrap');
@@ -11,6 +11,14 @@ import axios from 'axios';
 import VueAxios from 'vue-axios';
 
 import VueRouter from 'vue-router';
+
+// import Autocomplete  from 'vuejs-auto-complete';
+// Vue.component('autocomplete', Autocomplete);
+
+import vSelect from 'vue-select';
+Vue.component('v-select', vSelect);
+import 'vue-select/dist/vue-select.css';
+
 
 //vuex store
 import Vuex from 'vuex';
@@ -62,7 +70,14 @@ import PrepareDocument from "./components/document/PrepareDocument";
 import DocumentSubject from "./components/document/DocumentSubject";
 import FormDocument from "./components/document/FormDocument";
 import DealDocument from "./components/document/DealDocument";
-// console.log(is_admin);
+import Profile from "./components/profile/Profile";
+import Document1 from "./components/document/document_list/Document1";
+import Document2 from "./components/document/document_list/Document2";
+import MyDocument from "./components/profile/MyDocument";
+import UsersList from "./components/medical/UsersList";
+import LoginJuran from "./components/auth/LoginJuran";
+import RegisterJuran from "./components/auth/RegisterJuran";
+
 
 axios.defaults.baseURL = 'http://localhost:/api';
 // axios.defaults.baseURL = 'http://mart.juran.by:/api';
@@ -160,6 +175,34 @@ const router = new VueRouter({
                     name: 'deal_doc',
                     component: DealDocument,
                 },
+                {
+                    path: '/document1',
+                    name: 'document1',
+                    component: Document1,
+                },
+                {
+                    path: '/document2',
+                    name: 'document2',
+                    component: Document2,
+                },
+                {
+                    path: '/forget_pass_juran',
+                    name: 'forget_pass_juran',
+                    component: ForgetPasswordJuran,
+                },
+                {
+                    path: '/profile',
+                    name: 'profile',
+                    component: Profile,
+                    children: [
+                        {
+                            path: '/my_doc',
+                            name: 'my_doc',
+                            component: MyDocument,
+                        },
+                        ]
+                },
+
                 ]
         },
         {
@@ -197,6 +240,11 @@ const router = new VueRouter({
                     name: 'example',
                     component: ExampleComponent
                 },
+                {
+                    path: '/admin/users_list',
+                    name: 'users_list',
+                    component: UsersList
+                },
 
             ],
             beforeEnter: (to, from, next) => {
@@ -219,8 +267,20 @@ const router = new VueRouter({
             name: 'test',
             component: Test,
         },
+        {
+            path: '/login_juran',
+            name: 'login_juran',
+            component: LoginJuran,
+        },
+        {
+            path: '/register_juran',
+            name: 'register_juran',
+            component: RegisterJuran,
+        },
+
     ],
 });
+
 
 Vue.router = router;
 //websanova/vue-auth

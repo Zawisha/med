@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\MyAuth;
 
 use App\Admin;
+use App\Subject;
 use App\User;
 use App\ForgetPassword;
+use App\UserStatus;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -19,12 +21,20 @@ class AuthController extends Controller
     {
 //add valid
         $input = $request->except('conf_password');
+        $messages = [
+            'full-name.required' => 'Please enter full name',
+            'address.required' => 'Please enter address'
+        ];
         $validator = Validator::make($input, [
-            'name' => ['required', 'string', 'unique:users', 'max:20', 'min:3'],
+            'name' => ['required', 'string',  'max:30', 'min:2', 'alpha'],
+            'surname' => ['required', 'string', 'max:30', 'min:2', 'alpha'],
+            'telefon' => ['required', 'max:30', 'min:3'],
             'email' => ['required', 'string', 'email', 'max:50', 'unique:users'],
-            'password' => ['required', 'string', 'min:6'],
+            'password' => ['required', 'string', 'min:6','max:30'],
         ]);
         if($validator ->fails()){
+
+           // $failed = $validator->messages();
             $failed = $validator->messages();
             return response([$failed, 'status' => 'fail',],200);
         }
@@ -38,9 +48,19 @@ class AuthController extends Controller
             $user = new User;
             $user->email = $request->email;
             $user->name = $request->name;
+            $user->surname = $request->surname;
+            $user->telefon = $request->telefon;
             $user->password = Hash::make($request->password);
             $user->verified_token = $token;
             $user->save();
+
+
+
+            UserStatus::create([
+                'id_user' => $user['id'],
+                'status'=>'3',
+                'banned'=>'0'
+                ]);
 
             return response([
                 'status' => 'success',
@@ -54,7 +74,13 @@ class AuthController extends Controller
     public function login(Request $request)
     {
 
-        $credentials = $request->only('email', 'password');
+
+       $login=$request->input('login_user');
+        $field=filter_var($login,FILTER_VALIDATE_EMAIL)?'email':'name';
+        $request->merge([$field=>$login]);
+        $credentials=$request->only($field,'password');
+
+        //$credentials = $request->only('email', 'password');
         //if invalid log or pass
         if ( ! $token = JWTAuth::attempt($credentials)) {
             return response([
@@ -65,7 +91,17 @@ class AuthController extends Controller
         }
         else
         {
-            $user = User::where('email','=',$request->email) ->first();
+            $login=$request->input('login_user');
+            $field=filter_var($login,FILTER_VALIDATE_EMAIL)?'email':'name';
+            if($field =='email')
+            {
+                $user = User::where('email','=',$login) ->first();
+            }
+            else
+            {
+                    $user = User::where('name','=',$login) ->first();
+            }
+
             if(( $user ) && ($user->verified == '1')) {
                 return response([
                     'status' => 'success'
@@ -218,13 +254,14 @@ class AuthController extends Controller
 
     }
 
+
     public function is_admin(Request $request)
     {
         $user = User::find(JWTAuth::user()->id);
-        $is_admin = Admin::where('id_user', '=', $user['id'])->first();
+        $is_admin = UserStatus::where('id_user', '=', $user['id'])->first();
         if($is_admin)
         {
-            return 1;
+          return $is_admin['status'];
         }
         else
         {

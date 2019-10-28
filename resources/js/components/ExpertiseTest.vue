@@ -59,10 +59,7 @@
 
                 </div></div>
 
-        </div><div class="section-2"><div class="div-block-7">
-            <div class="columns w-row"><div class="w-col w-col-6"><div>
-                <div class="text-block">  © Все права защищены</div></div></div>
-                <div class="w-col w-col-6"></div></div></div></div>
+        </div>
         </body>
     </div>
 

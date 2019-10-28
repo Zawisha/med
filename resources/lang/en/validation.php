@@ -85,10 +85,10 @@ return [
     'mimes' => 'The :attribute must be a file of type: :values.',
     'mimetypes' => 'The :attribute must be a file of type: :values.',
     'min' => [
-        'numeric' => 'The :attribute must be at least :min.',
-        'file' => 'The :attribute must be at least :min kilobytes.',
-        'string' => 'The :attribute must be at least :min characters.',
-        'array' => 'The :attribute must have at least :min items.',
+        'numeric' => ' :attribute должно быть не менее :min.',
+        'file' => ' :attribute должно быть не менее :min килобайт.',
+        'string' => ' :attribute должно быть не менее :min символов.',
+        'array' => ' :attribute должно быть не менее :min.',
     ],
     'not_in' => 'The selected :attribute is invalid.',
     'not_regex' => 'The :attribute format is invalid.',
@@ -129,8 +129,32 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'name' => [
+            'min' =>'Поле Имя должно быть не менее 2 символов',
+            'required' =>'Поле имя обязательно для заполнения',
+            'max' =>'Поле Имя не может быть больше 30 символов',
+            'alpha' =>'Поле Имя может содержать только буквы',
+
+        ],
+        'surname' => [
+            'min' =>'Поле Фамилия должно быть не менее 2 символов',
+            'required' =>'Поле фамилия обязательно для заполнения',
+            'max' =>'Поле Фамилия не может быть больше 30 символов',
+            'alpha' =>'Поле Фамилия может содержать только буквы',
+        ],
+        'password' => [
+            'min' =>'Пароль должен быть не менее 6 символов',
+            'max' =>'Поле Пароль не может быть больше 30 символов'
+        ],
+        'telefon' => [
+            'min' =>'Поле телефон должно быть не менее 3 символов',
+            'required' =>'Поле телефон обязательно для заполнения',
+            'max' =>'Поле Телефон не может быть больше 30 символов'
+        ],
+        'email' => [
+            'unique' =>'Такой email уже зарегистрирован',
+            'max' =>'Поле email не может быть больше 50 символов',
+            'email' =>'Поле email должно соответствовать виду email'
         ],
     ],
 
@@ -145,6 +169,8 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+
+    ],
 
 ];

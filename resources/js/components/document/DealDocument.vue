@@ -11,17 +11,12 @@
                         <form id="wf-form-Form-Doc" name="wf-form-Form-Doc" data-name="Form Doc" v-on:submit.prevent="save">
 
                             <label for="name" class="field-label _1">Заинтересованное лицо (которое обращается за согласием)</label>
-                            <select v-model="select_zaint_lico" v-bind:class="{border_alert: elemInArr(30)}">
-                                <option value="" style="display:none">Выберите заинтересованное лицо</option>
-                                <option v-for="user in zaint_lico_arr" v-bind:value="user.name" >{{user.name}}</option>
-                            </select>
 
+                            <v-select v-model="select_zaint_lico" :options="arr_m" placeholder="Выберите заинтересованное лицо" @search="getDBrequestAutocomplete"></v-select>
                             <label for="name-2" class="field-label _1">Лицо, в отношении которого осуществляется сделка</label>
-                            <select v-model="lico_v_otnoshenii" v-bind:class="{border_alert: elemInArr(31)}">
-                                <option value="" style="display:none">Выберите лицо, в отношении которого осуществляется сделка</option>
-                                <option v-for="user in zaint_lico_arr" v-bind:value="user.name" >{{user.name}}</option>
-                            </select>
 
+
+                            <v-select v-model="lico_v_otnoshenii" :options="arr_m1" placeholder="Выберите лицо, в отношении которого осуществляется сделка" @search="getDBrequestAutocomplete1"></v-select>
 
                             <label for="name-2" class="field-label _1">Цель совершаемой сделки</label>
                             <textarea v-bind:class="{border_alert: elemInArr(3)}" maxlength="5000" id="field-3" name="field-3" data-name="Field 3" class="textarea " v-model="cel"></textarea>
@@ -67,8 +62,6 @@
                         <div class="w-form-done"><div>Thank you! Your submission has been received!</div></div>
                         <div class="w-form-fail"><div>Oops! Something went wrong while submitting the form.</div></div>
                     </div></div></div></div></div>
-    <div class="section-2"><div class="div-block-7"><div class="columns w-row"><div class="w-col w-col-6"><div><div class="text-block">  © Все права защищены</div></div></div><div class="w-col w-col-6"></div></div></div></div>
-
 </div>
 
 
@@ -106,11 +99,13 @@
                 ],
                 select_zaint_lico:'',
                 lico_v_otnoshenii:'',
-                deal_with:0
+                deal_with:0,
+                arr_m:[],
+                arr_m1:[]
             }
         },
         mounted() {
-            this.polute_start_array(this.zaint_lico_arr);
+            // this.polute_start_array(this.zaint_lico_arr);
         },
         methods: {
 elemInArr(numb)
@@ -172,22 +167,70 @@ check(inp,numb)
 
 },
 
-            polute_start_array(inp)
-            {
-                axios
-                    .post('/polute_start_array',{
-                        // id_post:this.$store.state.post_id,
-                    }).then(({ data }) =>
-                    {
-                                data.forEach(function(entry) {
-                                        inp.push({
-                                            name:entry.polnoe_naimenovanie,
-                                        });
-                                })
-                    }
+            // polute_start_array(inp)
+            // {
+            //     axios
+            //         .post('/polute_start_array',{
+            //             // id_post:this.$store.state.post_id,
+            //         }).then(({ data }) =>
+            //         {
+            //                     data.forEach(function(entry) {
+            //                             inp.push({
+            //                                 name:entry.polnoe_naimenovanie,
+            //                             });
+            //                     })
+            //         }
+            //
+            //     );
+            // },
 
-                );
+            getDBrequestAutocomplete (input) {
+                this.arr_m = [];
+                if(input!='') {
+                    let arr_md = [];
+                    axios
+                        .post('/get_autocomplete', {
+                            req_string: input,
+                        })
+                        .then(({data}) => {
+                                data.forEach(function (entry) {
+                                    arr_md.push(
+                                        // id:entry.id,
+                                        entry.polnoe_naimenovanie,
+                                    );
+                                })
+                            }
+                        )
+
+
+                    return this.arr_m = arr_md;
+                }
             },
+
+            getDBrequestAutocomplete1 (input) {
+                this.arr_m1 = [];
+                if(input!='') {
+                    let arr_md = [];
+                    axios
+                        .post('/get_autocomplete', {
+                            req_string: input,
+                        })
+                        .then(({data}) => {
+                                data.forEach(function (entry) {
+                                    arr_md.push(
+                                        // id:entry.id,
+                                        entry.polnoe_naimenovanie,
+                                    );
+                                })
+                            }
+                        )
+
+
+                    return this.arr_m1 = arr_md;
+                }
+            },
+
+
 
         },
 

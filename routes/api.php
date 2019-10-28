@@ -59,4 +59,15 @@ Route::post('update_procedure_name', 'DBController@update_procedure_name');
 Route::post('save_first_text', 'TextController@save_first_text');
 Route::post('save_subject', 'DBController@save_subject');
 Route::post('polute_start_array', 'DBController@polute_start_array');
+Route::post('get_autocomplete', 'DBController@get_autocomplete');
+Route::post('render_documents', 'DBController@render_documents');
+Route::post('documents_list', 'DBController@documents_list');
+Route::post('users_list', 'DBController@users_list');
+Route::post('change_user_banned', 'DBController@change_user_banned');
+Route::post('change_user_role', 'DBController@change_user_role');
+
+
+//Route::post('vk_get_token', 'DBController@vk_get_token');
+
+
 

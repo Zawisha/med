@@ -4,7 +4,7 @@
     <div class="section">
         <div class="div-screen-1">
             <div class="div-block-8">
-                <h1 class="heading">Подготовка документов</h1>
+                <h1 class="heading">Подготовка документов 2</h1>
                 <div class="div-block-10">
                     <div class="text-block-3">Заполните следующие поля:</div>
                     <div class="w-form">

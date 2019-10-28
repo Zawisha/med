@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\CurrentPost;
+use App\Document;
+use App\DocumentName;
 use App\Subject;
+use App\UserStatus;
 use Illuminate\Http\Request;
 use App\Temp;
 use App\Procedure;
 use App\Post;
 use App\CurrentBlock;
+use App\User;
 
 class DBController extends Controller
 {
@@ -474,6 +478,56 @@ class DBController extends Controller
     {
         $name = Subject::select('polnoe_naimenovanie')->get();
         return $name;
+    }
+    public function get_autocomplete(Request $request)
+    {
+        $req_string = $request->input('req_string');
+        $res=Subject::where('polnoe_naimenovanie','like',"%{$req_string}%")->get();
+        return $res;
+    }
+
+
+    //documents list for user
+    public function render_documents()
+    {
+        $user = User::find(JWTAuth::user()->id);
+
+        $is_admin = Document::where('id_user', '=', $user['id'])->get();
+    }
+
+    public function documents_list()
+    {
+        $doc_list = DocumentName::where('id', '>', '0')->get();
+        return $doc_list;
+    }
+
+    public function users_list()
+    {
+        $users_list = User::with('user_status')->where('id', '>', '0')->get();
+
+        foreach ($users_list as $key=>$list)
+        {
+          //  if($list['user_status']===null)
+          //  {
+//$users_list[$key]['user_status']='4';
+           // }
+        }
+
+        return $users_list;
+    }
+
+    public function change_user_banned(Request $request)
+    {
+        $user_id = $request->input('user_id');
+        $user_banned = $request->input('user_banned');
+        UserStatus::where('id_user', '=', $user_id)->update(['banned' =>$user_banned]);
+    }
+
+    public function change_user_role(Request $request)
+    {
+        $user_id = $request->input('user_id');
+        $user_role = $request->input('user_role');
+        UserStatus::where('id_user', '=', $user_id)->update(['status' =>$user_role]);
     }
 
 }

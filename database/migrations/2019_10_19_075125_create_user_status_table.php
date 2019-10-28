@@ -15,6 +15,9 @@ class CreateUserStatusTable extends Migration
     {
         Schema::create('user_status', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('id_user');
+            $table->integer('status')->default(3);
+            $table->integer('banned')->default(0);
             $table->timestamps();
         });
     }

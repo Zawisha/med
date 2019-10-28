@@ -33,19 +33,19 @@
             }
         },
         mounted() {
-this.is_admin_add();
+// this.is_admin_add();
         },
         created(){
         },
         methods: {
 
-            is_admin_add()
-            {
-                axios.get('/is_admin').then(({ data }) => (
-                        this.$store.dispatch('setIsAdmin', data)
-                    )
-                )
-            }
+            // is_admin_add()
+            // {
+            //     axios.get('/is_admin').then(({ data }) => (
+            //             this.$store.dispatch('setIsAdmin', data)
+            //         )
+            //     )
+            // }
 
         }
 

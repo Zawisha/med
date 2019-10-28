@@ -9,9 +9,10 @@
                     </div>
                     <form autocomplete="off" @submit.prevent="login" Метод = «пост»>
                         <div class="form-group">
-                            <label for="email">E-mail</label>
-                            <input type="email" id="email" class="form-control" placeholder="user@example.com" v-model="email" required>
+                            <label for="login_user">E-mail или никнейм</label>
+                            <input type="text" id="login_user" class="form-control" placeholder="никнейм пользователя" v-model="login_user" required>
                         </div>
+
                         <div class="form-group">
                             <label for="password">Пароль</label>
                             <input type="password" id="password" class="form-control" v-model="password" required>
@@ -37,7 +38,8 @@
             return {
                 email: null,
                 password: null,
-                error: false
+                error: false,
+                login_user:''
             }
         },
         methods: {
@@ -47,11 +49,11 @@
                 this.$auth.login({
                     url: "/auth/login",
                     params: {
-                        email: app.email,
+                        login_user: app.login_user,
                         password: app.password
                     },
                     success: function () {
-                 this.is_admin_add()
+                 // this.is_admin_add()
                     },
                     error: function () {
                         this.error = true;

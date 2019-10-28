@@ -5,24 +5,11 @@
             <div class="div-block-8">
                 <h1 class="heading">Подготовка документов для подачи в МАРТ</h1>
                 <p class="paragraph exp">Какой документ вы хотите составить?</p>
-                <router-link  :to="{ name: 'deal_doc' }"><div class="button-5 post"><a  class="link-post w-inline-block">
-                    <div class="text-block-7">Заявление на получение согласия</div>
-                </a>
-                    <a href="https://yadi.sk/i/EqBg0wf5HVheDQ" target="_blank" class="link-block w-inline-block">
-                        <img src="https://uploads-ssl.webflow.com/5d93c99b337fd39ab87ef61a/5d9d0a74b01a536db15dac8c_document.svg" width="32" alt=""/></a>
-                </div>
-                </router-link>
+                <a class="button-5 w-button" v-for="(doc) in documents_array" v-on:click="go_to_doc(doc.id_document)">{{ doc.document_name  }}</a>
+
 
             </div>
         </div>
-    </div>
-    <div class="section-2"><div class="div-block-7">
-        <div class="columns w-row">
-            <div class="w-col w-col-6"><div>
-                <div class="text-block">  © Все права защищены</div>
-            </div></div>
-            <div class="w-col w-col-6"></div></div>
-    </div>
     </div>
 
 
@@ -43,20 +30,44 @@
 
             return {
                 //главный массив постов
-                posts: [],
-                post_name:''
+                documents_array: [],
             }
         },
         mounted() {
-
+this.render_start_array(this.documents_array);
         },
         methods: {
+
+            go_to_doc(numb)
+            {
+     Vue.router.push({name:'document' + numb});
+            },
 
             test()
             {
                 axios
                     .post('/save_first_text',{
                     })
+            },
+
+            render_start_array(inp)
+            {
+                axios
+                    .post('/documents_list',{
+                    }).then(({ data }) =>
+                    {
+                                data.forEach(function(entry) {
+                                        inp.push({
+                                            id_document:entry.id_document,
+                                            document_name:entry.document_name
+                                        });
+
+                                })
+
+
+                    }
+
+                );
             },
 
 

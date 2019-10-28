@@ -105,7 +105,7 @@
             }
         },
         mounted() {
-            // this.polute_start_array(this.zaint_lico_arr);
+            this.render_start_array(this.documents_array);
         },
         methods: {
 elemInArr(numb)
@@ -167,22 +167,36 @@ check(inp,numb)
 
 },
 
-            // polute_start_array(inp)
-            // {
-            //     axios
-            //         .post('/polute_start_array',{
-            //             // id_post:this.$store.state.post_id,
-            //         }).then(({ data }) =>
-            //         {
-            //                     data.forEach(function(entry) {
-            //                             inp.push({
-            //                                 name:entry.polnoe_naimenovanie,
-            //                             });
-            //                     })
-            //         }
-            //
-            //     );
-            // },
+            render_star_arr(inp)
+            {
+                axios
+                    .post('/render_documents',{
+                        id_post:this.$store.state.post_id,
+                        id_procedure:this.$store.state.current_main_procedure,
+                        id_block:this.$store.state.block_id,
+                    }).then(({ data }) =>
+                    {
+                        if(data.length != 0)
+                        {
+                            this.text_block_name = data[0].block_name,
+                                this.question = data[0].question_text,
+
+                                data.forEach(function(entry) {
+                                    if(entry.answer_text!==''){
+                                        inp.push({
+                                            text:entry.answer_text,
+                                            link_id:entry.answer_link_id,
+                                            link_name:entry.answer_link_name,
+
+                                        });
+                                    }
+                                })
+                        }
+
+                    }
+
+                );
+            },
 
             getDBrequestAutocomplete (input) {
                 this.arr_m = [];

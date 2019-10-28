@@ -1,14 +1,12 @@
 <template>
 
-
     <div>
         <body class="body-2">
             <div class="section">
                  <div class="div-screen-1">
                 <div class="div-block-8">
-                    <a class="button-5 w-button" v-on:click="goto_my_doc">Мои документы</a>
-
-                    <a class="button-5 w-button" v-on:click="">Панель администратора</a>
+                    <p class="paragraph exp">Список ваших документов</p>
+                    <a class="button-5 w-button" v-for="(doc) in my_documents_array" v-on:click="">{{ doc.document_name  }}</a>
 
                 </div>
              </div>
@@ -25,9 +23,8 @@
         data(){
 
             return {
-                //главный массив постов
-                posts: [],
-                post_name:''
+                my_documents_array:[]
+
             }
         },
         mounted() {
@@ -35,13 +32,36 @@
            // this.post_name=this.posts[0]['name_post'];
         },
         methods: {
-
-            goto_my_doc()
+            render_star_arr(inp)
             {
-                Vue.router.push({name:'expertise_test'});
+                axios
+                    .post('/render_documents',{
+                        id_post:this.$store.state.post_id,
+                        id_procedure:this.$store.state.current_main_procedure,
+                        id_block:this.$store.state.block_id,
+                    }).then(({ data }) =>
+                    {
+                        if(data.length != 0)
+                        {
+                            this.text_block_name = data[0].block_name,
+                                this.question = data[0].question_text,
 
+                                data.forEach(function(entry) {
+                                    if(entry.answer_text!==''){
+                                        inp.push({
+                                            text:entry.answer_text,
+                                            link_id:entry.answer_link_id,
+                                            link_name:entry.answer_link_name,
+
+                                        });
+                                    }
+                                })
+                        }
+
+                    }
+
+                );
             },
-
             test()
             {
                 // axios
@@ -56,49 +76,4 @@
 
     }
 </script>
-<style>
-    .list-counter-square {
-        list-style: none;
-      counter-reset: list;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-    }
-
-    .list-counter-square>div {
-        position: relative;
-        display: block;
-        /*height: 2rem;*/
-        line-height: 2rem;
-        margin-left: 1.75rem;
-        margin-bottom: .25rem;
-        padding-left: 1rem;
-        padding-right: .5rem;
-        color: #fff;
-        background: #55a79a;
-        /*white-space: nowrap;*/
-        border-radius: .25rem
-    }
-
-    .list-counter-square>div:last-child {
-        margin-bottom: 0;
-    }
-
-    .list-counter-square>div::before {
-        content: counter(list);
-        counter-increment: list;
-        position: absolute;
-        left: -2rem;
-        top: -.25rem;
-        bottom: -.25rem;
-        width: 2.5rem;
-        height: 2.5rem;
-        line-height: 2rem;
-        border-radius: 1.25rem;
-        border: .25rem solid #fff;
-        text-align: center;
-        color: #fff;
-        background: #55a79a;
-    }
-</style>
 

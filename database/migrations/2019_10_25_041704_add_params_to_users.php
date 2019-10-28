@@ -14,7 +14,9 @@ class AddParamsToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->string('login')->default('log');
+            $table->string('surname')->default('sur');
+            $table->string('telefon')->default('0');
         });
     }
 

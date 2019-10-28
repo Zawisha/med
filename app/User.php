@@ -20,6 +20,7 @@ class User extends Authenticatable implements JWTSubject
         'name', 'email', 'password',
     ];
 
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -48,5 +49,9 @@ class User extends Authenticatable implements JWTSubject
     public function forget_pas()
     {
         return $this->hasOne('App\ForgetPassword');
+    }
+    public function user_status()
+    {
+        return $this->hasOne('App\UserStatus', 'id_user');
     }
 }

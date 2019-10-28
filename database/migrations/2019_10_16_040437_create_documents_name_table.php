@@ -15,6 +15,8 @@ class CreateDocumentsNameTable extends Migration
     {
         Schema::create('documents_name', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('id_document');
+            $table->text('document_name');
             $table->timestamps();
         });
     }
