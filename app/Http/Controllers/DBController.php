@@ -505,13 +505,13 @@ class DBController extends Controller
     {
         $users_list = User::with('user_status')->where('id', '>', '0')->get();
 
-        foreach ($users_list as $key=>$list)
-        {
-          //  if($list['user_status']===null)
-          //  {
-//$users_list[$key]['user_status']='4';
-           // }
-        }
+        return $users_list;
+    }
+
+    public function users_list_pagination(Request $request)
+    {
+        $offset = ($request->input('offset')-1)*3;
+        $users_list = User::with('user_status')->where('id', '>', '0')->offset($offset)->limit(3)->get();
 
         return $users_list;
     }

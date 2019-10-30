@@ -29,6 +29,9 @@ import TextareaAutosize from 'vue-textarea-autosize'
 // import is_admin from "./middleware/log_user";
 import post_name from './components/Dashboard.vue';
 
+import vPagination from 'vue-plain-pagination'
+Vue.component('v-pagination', vPagination);
+
 
 Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
@@ -40,6 +43,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('app', require('./components/App.vue').default);
 Vue.component('modal', require('./components/medical/ModalBlockList').default);
 Vue.component('parents_modal', require('./components/medical/ParentsModalBlockList').default);
+
 // шина данных
 export var postName = new Vue();
 

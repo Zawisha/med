@@ -42,7 +42,14 @@
 
             </tbody>
         </table>
-<!--        <button type="button" class="btn btn-primary btn-block procedure_button" v-on:click="test">Сохранить</button>-->
+
+
+        <div v-on:click="render_table(users)"><v-pagination v-if="total_pages!=0"  v-model="currentPage"  :page-count=total_pages :classes="bootstrapPaginationClasses"></v-pagination></div>
+        <button type="button" class="btn btn-primary btn-block procedure_button" v-on:click="test">test</button>
+
+
+
+
 
     </div>
 </template>
@@ -55,19 +62,31 @@
             return {
                 //главный массив постов
                 users: [],
-
-
+                currentPage: 1,
+                total_pages:0,
+                bootstrapPaginationClasses: {
+                    ul: 'pagination',
+                    li: 'page-item',
+                    liActive: 'active',
+                    liDisable: 'disabled',
+                    button: 'page-link'
+                },
 
             }
         },
         mounted() {
             this.render_table(this.users);
         },
+
         methods: {
 test()
 {
-    console.log(this.users)
+    console.log(this.users);
 },
+
+
+
+
             change_user_banned(user_id, user_banned)
             {
                 axios
@@ -91,8 +110,11 @@ test()
             {
 
                 axios
-                    .post('/users_list',{
-                    }).then(({ data }) => (
+                    .post('/users_list_pagination',{
+                        offset:this.currentPage,
+                    })
+                    .then(({ data }) => (
+                        inp=[],
                                 data.forEach(function(entry) {
                                     if(entry.user_status==null)
                                     {
@@ -103,21 +125,32 @@ test()
                                         entry.banned=entry.user_status.banned,
                                         entry.user_status=entry.user_status.status
                                     }
-                                inp.push({
+                                    inp.push({
                                     id:entry.id,
                                     name:entry.name,
                                     email:entry.email,
                                     user_status:entry.user_status,
                                     banned:entry.banned
                                 });
-                        })
-
+                        }),
+                        this.users=inp
                     )
 
                 );
 
+                this.getTotalCountUsers();
 
             },
+
+            getTotalCountUsers()
+            {
+                axios
+                    .post('/users_list',{
+                    }).then(({ data }) => (
+                        this.total_pages=Math.ceil((data.length)/3)
+                ));
+            }
+
 
 
         },

@@ -63,6 +63,7 @@ Route::post('get_autocomplete', 'DBController@get_autocomplete');
 Route::post('render_documents', 'DBController@render_documents');
 Route::post('documents_list', 'DBController@documents_list');
 Route::post('users_list', 'DBController@users_list');
+Route::post('users_list_pagination', 'DBController@users_list_pagination');
 Route::post('change_user_banned', 'DBController@change_user_banned');
 Route::post('change_user_role', 'DBController@change_user_role');
 

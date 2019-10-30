@@ -6527,11 +6527,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       //главный массив постов
-      users: []
+      users: [],
+      currentPage: 1,
+      total_pages: 0,
+      bootstrapPaginationClasses: {
+        ul: 'pagination',
+        li: 'page-item',
+        liActive: 'active',
+        liDisable: 'disabled',
+        button: 'page-link'
+      }
     };
   },
   mounted: function mounted() {
@@ -6554,9 +6570,13 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     render_table: function render_table(inp) {
-      axios.post('/users_list', {}).then(function (_ref) {
+      var _this = this;
+
+      axios.post('/users_list_pagination', {
+        offset: this.currentPage
+      }).then(function (_ref) {
         var data = _ref.data;
-        return data.forEach(function (entry) {
+        return inp = [], data.forEach(function (entry) {
           if (entry.user_status == null) {
             return;
           } else {
@@ -6570,7 +6590,16 @@ __webpack_require__.r(__webpack_exports__);
             user_status: entry.user_status,
             banned: entry.banned
           });
-        });
+        }), _this.users = inp;
+      });
+      this.getTotalCountUsers();
+    },
+    getTotalCountUsers: function getTotalCountUsers() {
+      var _this2 = this;
+
+      axios.post('/users_list', {}).then(function (_ref2) {
+        var data = _ref2.data;
+        return _this2.total_pages = Math.ceil(data.length / 3);
       });
     }
   }
@@ -49782,7 +49811,46 @@ var render = function() {
         }),
         0
       )
-    ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        on: {
+          click: function($event) {
+            return _vm.render_table(_vm.users)
+          }
+        }
+      },
+      [
+        _vm.total_pages != 0
+          ? _c("v-pagination", {
+              attrs: {
+                "page-count": _vm.total_pages,
+                classes: _vm.bootstrapPaginationClasses
+              },
+              model: {
+                value: _vm.currentPage,
+                callback: function($$v) {
+                  _vm.currentPage = $$v
+                },
+                expression: "currentPage"
+              }
+            })
+          : _vm._e()
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        staticClass: "btn btn-primary btn-block procedure_button",
+        attrs: { type: "button" },
+        on: { click: _vm.test }
+      },
+      [_vm._v("test")]
+    )
   ])
 }
 var staticRenderFns = [
@@ -50036,6 +50104,18 @@ function normalizeComponent (
   }
 }
 
+
+/***/ }),
+
+/***/ "./node_modules/vue-plain-pagination/dist/vue-plain-pagination.umd.min.js":
+/*!********************************************************************************!*\
+  !*** ./node_modules/vue-plain-pagination/dist/vue-plain-pagination.umd.min.js ***!
+  \********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+(function(t,n){ true?module.exports=n():undefined})("undefined"!==typeof self?self:this,function(){return function(t){var n={};function e(i){if(n[i])return n[i].exports;var a=n[i]={i:i,l:!1,exports:{}};return t[i].call(a.exports,a,a.exports,e),a.l=!0,a.exports}return e.m=t,e.c=n,e.d=function(t,n,i){e.o(t,n)||Object.defineProperty(t,n,{enumerable:!0,get:i})},e.r=function(t){"undefined"!==typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},e.t=function(t,n){if(1&n&&(t=e(t)),8&n)return t;if(4&n&&"object"===typeof t&&t&&t.__esModule)return t;var i=Object.create(null);if(e.r(i),Object.defineProperty(i,"default",{enumerable:!0,value:t}),2&n&&"string"!=typeof t)for(var a in t)e.d(i,a,function(n){return t[n]}.bind(null,a));return i},e.n=function(t){var n=t&&t.__esModule?function(){return t["default"]}:function(){return t};return e.d(n,"a",n),n},e.o=function(t,n){return Object.prototype.hasOwnProperty.call(t,n)},e.p="",e(e.s="fb15")}({"0d58":function(t,n,e){var i=e("ce10"),a=e("e11e");t.exports=Object.keys||function(t){return i(t,a)}},"11e9":function(t,n,e){var i=e("52a7"),a=e("4630"),r=e("6821"),o=e("6a99"),s=e("69a8"),u=e("c69a"),c=Object.getOwnPropertyDescriptor;n.f=e("9e1e")?c:function(t,n){if(t=r(t),n=o(n,!0),u)try{return c(t,n)}catch(e){}if(s(t,n))return a(!i.f.call(t,n),t[n])}},1495:function(t,n,e){var i=e("86cc"),a=e("cb7c"),r=e("0d58");t.exports=e("9e1e")?Object.defineProperties:function(t,n){a(t);var e,o=r(n),s=o.length,u=0;while(s>u)i.f(t,e=o[u++],n[e]);return t}},"230e":function(t,n,e){var i=e("d3f4"),a=e("7726").document,r=i(a)&&i(a.createElement);t.exports=function(t){return r?a.createElement(t):{}}},"2aba":function(t,n,e){var i=e("7726"),a=e("32e9"),r=e("69a8"),o=e("ca5a")("src"),s="toString",u=Function[s],c=(""+u).split(s);e("8378").inspectSource=function(t){return u.call(t)},(t.exports=function(t,n,e,s){var u="function"==typeof e;u&&(r(e,"name")||a(e,"name",n)),t[n]!==e&&(u&&(r(e,o)||a(e,o,t[n]?""+t[n]:c.join(String(n)))),t===i?t[n]=e:s?t[n]?t[n]=e:a(t,n,e):(delete t[n],a(t,n,e)))})(Function.prototype,s,function(){return"function"==typeof this&&this[o]||u.call(this)})},"2aeb":function(t,n,e){var i=e("cb7c"),a=e("1495"),r=e("e11e"),o=e("613b")("IE_PROTO"),s=function(){},u="prototype",c=function(){var t,n=e("230e")("iframe"),i=r.length,a="<",o=">";n.style.display="none",e("fab2").appendChild(n),n.src="javascript:",t=n.contentWindow.document,t.open(),t.write(a+"script"+o+"document.F=Object"+a+"/script"+o),t.close(),c=t.F;while(i--)delete c[u][r[i]];return c()};t.exports=Object.create||function(t,n){var e;return null!==t?(s[u]=i(t),e=new s,s[u]=null,e[o]=t):e=c(),void 0===n?e:a(e,n)}},"2d00":function(t,n){t.exports=!1},"2d95":function(t,n){var e={}.toString;t.exports=function(t){return e.call(t).slice(8,-1)}},"32e9":function(t,n,e){var i=e("86cc"),a=e("4630");t.exports=e("9e1e")?function(t,n,e){return i.f(t,n,a(1,e))}:function(t,n,e){return t[n]=e,t}},4588:function(t,n){var e=Math.ceil,i=Math.floor;t.exports=function(t){return isNaN(t=+t)?0:(t>0?i:e)(t)}},4630:function(t,n){t.exports=function(t,n){return{enumerable:!(1&t),configurable:!(2&t),writable:!(4&t),value:n}}},"52a7":function(t,n){n.f={}.propertyIsEnumerable},5537:function(t,n,e){var i=e("8378"),a=e("7726"),r="__core-js_shared__",o=a[r]||(a[r]={});(t.exports=function(t,n){return o[t]||(o[t]=void 0!==n?n:{})})("versions",[]).push({version:i.version,mode:e("2d00")?"pure":"global",copyright:"© 2018 Denis Pushkarev (zloirock.ru)"})},"5ca1":function(t,n,e){var i=e("7726"),a=e("8378"),r=e("32e9"),o=e("2aba"),s=e("9b43"),u="prototype",c=function(t,n,e){var l,f,p,g,b=t&c.F,v=t&c.G,d=t&c.S,h=t&c.P,y=t&c.B,_=v?i:d?i[n]||(i[n]={}):(i[n]||{})[u],m=v?a:a[n]||(a[n]={}),C=m[u]||(m[u]={});for(l in v&&(e=n),e)f=!b&&_&&void 0!==_[l],p=(f?_:e)[l],g=y&&f?s(p,i):h&&"function"==typeof p?s(Function.call,p):p,_&&o(_,l,p,t&c.U),m[l]!=p&&r(m,l,g),h&&C[l]!=p&&(C[l]=p)};i.core=a,c.F=1,c.G=2,c.S=4,c.P=8,c.B=16,c.W=32,c.U=64,c.R=128,t.exports=c},"5dbc":function(t,n,e){var i=e("d3f4"),a=e("8b97").set;t.exports=function(t,n,e){var r,o=n.constructor;return o!==e&&"function"==typeof o&&(r=o.prototype)!==e.prototype&&i(r)&&a&&a(t,r),t}},"613b":function(t,n,e){var i=e("5537")("keys"),a=e("ca5a");t.exports=function(t){return i[t]||(i[t]=a(t))}},"626a":function(t,n,e){var i=e("2d95");t.exports=Object("z").propertyIsEnumerable(0)?Object:function(t){return"String"==i(t)?t.split(""):Object(t)}},6821:function(t,n,e){var i=e("626a"),a=e("be13");t.exports=function(t){return i(a(t))}},"69a8":function(t,n){var e={}.hasOwnProperty;t.exports=function(t,n){return e.call(t,n)}},"6a99":function(t,n,e){var i=e("d3f4");t.exports=function(t,n){if(!i(t))return t;var e,a;if(n&&"function"==typeof(e=t.toString)&&!i(a=e.call(t)))return a;if("function"==typeof(e=t.valueOf)&&!i(a=e.call(t)))return a;if(!n&&"function"==typeof(e=t.toString)&&!i(a=e.call(t)))return a;throw TypeError("Can't convert object to primitive value")}},7726:function(t,n){var e=t.exports="undefined"!=typeof window&&window.Math==Math?window:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")();"number"==typeof __g&&(__g=e)},"77f1":function(t,n,e){var i=e("4588"),a=Math.max,r=Math.min;t.exports=function(t,n){return t=i(t),t<0?a(t+n,0):r(t,n)}},"79e5":function(t,n){t.exports=function(t){try{return!!t()}catch(n){return!0}}},8378:function(t,n){var e=t.exports={version:"2.5.7"};"number"==typeof __e&&(__e=e)},"86cc":function(t,n,e){var i=e("cb7c"),a=e("c69a"),r=e("6a99"),o=Object.defineProperty;n.f=e("9e1e")?Object.defineProperty:function(t,n,e){if(i(t),n=r(n,!0),i(e),a)try{return o(t,n,e)}catch(s){}if("get"in e||"set"in e)throw TypeError("Accessors not supported!");return"value"in e&&(t[n]=e.value),t}},"8b97":function(t,n,e){var i=e("d3f4"),a=e("cb7c"),r=function(t,n){if(a(t),!i(n)&&null!==n)throw TypeError(n+": can't set as prototype!")};t.exports={set:Object.setPrototypeOf||("__proto__"in{}?function(t,n,i){try{i=e("9b43")(Function.call,e("11e9").f(Object.prototype,"__proto__").set,2),i(t,[]),n=!(t instanceof Array)}catch(a){n=!0}return function(t,e){return r(t,e),n?t.__proto__=e:i(t,e),t}}({},!1):void 0),check:r}},9093:function(t,n,e){var i=e("ce10"),a=e("e11e").concat("length","prototype");n.f=Object.getOwnPropertyNames||function(t){return i(t,a)}},"9b43":function(t,n,e){var i=e("d8e8");t.exports=function(t,n,e){if(i(t),void 0===n)return t;switch(e){case 1:return function(e){return t.call(n,e)};case 2:return function(e,i){return t.call(n,e,i)};case 3:return function(e,i,a){return t.call(n,e,i,a)}}return function(){return t.apply(n,arguments)}}},"9def":function(t,n,e){var i=e("4588"),a=Math.min;t.exports=function(t){return t>0?a(i(t),9007199254740991):0}},"9e1e":function(t,n,e){t.exports=!e("79e5")(function(){return 7!=Object.defineProperty({},"a",{get:function(){return 7}}).a})},aa77:function(t,n,e){var i=e("5ca1"),a=e("be13"),r=e("79e5"),o=e("fdef"),s="["+o+"]",u="​",c=RegExp("^"+s+s+"*"),l=RegExp(s+s+"*$"),f=function(t,n,e){var a={},s=r(function(){return!!o[t]()||u[t]()!=u}),c=a[t]=s?n(p):o[t];e&&(a[e]=c),i(i.P+i.F*s,"String",a)},p=f.trim=function(t,n){return t=String(a(t)),1&n&&(t=t.replace(c,"")),2&n&&(t=t.replace(l,"")),t};t.exports=f},be13:function(t,n){t.exports=function(t){if(void 0==t)throw TypeError("Can't call method on  "+t);return t}},c366:function(t,n,e){var i=e("6821"),a=e("9def"),r=e("77f1");t.exports=function(t){return function(n,e,o){var s,u=i(n),c=a(u.length),l=r(o,c);if(t&&e!=e){while(c>l)if(s=u[l++],s!=s)return!0}else for(;c>l;l++)if((t||l in u)&&u[l]===e)return t||l||0;return!t&&-1}}},c5f6:function(t,n,e){"use strict";var i=e("7726"),a=e("69a8"),r=e("2d95"),o=e("5dbc"),s=e("6a99"),u=e("79e5"),c=e("9093").f,l=e("11e9").f,f=e("86cc").f,p=e("aa77").trim,g="Number",b=i[g],v=b,d=b.prototype,h=r(e("2aeb")(d))==g,y="trim"in String.prototype,_=function(t){var n=s(t,!1);if("string"==typeof n&&n.length>2){n=y?n.trim():p(n,3);var e,i,a,r=n.charCodeAt(0);if(43===r||45===r){if(e=n.charCodeAt(2),88===e||120===e)return NaN}else if(48===r){switch(n.charCodeAt(1)){case 66:case 98:i=2,a=49;break;case 79:case 111:i=8,a=55;break;default:return+n}for(var o,u=n.slice(2),c=0,l=u.length;c<l;c++)if(o=u.charCodeAt(c),o<48||o>a)return NaN;return parseInt(u,i)}}return+n};if(!b(" 0o1")||!b("0b1")||b("+0x1")){b=function(t){var n=arguments.length<1?0:t,e=this;return e instanceof b&&(h?u(function(){d.valueOf.call(e)}):r(e)!=g)?o(new v(_(n)),e,b):_(n)};for(var m,C=e("9e1e")?c(v):"MAX_VALUE,MIN_VALUE,NaN,NEGATIVE_INFINITY,POSITIVE_INFINITY,EPSILON,isFinite,isInteger,isNaN,isSafeInteger,MAX_SAFE_INTEGER,MIN_SAFE_INTEGER,parseFloat,parseInt,isInteger".split(","),x=0;C.length>x;x++)a(v,m=C[x])&&!a(b,m)&&f(b,m,l(v,m));b.prototype=d,d.constructor=b,e("2aba")(i,g,b)}},c69a:function(t,n,e){t.exports=!e("9e1e")&&!e("79e5")(function(){return 7!=Object.defineProperty(e("230e")("div"),"a",{get:function(){return 7}}).a})},ca5a:function(t,n){var e=0,i=Math.random();t.exports=function(t){return"Symbol(".concat(void 0===t?"":t,")_",(++e+i).toString(36))}},cb7c:function(t,n,e){var i=e("d3f4");t.exports=function(t){if(!i(t))throw TypeError(t+" is not an object!");return t}},ce10:function(t,n,e){var i=e("69a8"),a=e("6821"),r=e("c366")(!1),o=e("613b")("IE_PROTO");t.exports=function(t,n){var e,s=a(t),u=0,c=[];for(e in s)e!=o&&i(s,e)&&c.push(e);while(n.length>u)i(s,e=n[u++])&&(~r(c,e)||c.push(e));return c}},d3f4:function(t,n){t.exports=function(t){return"object"===typeof t?null!==t:"function"===typeof t}},d8e8:function(t,n){t.exports=function(t){if("function"!=typeof t)throw TypeError(t+" is not a function!");return t}},e11e:function(t,n){t.exports="constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",")},fab2:function(t,n,e){var i=e("7726").document;t.exports=i&&i.documentElement},fb15:function(t,n,e){"use strict";var i;(e.r(n),"undefined"!==typeof window)&&((i=window.document.currentScript)&&(i=i.src.match(/(.+\/)[^\/]+\.js(\?.*)?$/))&&(e.p=i[1]));var a=function(){var t=this,n=t.$createElement,e=t._self._c||n;return e("ul",{class:t.paginationClasses.ul},[t.paginationLabels.first?e("li",{class:t.paginationClasses.li+" "+(t.hasFirst?t.paginationClasses.liDisable:"")},[e("button",{class:t.paginationClasses.button+" "+(t.hasFirst?t.paginationClasses.buttonDisable:""),attrs:{disabled:t.hasFirst},domProps:{innerHTML:t._s(t.paginationLabels.first)},on:{click:t.first}})]):t._e(),t.paginationLabels.prev?e("li",{class:t.paginationClasses.li+" "+(t.hasFirst?t.paginationClasses.liDisable:"")},[e("button",{class:t.paginationClasses.button+" "+(t.hasFirst?t.paginationClasses.buttonDisable:""),attrs:{disabled:t.hasFirst},domProps:{innerHTML:t._s(t.paginationLabels.prev)},on:{click:t.prev}})]):t._e(),e("li",{directives:[{name:"show",rawName:"v-show",value:1!==t.rangeFirstPage,expression:"rangeFirstPage !== 1"}],class:t.paginationClasses.li},[e("button",{class:t.paginationClasses.button,on:{click:function(n){t.goto(1)}}},[t._v("1")])]),e("li",{directives:[{name:"show",rawName:"v-show",value:3===t.rangeFirstPage,expression:"rangeFirstPage === 3"}],class:t.paginationClasses.li},[e("button",{class:t.paginationClasses.button,on:{click:function(n){t.goto(2)}}},[t._v("2")])]),e("li",{directives:[{name:"show",rawName:"v-show",value:1!==t.rangeFirstPage&&2!==t.rangeFirstPage&&3!==t.rangeFirstPage,expression:"rangeFirstPage !== 1 && rangeFirstPage !== 2 && rangeFirstPage !== 3"}],class:t.paginationClasses.li+" "+t.paginationClasses.liDisable},[e("span",{class:t.paginationClasses.button+" "+t.paginationClasses.buttonDisable},[t._v("...")])]),t._l(t.range,function(n){return e("li",{key:n,class:t.paginationClasses.li+" "+(t.hasActive(n)?t.paginationClasses.liActive:"")},[e("button",{class:t.paginationClasses.button+" "+(t.hasActive(n)?t.paginationClasses.buttonActive:""),on:{click:function(e){t.goto(n)}}},[t._v(t._s(n))])])}),e("li",{directives:[{name:"show",rawName:"v-show",value:t.rangeLastPage!==t.pageCount&&t.rangeLastPage!==t.pageCount-1&&t.rangeLastPage!==t.pageCount-2,expression:"rangeLastPage !== pageCount && rangeLastPage !== (pageCount - 1) && rangeLastPage !== (pageCount - 2)"}],class:t.paginationClasses.li+" "+t.paginationClasses.liDisable},[e("span",{class:t.paginationClasses.button+" "+t.paginationClasses.buttonDisable},[t._v("...")])]),e("li",{directives:[{name:"show",rawName:"v-show",value:t.rangeLastPage===t.pageCount-2,expression:"rangeLastPage === (pageCount - 2)"}],class:t.paginationClasses.li},[e("button",{class:t.paginationClasses.button,on:{click:function(n){t.goto(t.pageCount-1)}}},[t._v(t._s(t.pageCount-1))])]),t.rangeLastPage!==t.pageCount?e("li",{class:t.paginationClasses.li},[e("button",{class:t.paginationClasses.button,on:{click:function(n){t.goto(t.pageCount)}}},[t._v(t._s(t.pageCount))])]):t._e(),t.paginationLabels.next?e("li",{class:t.paginationClasses.li+" "+(t.hasLast?t.paginationClasses.liDisable:"")},[e("button",{class:t.paginationClasses.button+" "+(t.hasLast?t.paginationClasses.buttonDisable:""),attrs:{disabled:t.hasLast},domProps:{innerHTML:t._s(t.paginationLabels.next)},on:{click:t.next}})]):t._e(),t.paginationLabels.last?e("li",{class:t.paginationClasses.li+" "+(t.hasLast?t.paginationClasses.liDisable:"")},[e("button",{class:t.paginationClasses.button+" "+(t.hasLast?t.paginationClasses.buttonDisable:""),attrs:{disabled:t.hasLast},domProps:{innerHTML:t._s(t.paginationLabels.last)},on:{click:t.last}})]):t._e()],2)},r=[];function o(t,n,e){return n in t?Object.defineProperty(t,n,{value:e,enumerable:!0,configurable:!0,writable:!0}):t[n]=e,t}function s(t){for(var n=1;n<arguments.length;n++){var e=null!=arguments[n]?arguments[n]:{},i=Object.keys(e);"function"===typeof Object.getOwnPropertySymbols&&(i=i.concat(Object.getOwnPropertySymbols(e).filter(function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),i.forEach(function(n){o(t,n,e[n])})}return t}e("c5f6");var u=3,c={ul:"pagination",li:"pagination-item",liActive:"pagination-item--active",liDisable:"pagination-item--disable",button:"pagination-link",buttonActive:"pagination-link--active",buttonDisable:"pagination-link--disable"},l={first:"&laquo;",prev:"&lsaquo;",next:"&rsaquo;",last:"&raquo;"},f={props:{value:{type:Number,required:!0},pageCount:{type:Number,required:!0},classes:{type:Object,required:!1,default:function(){return{}}},labels:{type:Object,required:!1,default:function(){return{}}}},data:function(){return{paginationClasses:s({},c,this.classes),paginationLabels:s({},l,this.labels)}},mounted:function(){this.value>this.pageCount&&this.$emit("input",this.pageCount)},computed:{rangeFirstPage:function(){return 1===this.value?1:this.value===this.pageCount?this.pageCount-u<0?1:this.pageCount-u+1:this.value-1},rangeLastPage:function(){return Math.min(this.rangeFirstPage+u-1,this.pageCount)},range:function(){for(var t=[],n=this.rangeFirstPage;n<=this.rangeLastPage;n+=1)t.push(n);return t},hasFirst:function(){return 1===this.value},hasLast:function(){return this.value===this.pageCount}},watch:{value:function(){this.$emit("change")}},methods:{first:function(){this.hasFirst||this.$emit("input",1)},prev:function(){this.hasFirst||this.$emit("input",this.value-1)},goto:function(t){this.$emit("input",t)},next:function(){this.hasLast||this.$emit("input",this.value+1)},last:function(){this.hasLast||this.$emit("input",this.pageCount)},hasActive:function(t){return t===this.value}}},p=f;function g(t,n,e,i,a,r,o,s){var u,c="function"===typeof t?t.options:t;if(n&&(c.render=n,c.staticRenderFns=e,c._compiled=!0),i&&(c.functional=!0),r&&(c._scopeId="data-v-"+r),o?(u=function(t){t=t||this.$vnode&&this.$vnode.ssrContext||this.parent&&this.parent.$vnode&&this.parent.$vnode.ssrContext,t||"undefined"===typeof __VUE_SSR_CONTEXT__||(t=__VUE_SSR_CONTEXT__),a&&a.call(this,t),t&&t._registeredComponents&&t._registeredComponents.add(o)},c._ssrRegister=u):a&&(u=s?function(){a.call(this,this.$root.$options.shadowRoot)}:a),u)if(c.functional){c._injectStyles=u;var l=c.render;c.render=function(t,n){return u.call(n),l(t,n)}}else{var f=c.beforeCreate;c.beforeCreate=f?[].concat(f,u):[u]}return{exports:t,options:c}}var b=g(p,a,r,!1,null,null,null);b.options.__file="vue-plain-pagination.vue";var v=b.exports;n["default"]=v},fdef:function(t,n){t.exports="\t\n\v\f\r   ᠎             　\u2028\u2029\ufeff"}})["default"]});
+//# sourceMappingURL=vue-plain-pagination.umd.min.js.map
 
 /***/ }),
 
@@ -66125,38 +66205,40 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
 /* harmony import */ var vue_textarea_autosize__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue-textarea-autosize */ "./node_modules/vue-textarea-autosize/dist/vue-textarea-autosize.esm.js");
 /* harmony import */ var _components_Dashboard_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/Dashboard.vue */ "./resources/js/components/Dashboard.vue");
-/* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/App */ "./resources/js/components/App.vue");
-/* harmony import */ var _components_Home__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/Home */ "./resources/js/components/Home.vue");
-/* harmony import */ var _components_auth_Register_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/auth/Register.vue */ "./resources/js/components/auth/Register.vue");
-/* harmony import */ var _components_auth_Login_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/auth/Login.vue */ "./resources/js/components/auth/Login.vue");
-/* harmony import */ var _components_AcceptToken_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/AcceptToken.vue */ "./resources/js/components/AcceptToken.vue");
-/* harmony import */ var _components_auth_ForgetPassword_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/auth/ForgetPassword.vue */ "./resources/js/components/auth/ForgetPassword.vue");
-/* harmony import */ var _components_auth_RenewPassword_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/auth/RenewPassword.vue */ "./resources/js/components/auth/RenewPassword.vue");
-/* harmony import */ var _components_medical_AddNewPost__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/medical/AddNewPost */ "./resources/js/components/medical/AddNewPost.vue");
-/* harmony import */ var _components_medical_AddContent__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/medical/AddContent */ "./resources/js/components/medical/AddContent.vue");
-/* harmony import */ var _components_medical_PostsList__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/medical/PostsList */ "./resources/js/components/medical/PostsList.vue");
-/* harmony import */ var _components_medical_AddProcedures__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/medical/AddProcedures */ "./resources/js/components/medical/AddProcedures.vue");
-/* harmony import */ var _components_medical_BlockList__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./components/medical/BlockList */ "./resources/js/components/medical/BlockList.vue");
-/* harmony import */ var _components_medical_ModalBlockList__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./components/medical/ModalBlockList */ "./resources/js/components/medical/ModalBlockList.vue");
-/* harmony import */ var _components_ExampleComponent__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./components/ExampleComponent */ "./resources/js/components/ExampleComponent.vue");
-/* harmony import */ var _components_Expertise__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./components/Expertise */ "./resources/js/components/Expertise.vue");
-/* harmony import */ var _components_ExpertiseTest__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./components/ExpertiseTest */ "./resources/js/components/ExpertiseTest.vue");
-/* harmony import */ var _components_medical_Admin__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./components/medical/Admin */ "./resources/js/components/medical/Admin.vue");
-/* harmony import */ var _components_MainHome__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./components/MainHome */ "./resources/js/components/MainHome.vue");
-/* harmony import */ var _components_Test__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./components/Test */ "./resources/js/components/Test.vue");
-/* harmony import */ var _components_document_Document__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./components/document/Document */ "./resources/js/components/document/Document.vue");
-/* harmony import */ var _components_document_GetDocument__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./components/document/GetDocument */ "./resources/js/components/document/GetDocument.vue");
-/* harmony import */ var _components_document_PrepareDocument__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./components/document/PrepareDocument */ "./resources/js/components/document/PrepareDocument.vue");
-/* harmony import */ var _components_document_DocumentSubject__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./components/document/DocumentSubject */ "./resources/js/components/document/DocumentSubject.vue");
-/* harmony import */ var _components_document_FormDocument__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./components/document/FormDocument */ "./resources/js/components/document/FormDocument.vue");
-/* harmony import */ var _components_document_DealDocument__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./components/document/DealDocument */ "./resources/js/components/document/DealDocument.vue");
-/* harmony import */ var _components_profile_Profile__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./components/profile/Profile */ "./resources/js/components/profile/Profile.vue");
-/* harmony import */ var _components_document_document_list_Document1__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./components/document/document_list/Document1 */ "./resources/js/components/document/document_list/Document1.vue");
-/* harmony import */ var _components_document_document_list_Document2__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./components/document/document_list/Document2 */ "./resources/js/components/document/document_list/Document2.vue");
-/* harmony import */ var _components_profile_MyDocument__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./components/profile/MyDocument */ "./resources/js/components/profile/MyDocument.vue");
-/* harmony import */ var _components_medical_UsersList__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./components/medical/UsersList */ "./resources/js/components/medical/UsersList.vue");
-/* harmony import */ var _components_auth_LoginJuran__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./components/auth/LoginJuran */ "./resources/js/components/auth/LoginJuran.vue");
-/* harmony import */ var _components_auth_RegisterJuran__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./components/auth/RegisterJuran */ "./resources/js/components/auth/RegisterJuran.vue");
+/* harmony import */ var vue_plain_pagination__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vue-plain-pagination */ "./node_modules/vue-plain-pagination/dist/vue-plain-pagination.umd.min.js");
+/* harmony import */ var vue_plain_pagination__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(vue_plain_pagination__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/App */ "./resources/js/components/App.vue");
+/* harmony import */ var _components_Home__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/Home */ "./resources/js/components/Home.vue");
+/* harmony import */ var _components_auth_Register_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/auth/Register.vue */ "./resources/js/components/auth/Register.vue");
+/* harmony import */ var _components_auth_Login_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/auth/Login.vue */ "./resources/js/components/auth/Login.vue");
+/* harmony import */ var _components_AcceptToken_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/AcceptToken.vue */ "./resources/js/components/AcceptToken.vue");
+/* harmony import */ var _components_auth_ForgetPassword_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/auth/ForgetPassword.vue */ "./resources/js/components/auth/ForgetPassword.vue");
+/* harmony import */ var _components_auth_RenewPassword_vue__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/auth/RenewPassword.vue */ "./resources/js/components/auth/RenewPassword.vue");
+/* harmony import */ var _components_medical_AddNewPost__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/medical/AddNewPost */ "./resources/js/components/medical/AddNewPost.vue");
+/* harmony import */ var _components_medical_AddContent__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/medical/AddContent */ "./resources/js/components/medical/AddContent.vue");
+/* harmony import */ var _components_medical_PostsList__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/medical/PostsList */ "./resources/js/components/medical/PostsList.vue");
+/* harmony import */ var _components_medical_AddProcedures__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./components/medical/AddProcedures */ "./resources/js/components/medical/AddProcedures.vue");
+/* harmony import */ var _components_medical_BlockList__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./components/medical/BlockList */ "./resources/js/components/medical/BlockList.vue");
+/* harmony import */ var _components_medical_ModalBlockList__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./components/medical/ModalBlockList */ "./resources/js/components/medical/ModalBlockList.vue");
+/* harmony import */ var _components_ExampleComponent__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./components/ExampleComponent */ "./resources/js/components/ExampleComponent.vue");
+/* harmony import */ var _components_Expertise__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./components/Expertise */ "./resources/js/components/Expertise.vue");
+/* harmony import */ var _components_ExpertiseTest__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./components/ExpertiseTest */ "./resources/js/components/ExpertiseTest.vue");
+/* harmony import */ var _components_medical_Admin__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./components/medical/Admin */ "./resources/js/components/medical/Admin.vue");
+/* harmony import */ var _components_MainHome__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./components/MainHome */ "./resources/js/components/MainHome.vue");
+/* harmony import */ var _components_Test__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./components/Test */ "./resources/js/components/Test.vue");
+/* harmony import */ var _components_document_Document__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./components/document/Document */ "./resources/js/components/document/Document.vue");
+/* harmony import */ var _components_document_GetDocument__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./components/document/GetDocument */ "./resources/js/components/document/GetDocument.vue");
+/* harmony import */ var _components_document_PrepareDocument__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./components/document/PrepareDocument */ "./resources/js/components/document/PrepareDocument.vue");
+/* harmony import */ var _components_document_DocumentSubject__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./components/document/DocumentSubject */ "./resources/js/components/document/DocumentSubject.vue");
+/* harmony import */ var _components_document_FormDocument__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./components/document/FormDocument */ "./resources/js/components/document/FormDocument.vue");
+/* harmony import */ var _components_document_DealDocument__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./components/document/DealDocument */ "./resources/js/components/document/DealDocument.vue");
+/* harmony import */ var _components_profile_Profile__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./components/profile/Profile */ "./resources/js/components/profile/Profile.vue");
+/* harmony import */ var _components_document_document_list_Document1__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./components/document/document_list/Document1 */ "./resources/js/components/document/document_list/Document1.vue");
+/* harmony import */ var _components_document_document_list_Document2__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./components/document/document_list/Document2 */ "./resources/js/components/document/document_list/Document2.vue");
+/* harmony import */ var _components_profile_MyDocument__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./components/profile/MyDocument */ "./resources/js/components/profile/MyDocument.vue");
+/* harmony import */ var _components_medical_UsersList__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./components/medical/UsersList */ "./resources/js/components/medical/UsersList.vue");
+/* harmony import */ var _components_auth_LoginJuran__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./components/auth/LoginJuran */ "./resources/js/components/auth/LoginJuran.vue");
+/* harmony import */ var _components_auth_RegisterJuran__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./components/auth/RegisterJuran */ "./resources/js/components/auth/RegisterJuran.vue");
 
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
@@ -66177,6 +66259,8 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('v-select', vue_select__WEB
  // import is_admin from "./middleware/log_user";
 
 
+
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('v-pagination', vue_plain_pagination__WEBPACK_IMPORTED_MODULE_11___default.a);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_4__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_axios__WEBPACK_IMPORTED_MODULE_3___default.a, axios__WEBPACK_IMPORTED_MODULE_2___default.a);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_7__["default"]);
@@ -66227,19 +66311,19 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_4__["default"]({
   routes: [{
     path: '/',
     name: 'home',
-    component: _components_Home__WEBPACK_IMPORTED_MODULE_12__["default"],
+    component: _components_Home__WEBPACK_IMPORTED_MODULE_13__["default"],
     children: [{
       path: '/',
       name: 'main_home',
-      component: _components_MainHome__WEBPACK_IMPORTED_MODULE_28__["default"]
+      component: _components_MainHome__WEBPACK_IMPORTED_MODULE_29__["default"]
     }, {
       path: '/register',
       name: 'register',
-      component: _components_auth_Register_vue__WEBPACK_IMPORTED_MODULE_13__["default"]
+      component: _components_auth_Register_vue__WEBPACK_IMPORTED_MODULE_14__["default"]
     }, {
       path: '/login',
       name: 'login',
-      component: _components_auth_Login_vue__WEBPACK_IMPORTED_MODULE_14__["default"]
+      component: _components_auth_Login_vue__WEBPACK_IMPORTED_MODULE_15__["default"]
     }, {
       path: '/dashboard',
       name: 'dashboard',
@@ -66250,59 +66334,59 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_4__["default"]({
     }, {
       path: '/accept/:token',
       name: 'accept',
-      component: _components_AcceptToken_vue__WEBPACK_IMPORTED_MODULE_15__["default"]
+      component: _components_AcceptToken_vue__WEBPACK_IMPORTED_MODULE_16__["default"]
     }, {
       path: '/forget',
       name: 'forget',
-      component: _components_auth_ForgetPassword_vue__WEBPACK_IMPORTED_MODULE_16__["default"]
+      component: _components_auth_ForgetPassword_vue__WEBPACK_IMPORTED_MODULE_17__["default"]
     }, {
       path: '/renew_password/:id/:token',
       name: 'renew_pass',
-      component: _components_auth_RenewPassword_vue__WEBPACK_IMPORTED_MODULE_17__["default"]
+      component: _components_auth_RenewPassword_vue__WEBPACK_IMPORTED_MODULE_18__["default"]
     }, {
       path: '/expertise',
       name: 'expertise',
-      component: _components_Expertise__WEBPACK_IMPORTED_MODULE_25__["default"],
+      component: _components_Expertise__WEBPACK_IMPORTED_MODULE_26__["default"],
       props: true
     }, {
       path: '/expertise_test',
       name: 'expertise_test',
-      component: _components_ExpertiseTest__WEBPACK_IMPORTED_MODULE_26__["default"],
+      component: _components_ExpertiseTest__WEBPACK_IMPORTED_MODULE_27__["default"],
       props: true
     }, {
       path: '/doc',
       name: 'doc',
-      component: _components_document_Document__WEBPACK_IMPORTED_MODULE_30__["default"]
+      component: _components_document_Document__WEBPACK_IMPORTED_MODULE_31__["default"]
     }, {
       path: '/get_doc',
       name: 'get_doc',
-      component: _components_document_GetDocument__WEBPACK_IMPORTED_MODULE_31__["default"]
+      component: _components_document_GetDocument__WEBPACK_IMPORTED_MODULE_32__["default"]
     }, {
       path: '/prep_doc',
       name: 'prep_doc',
-      component: _components_document_PrepareDocument__WEBPACK_IMPORTED_MODULE_32__["default"],
+      component: _components_document_PrepareDocument__WEBPACK_IMPORTED_MODULE_33__["default"],
       props: true
     }, {
       path: '/doc_subject',
       name: 'doc_subject',
-      component: _components_document_DocumentSubject__WEBPACK_IMPORTED_MODULE_33__["default"],
+      component: _components_document_DocumentSubject__WEBPACK_IMPORTED_MODULE_34__["default"],
       props: true
     }, {
       path: '/form_doc',
       name: 'form_doc',
-      component: _components_document_FormDocument__WEBPACK_IMPORTED_MODULE_34__["default"]
+      component: _components_document_FormDocument__WEBPACK_IMPORTED_MODULE_35__["default"]
     }, {
       path: '/deal_doc',
       name: 'deal_doc',
-      component: _components_document_DealDocument__WEBPACK_IMPORTED_MODULE_35__["default"]
+      component: _components_document_DealDocument__WEBPACK_IMPORTED_MODULE_36__["default"]
     }, {
       path: '/document1',
       name: 'document1',
-      component: _components_document_document_list_Document1__WEBPACK_IMPORTED_MODULE_37__["default"]
+      component: _components_document_document_list_Document1__WEBPACK_IMPORTED_MODULE_38__["default"]
     }, {
       path: '/document2',
       name: 'document2',
-      component: _components_document_document_list_Document2__WEBPACK_IMPORTED_MODULE_38__["default"]
+      component: _components_document_document_list_Document2__WEBPACK_IMPORTED_MODULE_39__["default"]
     }, {
       path: '/forget_pass_juran',
       name: 'forget_pass_juran',
@@ -66310,45 +66394,45 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_4__["default"]({
     }, {
       path: '/profile',
       name: 'profile',
-      component: _components_profile_Profile__WEBPACK_IMPORTED_MODULE_36__["default"],
+      component: _components_profile_Profile__WEBPACK_IMPORTED_MODULE_37__["default"],
       children: [{
         path: '/my_doc',
         name: 'my_doc',
-        component: _components_profile_MyDocument__WEBPACK_IMPORTED_MODULE_39__["default"]
+        component: _components_profile_MyDocument__WEBPACK_IMPORTED_MODULE_40__["default"]
       }]
     }]
   }, {
     path: '/admin',
     name: 'admin',
-    component: _components_medical_Admin__WEBPACK_IMPORTED_MODULE_27__["default"],
+    component: _components_medical_Admin__WEBPACK_IMPORTED_MODULE_28__["default"],
     children: [{
       path: '/admin/add_new',
       name: 'add_new',
-      component: _components_medical_AddNewPost__WEBPACK_IMPORTED_MODULE_18__["default"]
+      component: _components_medical_AddNewPost__WEBPACK_IMPORTED_MODULE_19__["default"]
     }, {
       path: '/admin/add_content',
       name: 'add_content',
-      component: _components_medical_AddContent__WEBPACK_IMPORTED_MODULE_19__["default"]
+      component: _components_medical_AddContent__WEBPACK_IMPORTED_MODULE_20__["default"]
     }, {
       path: '/admin/posts',
       name: 'posts',
-      component: _components_medical_PostsList__WEBPACK_IMPORTED_MODULE_20__["default"]
+      component: _components_medical_PostsList__WEBPACK_IMPORTED_MODULE_21__["default"]
     }, {
       path: '/admin/add_procedures',
       name: 'add_procedures',
-      component: _components_medical_AddProcedures__WEBPACK_IMPORTED_MODULE_21__["default"]
+      component: _components_medical_AddProcedures__WEBPACK_IMPORTED_MODULE_22__["default"]
     }, {
       path: '/admin/block_list',
       name: 'block_list',
-      component: _components_medical_BlockList__WEBPACK_IMPORTED_MODULE_22__["default"]
+      component: _components_medical_BlockList__WEBPACK_IMPORTED_MODULE_23__["default"]
     }, {
       path: '/admin/example',
       name: 'example',
-      component: _components_ExampleComponent__WEBPACK_IMPORTED_MODULE_24__["default"]
+      component: _components_ExampleComponent__WEBPACK_IMPORTED_MODULE_25__["default"]
     }, {
       path: '/admin/users_list',
       name: 'users_list',
-      component: _components_medical_UsersList__WEBPACK_IMPORTED_MODULE_40__["default"]
+      component: _components_medical_UsersList__WEBPACK_IMPORTED_MODULE_41__["default"]
     }],
     beforeEnter: function beforeEnter(to, from, next) {
       // console.log(store.getters.IS_ADMIN);
@@ -66363,15 +66447,15 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_4__["default"]({
   }, {
     path: '/test',
     name: 'test',
-    component: _components_Test__WEBPACK_IMPORTED_MODULE_29__["default"]
+    component: _components_Test__WEBPACK_IMPORTED_MODULE_30__["default"]
   }, {
     path: '/login_juran',
     name: 'login_juran',
-    component: _components_auth_LoginJuran__WEBPACK_IMPORTED_MODULE_41__["default"]
+    component: _components_auth_LoginJuran__WEBPACK_IMPORTED_MODULE_42__["default"]
   }, {
     path: '/register_juran',
     name: 'register_juran',
-    component: _components_auth_RegisterJuran__WEBPACK_IMPORTED_MODULE_42__["default"]
+    component: _components_auth_RegisterJuran__WEBPACK_IMPORTED_MODULE_43__["default"]
   }]
 });
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.router = router; //websanova/vue-auth
@@ -66384,8 +66468,8 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(__webpack_require__(/*! @websanov
 var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   el: '#app',
   components: {
-    App: _components_App__WEBPACK_IMPORTED_MODULE_11__["default"],
-    modal: _components_medical_ModalBlockList__WEBPACK_IMPORTED_MODULE_23__["default"]
+    App: _components_App__WEBPACK_IMPORTED_MODULE_12__["default"],
+    modal: _components_medical_ModalBlockList__WEBPACK_IMPORTED_MODULE_24__["default"]
   },
   router: router,
   store: _store__WEBPACK_IMPORTED_MODULE_8__["store"]
